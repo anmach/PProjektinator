@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>35559934-4429-46e4-9197-4bfacf2c2ef7</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>Game.py</StartupFile>
+    <StartupFile>src\Game.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -21,7 +21,42 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Game.py" />
+    <Compile Include="src\controller\controller.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\controller\controllerMenu.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\enum\command.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\Game.py" />
+    <Compile Include="src\model\model.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\model\modelMenu.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\programModes\menu.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\programModes\programMode.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\view\view.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\view\viewMenu.py">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src\" />
+    <Folder Include="src\model\" />
+    <Folder Include="src\controller\" />
+    <Folder Include="src\enum\" />
+    <Folder Include="src\programModes\" />
+    <Folder Include="src\view\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
