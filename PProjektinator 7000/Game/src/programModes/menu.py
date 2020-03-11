@@ -2,6 +2,7 @@ from .programMode import ProgramMode
 from src.model.modelMenu import ModelMenu
 from src.view.viewMenu import ViewMenu
 from src.controller.controllerMenu import ControllerMenu
+import pygame as py
 
 
 class Menu(ProgramMode):
@@ -9,7 +10,10 @@ class Menu(ProgramMode):
     def __init__(self):
         #super(Menu, self).__init__()
         self.model = ModelMenu()
-        self.view = ViewMenu()
+
+        display = py.display.set_mode((1600, 900))
+        self.view = ViewMenu(display)
+
         self.controller = ControllerMenu()
 
     def processInput(self):

@@ -4,9 +4,9 @@ import pygame as py
 
 class View(ABC):
 
-    def __init__(self, display, displaySize):
-        this.displaySize = displaySize
-        this.display = display
+    def __init__(self, surface, surfaceSize = (1600, 900)):
+        self._surfaceSize = surfaceSize
+        self._surface = surface
 
     @abstractmethod
     def render(self):
