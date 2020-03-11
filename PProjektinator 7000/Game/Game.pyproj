@@ -43,6 +43,12 @@
     <Compile Include="src\programModes\programMode.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="src\view\UI\control.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\view\UI\text.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="src\view\view.py">
       <SubType>Code</SubType>
     </Compile>
@@ -57,6 +63,7 @@
     <Folder Include="src\enum\" />
     <Folder Include="src\programModes\" />
     <Folder Include="src\view\" />
+    <Folder Include="src\view\UI\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

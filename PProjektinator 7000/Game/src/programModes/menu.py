@@ -23,4 +23,4 @@ class Menu(ProgramMode):
         pass
 
     def render(self):
-        pass
+        self.view.render()
