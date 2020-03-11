@@ -1,4 +1,3 @@
-from src.model.model import *
 from src.programModes.menu import Menu
 import pygame as py
 
