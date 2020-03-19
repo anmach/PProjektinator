@@ -5,22 +5,14 @@ from src.controller.controllerMenu import ControllerMenu
 import pygame as py
 
 
+#klasa reprezentująca menu główne gry
 class Menu(ProgramMode):
 
     def __init__(self):
-        #super(Menu, self).__init__()
-        self.model = ModelMenu()
+        self._model = ModelMenu()
 
+        #menu główne ustala początkową rozdzielczość ekranu (możliwa zmiana w przyszłości na wczytywanie zapisanych ustawień z pliku)
         display = py.display.set_mode((1600, 900))
-        self.view = ViewMenu(display)
+        self._view = ViewMenu(display)
 
-        self.controller = ControllerMenu()
-
-    def processInput(self):
-        pass
-
-    def update(self):
-        pass
-
-    def render(self):
-        self.view.render()
+        self._controller = ControllerMenu()

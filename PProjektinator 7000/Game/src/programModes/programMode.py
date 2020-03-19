@@ -10,31 +10,37 @@ class ProgramMode(ABC):
     runMode = True
 
     def __init__(self):
-        self.model = Model()
-        self.view = View()
-        self.controller = Controller()
+        self._model = Model()
+        self._view = View()
+        self._controller = Controller()
     
-
+    
     def run(self):
-        while self.runMode :
-            self.controller.getControls(self.view)
-            self.controller.processInput()
+        #główne pętla aktualnego trybu programu
+        while self._model.getRunMode() :
+            #przetwarzanie danych wejściowych
+            self.processInput()
 
-            self.controller.giveCommand(self.model)
-            self.model.update()
+            #aktualizacja stanu modelu
+            self.update()
 
-            self.controller.communicateMV(self.model, self.view)
-            self.view.render()
+            #renderowanie
+            self.render()
 
-
-    @abstractmethod
+    #metoda, która zajmuje się wszelkimi rzeczami związanymi z danymi wejściowymi od użytkownika
+    #@abstractmethod
     def processInput(self):
-        pass
+        self._controller.getControls(self._view)
+        self._controller.processInput()
 
-    @abstractmethod
+    #metoda, która zajmuje się wszelkimi rzeczami związanymi z aktualizowaniem stanu wewnętrzego modelu
+    #@abstractmethods
     def update(self):
-        pass
+        self._controller.giveCommand(self._model)
+        self._model.update()
 
-    @abstractmethod
+    #metoda, która zajmuje się wszelkimi rzeczami związanymi z renderowaniem obiektów na ekran
+    #@abstractmethod
     def render(self):
-        pass
+        self._controller.communicateMV(self._model, self._view)
+        self._view.render()

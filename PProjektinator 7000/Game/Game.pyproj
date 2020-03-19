@@ -43,6 +43,9 @@
     <Compile Include="src\programModes\programMode.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="src\view\UI\button.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="src\view\UI\control.py">
       <SubType>Code</SubType>
     </Compile>
