@@ -25,4 +25,4 @@ class Menu(ProgramMode):
             levelBrowser = LevelBrowser(self._view.getSurface())
             levelBrowser.run()
             self._model.setChangeMode(False)
-            py.event.clear
+            py.event.clear()
