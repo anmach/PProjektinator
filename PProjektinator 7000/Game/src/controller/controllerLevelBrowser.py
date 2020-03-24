@@ -10,12 +10,10 @@ class ControllerLevelBrowser(Controller):
         super().__init__()
 
     #metoda pozwalająca pobrać kontrolki z widoku (do sprawdzenia interakcji użytkownika z nimi)
-    @abstractmethod
     def getControls(self, view):
         self._controls = view.getControls()
 
     #główna metoda przetwarzająca i interpretująca dane wejściowe od użytkownika
-    @abstractmethod
     def processInput(self):
         for event in py.event.get():
 
@@ -33,7 +31,7 @@ class ControllerLevelBrowser(Controller):
 
     #metoda pozwalająca przekazać model do widoku w celu jego wyrenderowania
     def communicateMV(self, model, view):
-        view.setShownLevel(model.getShownLevel())
+        view.setShownLevel(model.getShownLevelNumber())
 
     #metoda pozwalająca na przekazanie polecenia do modelu
     def giveCommand(self, model):

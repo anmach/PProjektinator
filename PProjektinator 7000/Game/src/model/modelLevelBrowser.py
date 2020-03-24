@@ -10,11 +10,9 @@ class ModelLevelBrowser(Model):
         super().__init__()
 
         #pobranie informacji o zawartości folderu
-        #       v-----nie działa-----v
-        _, _, fileList = os.walk('.\saves\levels')
-
-        #trzeci element to lista plików w katalogu
-        #self.__levelList = dirInfo[2]
+        #       v-----inaczej nie działa-----v
+        for (_, _, fileList) in os.walk('.\\saves\\levels'):
+            self.__levelList = fileList
 
         #nr aktualnie wybranego poziomu
         self.__shownLevel = 0
@@ -23,7 +21,7 @@ class ModelLevelBrowser(Model):
     def update(self):
         #wyjście do menu
         if self._command == Command.EXIT:
-            self._runMode = false;
+            self._runMode = False;
 
         #wybór kolejnego poziomu
         elif self._command == Command.NEXT_LEVEL and self.__levelShown < (self.__levelList) - 1:

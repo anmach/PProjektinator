@@ -24,3 +24,5 @@ class Menu(ProgramMode):
         if(self._model.getCommand() == Command.BROWSE_LVL):
             levelBrowser = LevelBrowser(self._view.getSurface())
             levelBrowser.run()
+            self._model.setChangeMode(False)
+            py.event.clear

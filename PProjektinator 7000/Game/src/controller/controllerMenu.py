@@ -21,6 +21,8 @@ class ControllerMenu(Controller):
                     #sprawdzanie czy nad daną kontrolką jest kursor
                     if control.getIsFocused():
                         self._command = control.getCommand()
+            else:
+                self._command = Command.CONTINUE
             
 
     #w menu nie ma potrzeby przekazywania modelu do widoku

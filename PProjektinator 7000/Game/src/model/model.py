@@ -34,4 +34,7 @@ class Model(ABC):
     #v----SETTERY----v
     def setCommand(self, command):
         self._command = command
+
+    def setChangeMode(self, change):
+        self._changeMode = change
     
