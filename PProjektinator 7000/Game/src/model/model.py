@@ -28,6 +28,9 @@ class Model(ABC):
     def getChangeMode(self):
         return self._changeMode
 
+    def getCommand(self):
+        return self._command
+
     #v----SETTERY----v
     def setCommand(self, command):
         self._command = command

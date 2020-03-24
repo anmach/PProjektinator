@@ -18,11 +18,6 @@ class View(ABC):
     @abstractmethod
     def render(self):
         pass
-    
-    #metoda pozwalająca na pobranie modelu (może się różnić dla każdego z trybów programu)
-    @abstractmethod
-    def setModel(self):
-        pass
 
     #v----GETTERY----v
 

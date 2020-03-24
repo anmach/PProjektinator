@@ -27,13 +27,9 @@ class ViewMenu(View):
         #wypełnienie ekranu kolorem jasno-niebieskim
         self._surface.fill((200, 220, 250))
 
-        #wyrysowanie wszystkich tekstów na ekran
+        #wyrysowanie wszystkich przycisków na ekran
         for butt in self.__buttons:
             butt.draw(self._surface)
 
         #ukazanie nowej zawartości użytkownikowi
         py.display.update()
-
-    #w menu nie jest to potrzebne
-    def setModel(self):
-        pass

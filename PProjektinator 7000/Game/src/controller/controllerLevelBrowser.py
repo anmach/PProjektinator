@@ -32,11 +32,9 @@ class ControllerLevelBrowser(Controller):
                         self._command = control.getCommand()
 
     #metoda pozwalająca przekazać model do widoku w celu jego wyrenderowania
-    @abstractmethod
     def communicateMV(self, model, view):
-        pass
+        view.setShownLevel(model.getShownLevel())
 
     #metoda pozwalająca na przekazanie polecenia do modelu
-    @abstractmethod
     def giveCommand(self, model):
         model.setCommand(self._command)

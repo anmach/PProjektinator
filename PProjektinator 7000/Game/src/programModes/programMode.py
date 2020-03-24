@@ -17,8 +17,8 @@ class ProgramMode(ABC):
     
     def run(self):
         #główne pętla aktualnego trybu programu
-        while self._model.getRunMode() :
-            if(self._model.getChangeMode())
+        while self._model.getRunMode():
+            if(self._model.getChangeMode()):
                 self.changeMode()
             
             #przetwarzanie danych wejściowych
@@ -30,7 +30,7 @@ class ProgramMode(ABC):
             #renderowanie
             self.render()
 
-
+    #metoda tworząca odpowiedni nowy tryb i uruchamiająca go
     @abstractmethod
     def changeMode(self):
         pass
