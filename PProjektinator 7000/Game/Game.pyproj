@@ -24,6 +24,9 @@
     <Compile Include="src\controller\controller.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="src\controller\controllerLevelBrowser.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="src\controller\controllerMenu.py">
       <SubType>Code</SubType>
     </Compile>
@@ -34,10 +37,16 @@
     <Compile Include="src\model\model.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="src\model\modelLevelBrowser.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="src\model\modelMenu.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="src\programModes\menu.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\programModes\levelBrowser.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="src\programModes\programMode.py">
@@ -53,6 +62,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="src\view\view.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\view\viewLevelBrowser.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="src\view\viewMenu.py">

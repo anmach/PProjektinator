@@ -19,7 +19,7 @@ class View(ABC):
     def render(self):
         pass
     
-    #metoda pozwalająca na pobranie modelu (może się różnic dla każdego z trybów programu)
+    #metoda pozwalająca na pobranie modelu (może się różnić dla każdego z trybów programu)
     @abstractmethod
     def setModel(self):
         pass
@@ -28,3 +28,6 @@ class View(ABC):
 
     def getControls(self):
         return self._controls
+
+    def getSurface(self):
+        return self._surface

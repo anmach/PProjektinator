@@ -9,18 +9,24 @@ class Model(ABC):
         #ustawienie domyślnej wartości polecenia
         self._command = Command.CONTINUE
 
-        #ustawienie domyślnej zmiennej określającej stan głównej pętli aktualnego trybu programu
+        #ustawienie domyślnej wartości zmiennej określającej stan głównej pętli aktualnego trybu programu
         self._runMode = True
 
-    
+        #ustawienie domuślnej wartości zmiennej określającej czy należy przejść do nowego trybu programu
+        self._changeMode = False
+
+
     #metoda aktualizująca stan wewnętrzego modelu programu
     @abstractmethod
-    def update():
+    def update(self):
         pass
 
     #v----GETTERY----v
     def getRunMode(self):
         return self._runMode
+
+    def getChangeMode(self):
+        return self._changeMode
 
     #v----SETTERY----v
     def setCommand(self, command):
