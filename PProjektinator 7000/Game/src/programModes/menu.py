@@ -22,7 +22,7 @@ class Menu(ProgramMode):
     def changeMode(self):
         #przejście do przeglądarki poziomów
         if(self._model.getCommand() == Command.BROWSE_LVL):
+            print(self._model.getCommand())
             levelBrowser = LevelBrowser(self._view.getSurface())
             levelBrowser.run()
-            self._model.setChangeMode(False)
-            py.event.clear()
+            self._controller.setCommand(Command.CONTINUE)

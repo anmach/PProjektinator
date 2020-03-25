@@ -29,3 +29,8 @@ class Controller(ABC):
     @abstractmethod
     def giveCommand(self, model):
         pass
+
+    #v----SETTERY----v
+
+    def setCommand(self, command):
+        self._command = command
