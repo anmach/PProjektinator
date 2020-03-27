@@ -10,11 +10,11 @@ class ControllerLevelBrowser(Controller):
         super().__init__()
 
     #metoda pozwalająca pobrać kontrolki z widoku (do sprawdzenia interakcji użytkownika z nimi)
-    def getControls(self, view):
-        self._controls = view.getControls()
+    def get_controls(self, view):
+        self._controls = view.get_controls()
 
     #główna metoda przetwarzająca i interpretująca dane wejściowe od użytkownika
-    def processInput(self):
+    def process_input(self):
         for event in py.event.get():
 
             #naciśnięcie X okna
@@ -25,14 +25,14 @@ class ControllerLevelBrowser(Controller):
             if event.type == py.MOUSEBUTTONDOWN:
                 for control in self._controls:
                     #sprawdzanie czy nad daną kontrolką jest kursor
-                    if control.getIsFocused():
+                    if control.get_is_focused():
                         #pobranie z niej polecenia
-                        self._command = control.getCommand()
+                        self._command = control.get_command()
 
     #metoda pozwalająca przekazać model do widoku w celu jego wyrenderowania
     def communicateMV(self, model, view):
-        view.setShownLevel(model.getShownLevelNumber())
+        view.set_shown_level(model.get_shown_level_number())
 
     #metoda pozwalająca na przekazanie polecenia do modelu
-    def giveCommand(self, model):
-        model.setCommand(self._command)
+    def give_command(self, model):
+        model.set_command(self._command)

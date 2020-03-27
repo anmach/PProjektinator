@@ -36,25 +36,25 @@ class Control(ABC):
 
     #v----SETTERY----v
 
-    def setPos(self, newPos):
+    def set_pos(self, newPos):
         self._pos = newPos
 
-    def setSize(self, newSize):
+    def set_size(self, newSize):
         self._size = newSize
 
-    def setIsFocused(self, newState):
+    def set_is_focused(self, newState):
         self._isFocused = newState
 
     #v----GETTERY----v
 
-    def getPos(self):
+    def get_pos(self):
         return self._pos
 
-    def getSize(self):
+    def get_size(self):
         return self._size
 
-    def getIsFocused(self):
+    def get_is_focused(self):
         return self._isFocused
 
-    def getCommand(self):
+    def get_command(self):
         return self._command

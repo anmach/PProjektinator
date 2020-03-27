@@ -3,8 +3,8 @@ from src.enum.command import Command
 import pygame as py
 
 
-#klasa bazowa reprezentująca kontroler w MVC
 class Controller(ABC):
+    """klasa bazowa reprezentująca kontroler w MVC"""
 
     def __init__(self):
         self._command = Command.CONTINUE
@@ -12,12 +12,12 @@ class Controller(ABC):
 
     #metoda pozwalająca pobrać kontrolki z widoku (do sprawdzenia interakcji użytkownika z nimi)
     @abstractmethod
-    def getControls(self, view):
+    def get_controls(self, view):
         pass
 
     #główna metoda przetwarzająca i interpretująca dane wejściowe od użytkownika
     @abstractmethod
-    def processInput(self):
+    def process_input(self):
         pass
 
     #metoda pozwalająca przekazać model do widoku w celu jego wyrenderowania
@@ -27,10 +27,10 @@ class Controller(ABC):
 
     #metoda pozwalająca na przekazanie polecenia do modelu
     @abstractmethod
-    def giveCommand(self, model):
+    def give_command(self, model):
         pass
 
     #v----SETTERY----v
 
-    def setCommand(self, command):
+    def set_command(self, command):
         self._command = command

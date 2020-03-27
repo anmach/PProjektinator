@@ -7,8 +7,8 @@ from src.enum.command import Command
 import pygame as py
 
 
-#klasa reprezentująca menu główne gry
 class Menu(ProgramMode):
+    """klasa reprezentująca menu główne gry"""
 
     def __init__(self):
         self._model = ModelMenu()
@@ -19,10 +19,10 @@ class Menu(ProgramMode):
 
         self._controller = ControllerMenu()
 
-    def changeMode(self):
+    def change_mode(self):
         #przejście do przeglądarki poziomów
-        if(self._model.getCommand() == Command.BROWSE_LVL):
-            print(self._model.getCommand())
-            levelBrowser = LevelBrowser(self._view.getSurface())
+        if(self._model.get_command() == Command.BROWSE_LVL):
+            print(self._model.get_command())
+            levelBrowser = LevelBrowser(self._view.get_surface())
             levelBrowser.run()
-            self._controller.setCommand(Command.CONTINUE)
+            self._controller.set_command(Command.CONTINUE)

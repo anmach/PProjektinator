@@ -21,6 +21,9 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="src\controller\controllerPlayer.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="src\controller\controller.py">
       <SubType>Code</SubType>
     </Compile>
@@ -52,6 +55,12 @@
     <Compile Include="src\programModes\programMode.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="src\view\Game\sprite.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\view\Game\viewLevel.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="src\view\UI\button.py">
       <SubType>Code</SubType>
     </Compile>
@@ -78,6 +87,7 @@
     <Folder Include="src\enum\" />
     <Folder Include="src\programModes\" />
     <Folder Include="src\view\" />
+    <Folder Include="src\view\Game\" />
     <Folder Include="src\view\UI\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />

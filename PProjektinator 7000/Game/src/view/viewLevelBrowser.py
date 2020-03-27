@@ -48,6 +48,6 @@ class ViewLevelBrowser(View):
     
 
     #v----SETTERY----v
-    def setShownLevel(self, shownLevel):
+    def set_shown_level(self, shownLevel):
         self.__shownLevel = shownLevel
-        self.__texts[0].setText(str(shownLevel))
+        self.__texts[0].set_text(str(shownLevel))

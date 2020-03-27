@@ -3,8 +3,8 @@ from src.enum.command import Command
 import os
 
 
-#klasa reprezentująca model przeglądarki poziomów
 class ModelLevelBrowser(Model):
+    """klasa reprezentująca model przeglądarki poziomów"""
 
     def __init__(self):
         super().__init__()
@@ -32,5 +32,5 @@ class ModelLevelBrowser(Model):
             self.__shownLevel -= 1
 
     #v----GETTERY----v
-    def getShownLevelNumber(self):
+    def get_shown_level_number(self):
         return self.__shownLevel

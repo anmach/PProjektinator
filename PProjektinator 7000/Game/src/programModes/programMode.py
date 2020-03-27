@@ -4,8 +4,8 @@ from src.view.view import View
 from src.controller.controller import Controller
 
 
-#klasa bazowa trybów programu takich jak Menu, Edytor poziomów, Gra
 class ProgramMode(ABC):
+    """klasa bazowa trybów programu takich jak Menu, Edytor poziomów, Gra"""
 
     runMode = True
 
@@ -17,12 +17,12 @@ class ProgramMode(ABC):
     
     def run(self):
         #główne pętla aktualnego trybu programu
-        while self._model.getRunMode():
-            if(self._model.getChangeMode()):
-                self.changeMode()
+        while self._model.get_run_mode():
+            if(self._model.get_change_mode()):
+                self.change_mode()
             
             #przetwarzanie danych wejściowych
-            self.processInput()
+            self.process_input()
 
             #aktualizacja stanu modelu
             self.update()
@@ -32,19 +32,19 @@ class ProgramMode(ABC):
 
     #metoda tworząca odpowiedni nowy tryb i uruchamiająca go
     @abstractmethod
-    def changeMode(self):
+    def change_mode(self):
         pass
 
     #metoda, która zajmuje się wszelkimi rzeczami związanymi z danymi wejściowymi od użytkownika
     #@abstractmethod
-    def processInput(self):
-        self._controller.getControls(self._view)
-        self._controller.processInput()
+    def process_input(self):
+        self._controller.get_controls(self._view)
+        self._controller.process_input()
 
     #metoda, która zajmuje się wszelkimi rzeczami związanymi z aktualizowaniem stanu wewnętrzego modelu
     #@abstractmethods
     def update(self):
-        self._controller.giveCommand(self._model)
+        self._controller.give_command(self._model)
         self._model.update()
 
     #metoda, która zajmuje się wszelkimi rzeczami związanymi z renderowaniem obiektów na ekran

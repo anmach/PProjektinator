@@ -2,8 +2,8 @@ from src.model.model import Model
 from src.enum.command import Command
 
 
-#klasa reprezentująca model menu
 class ModelMenu(Model):
+    """klasa reprezentująca model menu"""
 
     def __init__(self):
         super().__init__()

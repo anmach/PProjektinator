@@ -2,8 +2,8 @@ from abc import ABC, abstractmethod
 from src.enum.command import Command
 
 
-#klasa bazowa reprezentująca model w MVC
 class Model(ABC):
+    """klasa bazowa reprezentująca model w MVC"""
 
     def __init__(self):
         #ustawienie domyślnej wartości polecenia
@@ -22,19 +22,19 @@ class Model(ABC):
         pass
 
     #v----GETTERY----v
-    def getRunMode(self):
+    def get_run_mode(self):
         return self._runMode
 
-    def getChangeMode(self):
+    def get_change_mode(self):
         return self._changeMode
 
-    def getCommand(self):
+    def get_command(self):
         return self._command
 
     #v----SETTERY----v
-    def setCommand(self, command):
+    def set_command(self, command):
         self._command = command
 
-    def setChangeMode(self, change):
+    def set_change_mode(self, change):
         self._changeMode = change
     

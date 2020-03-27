@@ -8,7 +8,7 @@ import pygame as py
 class ControllerMenu(Controller):
 
     #przetwarzanie danych wejściowych
-    def processInput(self):
+    def process_input(self):
         for event in py.event.get():
 
             #naciśnięcie X okna
@@ -19,8 +19,8 @@ class ControllerMenu(Controller):
             if event.type == py.MOUSEBUTTONDOWN:
                 for control in self._controls:
                     #sprawdzanie czy nad daną kontrolką jest kursor
-                    if control.getIsFocused():
-                        self._command = control.getCommand()
+                    if control.get_is_focused():
+                        self._command = control.get_command()
             else:
                 self._command = Command.CONTINUE
             
@@ -29,8 +29,8 @@ class ControllerMenu(Controller):
     def communicateMV(self, model, view):
         pass
 
-    def getControls(self, view):
-        self._controls = view.getControls()
+    def get_controls(self, view):
+        self._controls = view.get_controls()
 
-    def giveCommand(self, model):
-        model.setCommand(self._command)
+    def give_command(self, model):
+        model.set_command(self._command)

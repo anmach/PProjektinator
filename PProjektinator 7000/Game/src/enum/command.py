@@ -1,7 +1,8 @@
 from enum import Enum
 
-#klasa poleceń wydawanych modelowi przez kontroler
+
 class Command(Enum):
+    """klasa poleceń wydawanych modelowi przez kontroler"""
 
     #polecenie do kontynuowania pracy
     CONTINUE = 1,

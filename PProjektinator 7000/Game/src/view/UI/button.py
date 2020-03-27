@@ -18,7 +18,7 @@ class Button(Control):
         self.__text = Text(text, textSize, pos, primaryColour, secondaryColour)
 
         #ustalenie rozmiaru przycisku ze względu na zajmowane przez tekst miejsce
-        self._size = self.__text.getSize()
+        self._size = self.__text.get_size()
         
         #ewentualne obramowanie przycisku
         self.__hasFrame = hasFrame
@@ -40,10 +40,10 @@ class Button(Control):
         mousePos = py.mouse.get_pos()
         if mousePos[0] >= self._pos[0] and mousePos[0] <= self._pos[0] + self._size[0] and mousePos[1] >= self._pos[1] and mousePos[1] <= self._pos[1] + self._size[1]:
             self._isFocused = 1
-            self.__text.setIsFocused(1)
+            self.__text.set_is_focused(1)
         else: 
             self._isFocused = 0
-            self.__text.setIsFocused(0)
+            self.__text.set_is_focused(0)
 
     #metoda do wyrysowania kontrolki
     def draw(self, surface):

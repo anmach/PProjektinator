@@ -36,6 +36,6 @@ class Text(Control):
         self._surface = self.__font.render(self.__text, True, self._colours[self._isFocused])
         surface.blit(self._surface, self._pos)
 
-    def setText(self, text):
+    def set_text(self, text):
         self.__text = text
         self._size = self.__font.size(self.__text)

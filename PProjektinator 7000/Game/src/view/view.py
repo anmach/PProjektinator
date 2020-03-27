@@ -2,8 +2,8 @@ from abc import ABC, abstractmethod
 import pygame as py
 
 
-#klasa bazowa reprezentująca widok w MVC
 class View(ABC):
+    """klasa bazowa reprezentująca widok w MVC"""
 
     def __init__(self, surface, surfaceSize = (1600, 900)):
         #zmienna określająca rozmiar ekranu
@@ -21,8 +21,8 @@ class View(ABC):
 
     #v----GETTERY----v
 
-    def getControls(self):
+    def get_controls(self):
         return self._controls
 
-    def getSurface(self):
+    def get_surface(self):
         return self._surface

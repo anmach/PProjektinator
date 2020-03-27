@@ -11,5 +11,5 @@ class LevelBrowser(ProgramMode):
         self._view = ViewLevelBrowser(display)
         self._controller = ControllerLevelBrowser()
 
-    def changeMode(self):
+    def change_mode(self):
         pass
