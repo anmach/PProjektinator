@@ -18,3 +18,6 @@ class Command(Enum):
 
     #polecenie do wybrania poprzedniego dostępnego poziomu
     PREV_LEVEL = 5
+
+    #polecenie do rozpoczęcia gry na jednym z poziomów
+    PLAY = 6

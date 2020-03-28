@@ -20,11 +20,14 @@ class ViewLevelBrowser(View):
         self.__buttons.append(Button("Wyjdz", 50, (0.4 * surface.get_size()[0], 0.8 * surface.get_size()[1]), True, Command.EXIT))
         self._controls.append(self.__buttons[-1])
 
-        #propozycja - dodać nową klasę kontrolek, gdzie nie ma tekstu tylko grafika
-        self.__buttons.append(Button("->", 50, (0.6 * surface.get_size()[0], 0.5 * surface.get_size()[1]), True, Command.EXIT))
+        self.__buttons.append(Button("Graj", 50, (0.6 * surface.get_size()[0], 0.8 * surface.get_size()[1]), True, Command.PLAY))
         self._controls.append(self.__buttons[-1])
 
-        self.__buttons.append(Button("<-", 50, (0.3 * surface.get_size()[0], 0.5 * surface.get_size()[1]), True, Command.EXIT))
+        #propozycja - dodać nową klasę kontrolek, gdzie nie ma tekstu tylko grafika
+        self.__buttons.append(Button("->", 50, (0.6 * surface.get_size()[0], 0.5 * surface.get_size()[1]), True, Command.NEXT_LEVEL))
+        self._controls.append(self.__buttons[-1])
+
+        self.__buttons.append(Button("<-", 50, (0.3 * surface.get_size()[0], 0.5 * surface.get_size()[1]), True, Command.PREV_LEVEL))
         self._controls.append(self.__buttons[-1])
 
         self.__texts.append(Text("", 50, (0.4 * surface.get_size()[0], 0.5 * surface.get_size()[1])))

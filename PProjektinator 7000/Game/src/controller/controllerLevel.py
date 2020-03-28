@@ -5,7 +5,10 @@ from src.enum.command import Command
 import pygame as py
 
 
-class controllerPlayer(Controller):
+class controllerLevel(Controller):
+
+    def __init__(self):
+        super().__init__()
 
     #przetwarzanie danych wejściowych
     def process_input(self):
@@ -17,6 +20,8 @@ class controllerPlayer(Controller):
 
             #naciśnięcie klawisza klawiatury
             if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    self._command = Command.EXIT
                 if event.key == pygame.K_UP:
                     print("Jump")
                     #TODO 
@@ -34,8 +39,8 @@ class controllerPlayer(Controller):
         pass
 
     def get_controls(self, view):
-        pass
+        self._controls = view.get_controls()
 
     def give_command(self, model):
-        pass
+        model.set_command(self._command)
 

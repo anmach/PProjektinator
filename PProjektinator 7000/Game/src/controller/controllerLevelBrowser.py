@@ -2,6 +2,7 @@ from .controller import Controller
 from src.model.modelLevelBrowser import ModelLevelBrowser
 from src.enum.command import Command
 import pygame as py
+import time
 
 
 class ControllerLevelBrowser(Controller):

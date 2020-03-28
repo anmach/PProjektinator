@@ -24,12 +24,18 @@ class ModelLevelBrowser(Model):
             self._runMode = False;
 
         #wybór kolejnego poziomu
-        elif self._command == Command.NEXT_LEVEL and self.__levelShown < (self.__levelList) - 1:
+        elif self._command == Command.NEXT_LEVEL and self.__shownLevel < (len(self.__levelList)) - 1:
             self.__shownLevel += 1
 
         #wybór poprzedniego poziomu
-        elif self._command == Command.PREV_LEVEL and self.__levelShown > 0:
+        elif self._command == Command.PREV_LEVEL and self.__shownLevel > 0:
             self.__shownLevel -= 1
+
+        elif self._command == Command.PLAY:
+            print("Rozpoczęto grę na poziomie " + str(self.__shownLevel))
+            self._command = Command.EXIT
+            self._runMode = False
+            #TODO
 
     #v----GETTERY----v
     def get_shown_level_number(self):
