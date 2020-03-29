@@ -22,18 +22,24 @@ class controllerLevel(Controller):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     self._command = Command.EXIT
-                if event.key == pygame.K_UP:
-                    print("Jump")
-                    #TODO 
-                if event.key == pygame.K_DOWN:
-                    print("Crouch")
-                    #TODO 
-                if event.key == pygame.K_LEFT:
-                    print("Go left")
-                    #TODO
-                if event.key == pygame.K_RIGHT:
-                    print("Go right")
-                    #TODO                          
+                #skakanie
+                elif event.key == pygame.K_W:
+                    self._command = Command.JUMP 
+                #kucanie
+                elif event.key == pygame.K_S:
+                    self._command = Command.CROUCH
+                #atak
+                elif event.key == pygame.K_F:
+                    self._command = Command.ATTACK
+                #rozpoczęcie telekinezy
+                elif event.key == pygame.K_R:
+                    print("The force is strong with this one.\n")
+                    self._command == Command.TELEKINESIS
+                #poruszanie się lewo/prawo
+                elif event.key == pygame.K_A:
+                    self._command = Command.GO_LEFT
+                elif event.key == pygame.K_D:
+                    self._command = Command.GO_RIGHT                     
 
     def communicateMV(self, model, view):
         pass
