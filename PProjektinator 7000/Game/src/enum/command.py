@@ -38,5 +38,8 @@ class Command(Enum):
     #polecenie do kucnięcia
     CROUCH = 24
 
-    #polecenie do ataku
+    #polecenie do ataku wrogich jednostek
     ATTACK = 25
+    
+    #polecenie do złapania obiektu do poruszania siłą umysłu
+    TELEKINESIS = 26
