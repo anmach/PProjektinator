@@ -37,13 +37,18 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="src\Game.py" />
+    <Compile Include="src\model\gameObjects\gameObject.py" />
     <Compile Include="src\model\model.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="src\model\modelLevel.py" />
     <Compile Include="src\model\modelLevelBrowser.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="src\model\modelMenu.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\programModes\level.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="src\programModes\menu.py">
@@ -82,6 +87,7 @@
     <Folder Include="src\model\" />
     <Folder Include="src\controller\" />
     <Folder Include="src\enum\" />
+    <Folder Include="src\model\gameObjects\" />
     <Folder Include="src\programModes\" />
     <Folder Include="src\view\" />
     <Folder Include="src\view\Game\" />

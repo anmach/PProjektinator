@@ -5,7 +5,7 @@ from src.enum.command import Command
 import pygame as py
 
 
-class controllerLevel(Controller):
+class ControllerLevel(Controller):
 
     def __init__(self):
         super().__init__()
