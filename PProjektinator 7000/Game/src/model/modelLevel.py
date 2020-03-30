@@ -35,6 +35,8 @@ class ModelLevel(Model):
         elif self._command == Command.GO_LEFT:
             self.__player.set_spd_x(-1)
             self._command = Command.CONTINUE
+        elif self._command == Command.EXIT:            
+            self._runMode = False
 
 
         if self.__player.does_gravity: 
