@@ -15,7 +15,7 @@ class GameObject(py.sprite.Sprite):
         #obrazek
         if (image_source != None):
             self._image = py.image.load(image_source).convert()
-            self.surf.set_colorkey((255, 255, 255))
+            #self.surf.set_colorkey((255, 255, 0))
         else:
             self.surf.fill((255, 255, 255))
         self.rect = self.surf.get_rect()
@@ -42,8 +42,8 @@ class GameObject(py.sprite.Sprite):
     def set_spd_y(self, spd):
         self.spd_y = spd
 
-    def check_collision_at(self, target, x, y):
-        if ((x + self.width > target.x) and (x < target.x + target.width)) or ((y + self.height > target.y) and (y < targe.y + target.height)):
-            return True
-        else:
-            return False
+  #  def check_collision_at(self, target, x, y):
+   #     if ((x + self.width > target.x) and (x < target.x + target.width)) or ((y + self.height > target.y) and (y < targe.y + target.height)):
+    #        return True
+     #   else:
+      #      return False
