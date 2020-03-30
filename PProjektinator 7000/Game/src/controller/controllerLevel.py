@@ -13,13 +13,14 @@ class ControllerLevel(Controller):
     #przetwarzanie danych wejściowych
     def process_input(self):
         for event in py.event.get():
+            self._command = Command.CONTINUE
 
             #naciśnięcie X okna
             if event.type == py.QUIT:
                 self._command = Command.EXIT
 
             #naciśnięcie klawisza klawiatury
-            if event.type == py.KEYDOWN:
+            elif event.type == py.KEYDOWN:
                 if event.key == py.K_ESCAPE:
                     self._command = Command.EXIT
                 #skakanie
@@ -39,7 +40,13 @@ class ControllerLevel(Controller):
                 elif event.key == py.K_a:
                     self._command = Command.GO_LEFT
                 elif event.key == py.K_d:
-                    self._command = Command.GO_RIGHT                     
+                    self._command = Command.GO_RIGHT 
+            else:
+                keys = py.key.get_pressed()
+                if keys[py.K_d]:
+                    self._command = Command.GO_RIGHT 
+                elif keys[py.K_a]:
+                    self._command = Command.GO_LEFT
 
     #metoda pozwalająca przekazać model do widoku w celu jego wyrenderowania
     def communicateMV(self, model, view):
