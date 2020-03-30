@@ -21,7 +21,7 @@ class ModelLevelBrowser(Model):
     def update(self):
         #wyjście do menu
         if self._command == Command.EXIT:
-            self._runMode = False;
+            self._runMode = False
 
         #wybór kolejnego poziomu
         elif self._command == Command.NEXT_LEVEL and self.__shownLevel < (len(self.__levelList)) - 1:
@@ -33,9 +33,7 @@ class ModelLevelBrowser(Model):
 
         elif self._command == Command.PLAY:
             print("Rozpoczęto grę na poziomie " + str(self.__shownLevel))
-            self._command = Command.EXIT
-            self._runMode = False
-            #TODO
+            self._changeMode = True
 
     #v----GETTERY----v
     def get_shown_level_number(self):

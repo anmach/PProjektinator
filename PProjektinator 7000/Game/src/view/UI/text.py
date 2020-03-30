@@ -5,7 +5,7 @@ import pygame as py
 #klas umożliwiająca wyświetlanie tekstu na ekranie
 class Text(Control):
 
-    def __init__ (self, text, textSize, pos, primaryColour = (200, 200, 200), secondaryColour = (240, 240, 240)):
+    def __init__ (self, text, textSize, pos, primaryColour = (255, 255, 255), secondaryColour = (240, 240, 240)):
         super().__init__(pos);
 
         #przypisanie kolorów

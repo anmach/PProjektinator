@@ -37,7 +37,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="src\Game.py" />
-    <Compile Include="src\model\gameObjects\gameObject.py" />
+    <Compile Include="src\view\Game\gameObject.py" />
     <Compile Include="src\model\model.py">
       <SubType>Code</SubType>
     </Compile>
@@ -60,6 +60,9 @@
     <Compile Include="src\programModes\programMode.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="src\view\Game\player.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="src\view\Game\sprite.py">
       <SubType>Code</SubType>
     </Compile>
@@ -73,6 +76,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="src\view\view.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\view\viewLevel.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="src\view\viewLevelBrowser.py">

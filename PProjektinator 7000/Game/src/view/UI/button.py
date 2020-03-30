@@ -7,7 +7,7 @@ import pygame as py
 #klasa reprezentująca przycisk w GUI
 class Button(Control):
 
-    def __init__(self, text, textSize, pos, hasFrame, command = Command.CONTINUE, primaryColour = (200, 200, 200), secondaryColour = (240, 240, 240)):
+    def __init__(self, text, textSize, pos, hasFrame, command = Command.CONTINUE, primaryColour = (255, 255, 255), secondaryColour = (240, 240, 240)):
         super().__init__(pos, command)
 
         #przypisanie kolorów
