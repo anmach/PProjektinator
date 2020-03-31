@@ -14,7 +14,6 @@ class LevelBrowser(ProgramMode):
 
     def change_mode(self):
        if(self._model.get_command() == Command.PLAY):
-            print(self._model.get_command())
             level = Level(self._view.get_surface(), self._model.get_shown_level_number())
             level.run()
             self._controller.set_command(Command.CONTINUE)

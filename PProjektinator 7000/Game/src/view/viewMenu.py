@@ -13,10 +13,10 @@ class ViewMenu(View):
         self.__buttons = []
 
         #tworzenie przycisków i przypisanie każdego z nich do ogólnej tablicy kontrolek
-        self.__buttons.append(Button("Wyjdź", 50, (0.2 * surface.get_size()[0], 0.8 * surface.get_size()[1]), True, Command.EXIT))
+        self.__buttons.append(Button("Wyjdź", 60, (0.2 * surface.get_size()[0], 0.7 * surface.get_size()[1]), True, Command.EXIT))
         self._controls.append(self.__buttons[-1])
 
-        self.__buttons.append(Button("Przeglądaj poziomy", 50, (0.2 * surface.get_size()[0], 0.3 * surface.get_size()[1]), True, Command.BROWSE_LVL))
+        self.__buttons.append(Button("Przeglądaj poziomy", 60, (0.2 * surface.get_size()[0], 0.3 * surface.get_size()[1]), True, Command.BROWSE_LVL))
         self._controls.append(self.__buttons[-1])
 
     def render(self):

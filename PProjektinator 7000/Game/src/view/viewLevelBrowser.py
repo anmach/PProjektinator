@@ -16,21 +16,23 @@ class ViewLevelBrowser(View):
         #tablica przycisków
         self.__buttons = []
         self.__texts = []
+
         #tworzenie przycisków i przypisanie każdego z nich do ogólnej tablicy kontrolek
-        self.__buttons.append(Button("Wyjdz", 50, (0.4 * surface.get_size()[0], 0.8 * surface.get_size()[1]), True, Command.EXIT))
+        self.__buttons.append(Button("Wyjdz", 50, (0.8 * surface.get_size()[0], 0.8 * surface.get_size()[1]), True, Command.EXIT))
         self._controls.append(self.__buttons[-1])
 
-        self.__buttons.append(Button("Graj", 50, (0.6 * surface.get_size()[0], 0.8 * surface.get_size()[1]), True, Command.PLAY))
+        self.__buttons.append(Button("Graj", 60, (0.42 * surface.get_size()[0], 0.7 * surface.get_size()[1]), True, Command.PLAY))
         self._controls.append(self.__buttons[-1])
 
         #propozycja - dodać nową klasę kontrolek, gdzie nie ma tekstu tylko grafika
-        self.__buttons.append(Button("->", 50, (0.6 * surface.get_size()[0], 0.5 * surface.get_size()[1]), True, Command.NEXT_LEVEL))
+        self.__buttons.append(Button("->", 40, (0.7 * surface.get_size()[0], 0.4 * surface.get_size()[1]), True, Command.NEXT_LEVEL))
         self._controls.append(self.__buttons[-1])
 
-        self.__buttons.append(Button("<-", 50, (0.3 * surface.get_size()[0], 0.5 * surface.get_size()[1]), True, Command.PREV_LEVEL))
+        self.__buttons.append(Button("<-", 40, (0.2 * surface.get_size()[0], 0.4 * surface.get_size()[1]), True, Command.PREV_LEVEL))
         self._controls.append(self.__buttons[-1])
 
-        self.__texts.append(Text("", 50, (0.4 * surface.get_size()[0], 0.5 * surface.get_size()[1])))
+        #tekst wyświetlający aktualnie wybrany poziom
+        self.__texts.append(Text("", 60, (0.45 * surface.get_size()[0], 0.385 * surface.get_size()[1])))
         self._controls.append(self.__texts[-1])
 
     #metoda renderująca
