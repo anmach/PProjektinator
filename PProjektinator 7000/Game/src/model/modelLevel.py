@@ -20,6 +20,7 @@ class ModelLevel(Model):
         self.__player = Player(".\\res\\sprites\\player.png")
         self.__all_sprites.add(self.__player)
         self.__all_sprites.add(platform1)
+        self.__all_sprites.add(platform2)
         self.platforms.add(platform1)
         self.platforms.add(platform2)
         for entity in self.__all_sprites:
