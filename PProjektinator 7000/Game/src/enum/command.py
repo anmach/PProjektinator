@@ -17,29 +17,38 @@ class Command(Enum):
     NEXT_LEVEL = 4,
 
     #polecenie do wybrania poprzedniego dostępnego poziomu
-    PREV_LEVEL = 5
+    PREV_LEVEL = 5,
 
     #polecenie do rozpoczęcia gry na jednym z poziomów
-    PLAY = 6
+    PLAY = 6,
+
+    #polecenie do wczytania nowego poziomu do edytowania
+    EDIT = 7,
+
+    #polecenie do utworzenia nowego poziomu
+    CREATE_NEW = 8,
+
+    #polecenie do zapisania aktualnie modyfikowanego poziomu
+    SAVE = 9,
 
     #POLECENIA DO STEROWANIA NA POZIOMIE POZIOMU
     #polecenie do skoku
-    JUMP = 20
+    JUMP = 20,
 
     #polecenie do podwójnego skoku
-    DOUBLE_JUMP = 21
+    DOUBLE_JUMP = 21,
 
     #polecenie do ruchu w prawo
-    GO_RIGHT = 22
+    GO_RIGHT = 22,
 
     #polecenie do ruchu w lewo
-    GO_LEFT = 23
+    GO_LEFT = 23,
 
     #polecenie do kucnięcia
-    CROUCH = 24
+    CROUCH = 24,
 
     #polecenie do ataku wrogich jednostek
-    ATTACK = 25
+    ATTACK = 25,
     
     #polecenie do złapania obiektu do poruszania siłą umysłu
     TELEKINESIS = 26

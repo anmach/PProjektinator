@@ -30,6 +30,9 @@
     <Compile Include="src\controller\controllerLevelBrowser.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="src\controller\controllerLevelEditor.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="src\controller\controllerMenu.py">
       <SubType>Code</SubType>
     </Compile>
@@ -37,6 +40,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="src\Game.py" />
+    <Compile Include="src\model\modelLevelEditor.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\programModes\levelEditor.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="src\view\Game\gameObject.py" />
     <Compile Include="src\model\model.py">
       <SubType>Code</SubType>
@@ -82,6 +91,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="src\view\viewLevelBrowser.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\view\viewLevelEditor.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="src\view\viewMenu.py">
