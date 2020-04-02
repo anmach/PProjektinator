@@ -30,13 +30,13 @@ class ModelLevel(Model):
     def update(self):
         self.__player.set_spd_x(0)
         
-        if self._command == Command.GO_RIGHT:
+        if self._command & Command.GO_RIGHT == Command.GO_RIGHT and not (self._command & 0x80):
             self.__player.set_spd_x(1)
-            self._command = Command.CONTINUE
-        elif self._command == Command.GO_LEFT:
+            #self._command = Command.CONTINUE
+        elif self._command & Command.GO_LEFT == Command.GO_LEFT and not (self._command & 0x80):
             self.__player.set_spd_x(-1)
-            self._command = Command.CONTINUE
-        elif self._command == Command.EXIT:            
+            #self._command = Command.CONTINUE
+        elif self._command == Command.EXIT:
             self._runMode = False
 
 
@@ -46,7 +46,7 @@ class ModelLevel(Model):
         for entity in self.platforms:
             self.__player.rect.move_ip(0, self.__player.spd_y)
             if py.sprite.collide_rect(self.__player, entity):
-                if self._command == Command.JUMP:   #kolidujesz z podłożem? tak - skocz, nie - nie skacz
+                if self._command & Command.JUMP == Command.JUMP and not (self._command & 0x80):   #kolidujesz z podłożem? tak - skocz, nie - nie skacz
                     self.__player.set_spd_y(-2)
                 else:
                     self.__player.set_spd_y(0)

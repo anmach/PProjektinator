@@ -9,11 +9,13 @@ class ControllerLevel(Controller):
 
     def __init__(self):
         super().__init__()
+        self._command = 0;
 
     #przetwarzanie danych wejściowych
     def process_input(self):
         for event in py.event.get():
-            self._command = Command.CONTINUE
+            
+            self._command = self._command & 0x7F;
 
             #naciśnięcie X okna
             if event.type == py.QUIT:
@@ -24,29 +26,31 @@ class ControllerLevel(Controller):
                 if event.key == py.K_ESCAPE:
                     self._command = Command.EXIT
                 #skakanie
-                elif event.key == py.K_SPACE:
-                    self._command = Command.JUMP 
+                if event.key == py.K_SPACE:
+                    self._command += Command.JUMP 
                 #kucanie
-                elif event.key == py.K_s:
-                    self._command = Command.CROUCH
+                if event.key == py.K_s:
+                    self._command += Command.CROUCH
                 #atak
-                elif event.key == py.K_f:
-                    self._command = Command.ATTACK
+                if event.key == py.K_f:
+                    self._command += Command.ATTACK
                 #rozpoczęcie telekinezy
-                elif event.key == py.K_r:
+                if event.key == py.K_r:
                     print("The force is strong with this one.\n")
-                    self._command == Command.TELEKINESIS
+                    self._command += Command.TELEKINESIS
                 #poruszanie się lewo/prawo
-                elif event.key == py.K_a:
-                    self._command = Command.GO_LEFT
-                elif event.key == py.K_d:
-                    self._command = Command.GO_RIGHT 
-            else:
-                keys = py.key.get_pressed()
-                if keys[py.K_d]:
-                    self._command = Command.GO_RIGHT 
-                elif keys[py.K_a]:
-                    self._command = Command.GO_LEFT
+                if event.key == py.K_a:
+                    self._command += Command.GO_LEFT
+                if event.key == py.K_d:
+                    self._command += Command.GO_RIGHT
+            elif event.type == py.KEYUP:
+                #poruszanie się lewo/prawo
+                if event.key == py.K_a:
+                    self._command -= Command.GO_LEFT
+                if event.key == py.K_d:
+                    self._command -= Command.GO_RIGHT
+                if event.key == py.K_SPACE:
+                    self._command -= Command.JUMP
 
     #metoda pozwalająca przekazać model do widoku w celu jego wyrenderowania
     def communicateMV(self, model, view):
