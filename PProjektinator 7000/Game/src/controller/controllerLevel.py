@@ -27,17 +27,19 @@ class ControllerLevel(Controller):
                     self._command = Command.EXIT
                 #skakanie
                 if event.key == py.K_SPACE:
-                    self._command += Command.JUMP 
+                    self._command += Command.JUMP
+                    self._command = self._command ^ Command.CROUCH
                 #kucanie
                 if event.key == py.K_s:
                     self._command += Command.CROUCH
+                    self._command = self._command ^ Command.JUMP
                 #atak
                 if event.key == py.K_f:
                     self._command += Command.ATTACK
                 #rozpoczęcie telekinezy
                 if event.key == py.K_r:
                     print("The force is strong with this one.\n")
-                    self._command += Command.TELEKINESIS
+                    self._command = Command.TELEKINESIS
                 #poruszanie się lewo/prawo
                 if event.key == py.K_a:
                     self._command += Command.GO_LEFT
@@ -46,11 +48,15 @@ class ControllerLevel(Controller):
             elif event.type == py.KEYUP:
                 #poruszanie się lewo/prawo
                 if event.key == py.K_a:
-                    self._command -= Command.GO_LEFT
+                    self._command = self._command & ~Command.GO_LEFT
                 if event.key == py.K_d:
-                    self._command -= Command.GO_RIGHT
+                    self._command = self._command & ~Command.GO_RIGHT
                 if event.key == py.K_SPACE:
-                    self._command -= Command.JUMP
+                    self._command = self._command & ~Command.JUMP
+                if event.key == py.K_f:
+                    self._command = self._command & ~Command.ATTACK
+                if event.key == py.K_s:
+                    self._command = self._command & ~Command.CROUCH
 
     #metoda pozwalająca przekazać model do widoku w celu jego wyrenderowania
     def communicateMV(self, model, view):
