@@ -39,7 +39,9 @@ class ModelLevelEditor(Model):
             #wczytanie nowego poziomu
 
         elif self._command == Command.CREATE_NEW:
+            pass
             #utworzenie nowego poziomu i wczytanie go
 
         elif self._command == Command.SAVE and self.__chosenLevel != -1:
+            pass
             #zapisanie aktualnie modyfikowanego poziomu

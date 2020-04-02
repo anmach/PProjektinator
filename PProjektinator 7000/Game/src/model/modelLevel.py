@@ -4,6 +4,7 @@ from src.view.Game.player import Player
 from src.enum.command import Command
 import pygame as py
 
+
 class ModelLevel(Model):
     """Model poziomu"""
 
@@ -28,17 +29,20 @@ class ModelLevel(Model):
 
 
     def update(self):
-        self.__player.set_spd_x(0)
-        
-        if self._command & Command.GO_RIGHT == Command.GO_RIGHT and not (self._command & 0x80):
-            self.__player.set_spd_x(1)
-            #self._command = Command.CONTINUE
-        elif self._command & Command.GO_LEFT == Command.GO_LEFT and not (self._command & 0x80):
-            self.__player.set_spd_x(-1)
-            #self._command = Command.CONTINUE
-        elif self._command == Command.EXIT:
-            self._runMode = False
 
+        spd_x = 1 if self._command & Command.GO_RIGHT & ~0x80 else \
+                -1 if self._command & Command.GO_LEFT & ~0x80 else \
+                0
+        self.__player.set_spd_x(spd_x)
+
+        # self.__player.set_spd_x(0)
+        # if self._command & Command.GO_RIGHT & ~0x80:
+        #     self.__player.set_spd_x(1)
+        # if self._command & Command.GO_LEFT & ~0x80:
+        #     self.__player.set_spd_x(-1)
+
+        if self._command == Command.EXIT:
+            self._runMode = False
 
         if self.__player.does_gravity: 
             self.__player.spd_y += 0.01
@@ -46,13 +50,18 @@ class ModelLevel(Model):
         for entity in self.platforms:
             self.__player.rect.move_ip(0, self.__player.spd_y)
             if py.sprite.collide_rect(self.__player, entity):
-                if self._command & Command.JUMP == Command.JUMP and not (self._command & 0x80):   #kolidujesz z podłożem? tak - skocz, nie - nie skacz
-                    self.__player.set_spd_y(-2)
-                else:
-                    self.__player.set_spd_y(0)
+                spd_y = -2 if self._command & Command.JUMP & ~0x80 else \
+                        0
+                self.__player.set_spd_y(spd_y)
+
+                # if self._command & Command.JUMP & ~0x80:   #kolidujesz z podłożem? tak - skocz, nie - nie skacz
+                #     self.__player.set_spd_y(-2)
+                # else:
+                #     self.__player.set_spd_y(0)
             self.__player.rect.move_ip(self.__player.spd_x, 0)
-            if py.sprite.collide_rect(self.__player, entity):
-                self.__player.set_spd_x(0)
+            # if py.sprite.collide_rect(self.__player, entity): # to chyba nie jest potrzebne
+            #     self.__player.set_spd_x(0)
+
         #for entity in self.__all_sprites:
          #   if self.__player.check_collision_at(GameObject, self.__player.x, self.__player.y + self.__player.spd_y):    #sprawdzenie pionowej kolizji gracza w stronę w którą się porusza
           #      if self._command == Command.JUMP:   #kolidujesz z podłożem? tak - skocz, nie - nie skacz
@@ -70,5 +79,3 @@ class ModelLevel(Model):
 
     def get_all_sprites(self):
         return self.__all_sprites
-
-
