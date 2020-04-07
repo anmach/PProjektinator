@@ -13,3 +13,5 @@ class ModelMenu(Model):
             self._runMode = False
         elif self._command == Command.BROWSE_LVL:
             self._changeMode = True
+        elif self._command == Command.OPTIONS:
+            self._changeMode = True

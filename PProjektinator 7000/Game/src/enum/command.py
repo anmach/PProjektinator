@@ -30,6 +30,9 @@ class Command(IntEnum):
 
     #polecenie do zapisania aktualnie modyfikowanego poziomu
     SAVE = 0x89,
+    
+    #polecenie do przejścia do menu opcji
+    OPTIONS = 0x90,
 
     #POLECENIA DO STEROWANIA NA POZIOMIE POZIOMU
     #polecenie do skoku

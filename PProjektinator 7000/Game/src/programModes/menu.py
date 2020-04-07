@@ -1,5 +1,6 @@
 from .programMode import ProgramMode
 from .levelBrowser import LevelBrowser
+from .options import Options
 from src.model.modelMenu import ModelMenu
 from src.view.viewMenu import ViewMenu
 from src.controller.controllerMenu import ControllerMenu
@@ -25,4 +26,8 @@ class Menu(ProgramMode):
             print(self._model.get_command())
             levelBrowser = LevelBrowser(self._view.get_surface())
             levelBrowser.run()
+            self._controller.set_command(Command.CONTINUE)
+        elif(self._model.get_command() == Command.OPTIONS):
+            options = Options(self._view.get_surface())
+            options.run()
             self._controller.set_command(Command.CONTINUE)

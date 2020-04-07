@@ -36,6 +36,9 @@
     <Compile Include="src\controller\controllerMenu.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="src\controller\controllerOptions.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="src\enum\command.py">
       <SubType>Code</SubType>
     </Compile>
@@ -43,7 +46,13 @@
     <Compile Include="src\model\modelLevelEditor.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="src\model\modelOptions.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="src\programModes\levelEditor.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\programModes\options.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="src\view\Game\gameObject.py" />
@@ -97,6 +106,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="src\view\viewMenu.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\view\viewOptions.py">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
