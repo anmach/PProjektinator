@@ -6,6 +6,12 @@ import pygame as py
 
 class ControllerOptions(Controller):
   #przetwarzanie danych wejściowych
+    def __init__(self):
+        super().__init__()
+        
+        # tablica sliderów
+        self._sliders = []
+
     def process_input(self):
         for event in py.event.get():
 
@@ -19,6 +25,11 @@ class ControllerOptions(Controller):
                     #sprawdzanie czy nad daną kontrolką jest kursor
                     if control.get_is_focused():
                         self._command = control.get_command()
+                        break
+                for slider in self._sliders:
+                    if slider.get_is_focused():
+                        slider.move()
+                        break
             else:
                 self._command = Command.CONTINUE
             
@@ -29,6 +40,7 @@ class ControllerOptions(Controller):
 
     def get_controls(self, view):
         self._controls = view.get_controls()
+        self._sliders = view.get_sliders()
 
     def give_command(self, model):
         model.set_command(self._command)
