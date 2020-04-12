@@ -73,7 +73,8 @@ class Slider(Control):
             self.move_right()
         elif mouse_position[0] < (self._pos[0] + self._size[0]/2):
             self.move_left()
-
+    
+    # gettery | settery
     def get_current_value(self):
         return self._current_value
 

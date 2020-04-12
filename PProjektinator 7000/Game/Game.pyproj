@@ -54,7 +54,7 @@
     <Compile Include="src\programModes\levelEditor.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\programModes\options.py">
+    <Compile Include="src\programModes\optionsMenu.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="src\view\Game\gameObject.py" />

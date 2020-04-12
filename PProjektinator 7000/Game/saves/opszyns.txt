@@ -1,0 +1,4 @@
+1 2 ruch w lewo
+2 3 ruch w prawo
+3 4 skok
+20 1 głośnośc
