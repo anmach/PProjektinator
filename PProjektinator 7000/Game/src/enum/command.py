@@ -22,7 +22,7 @@ class Command(IntEnum):
     #polecenie do rozpoczęcia gry na jednym z poziomów
     PLAY = 0x86,
 
-    #polecenie do wczytania nowego poziomu do edytowania
+    #polecenie do przejścia do edytora poziomów
     EDIT = 0x87,
 
     #polecenie do utworzenia nowego poziomu
@@ -30,11 +30,18 @@ class Command(IntEnum):
 
     #polecenie do zapisania aktualnie modyfikowanego poziomu
     SAVE = 0x89,
+
+    #polecenie do wykonania odpowiedniej akcji na polu edycyjnym przypisanej do LPM
+    CLICKED_LMB = 0x90,
+
+    #polecenie do wykonanie odpowiedniej akcji na polu edycyjnym przeypisanej do PPM
+    CLICKED_RMP = 0x91,
     
     #polecenie do przejścia do menu opcji
-    OPTIONS = 0x90,
+    OPTIONS = 0x92,
 
-    #POLECENIA DO STEROWANIA NA POZIOMIE POZIOMU
+    #POLECENIA DO STEROWANIA NA POZIOMIE POZIOMU 
+    #wartości są sprawdzane
     #polecenie do skoku
     JUMP = 0b1,
 

@@ -1,6 +1,8 @@
 from .model import Model
 from src.enum.command import Command
+from src.enum.editingMode import EditingMode
 import os
+import pygame as py
 
 
 class ModelLevelEditor(Model):
@@ -20,7 +22,13 @@ class ModelLevelEditor(Model):
         self.__levelToEdit = 0
 
         #współrzędne punktów nowej platformy
-        self.__newPlatformPoints = []
+        self.__newPlatformCoords = (-1, -1)
+
+        #liczba utworzonych już wierzchołków nowej platformy
+        self.__createdVerticesNumber = 0
+
+        #aktualny tryb pracy
+        self.__mode = EditingMode.NONE
 
     #metoda aktualizująca stan wewnętrzego modelu programu
     @abstractmethod
@@ -45,3 +53,43 @@ class ModelLevelEditor(Model):
         elif self._command == Command.SAVE and self.__chosenLevel != -1:
             pass
             #zapisanie aktualnie modyfikowanego poziomu
+        elif self.__mode != EditingMode.NONE:
+
+            #lewy przycisk myszki
+            if self._command == Command.CLICKED_LMB:
+            
+                #tworzenie nowej platformy
+                if self.__mode == EditingMode.PLATFORM_CREATION:
+                    #TODO
+                    #sprawdzenie czy nie nachodzi/koliduje z innymi obiektami
+                    #albo i bez tego, gdyż wtedy można [łatwiej] robić platformy, które nie są prostokątami
+            
+                    if self.__newPlatformCoords == (-1, -1):
+                        self.__newPlatformCoords = py.mouse.get_pos()
+                    else:
+                        #TODO
+                        #dodanie nowej platformy o współrzędnych wierzchołków [tworzących przekątną] - (self.__newPlatformCoords, py.mouse.get_pos())
+                        pass
+            
+                elif self.__mode == EditingMode.OBJECT_PLACEMENT:
+                    #TODO
+                    #sprawdzenie kolizji i dodanie do poziomu
+                    pass
+            
+            #prawy przycisk myszki
+            elif self._command == Command.CLICKED_RMP:
+
+                #w trybie tworzenia platformy
+                if self.__mode == EditingMode.PLATFORM_CREATION:
+
+                    #ale bez wierzchołków - wychodzimy z tego trybu
+                    if self.__newPlatformCoords == (-1, -1):
+                        self.__mode = EditingMode.NONE
+
+                    #już z jednym wierzchołkiem - usuwamy go
+                    else:
+                        self.__newPlatformCoords = (-1, -1)
+
+                #w trybie wstawianie nowego obiektu
+                elif self.__mode == EditingMode.OBJECT_PLACEMENT:
+                    self.__mode == EditingMode.NONE
