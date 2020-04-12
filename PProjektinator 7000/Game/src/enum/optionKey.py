@@ -1,6 +1,6 @@
 from enum import IntEnum
 
-class optionsKeys(IntEnum):
+class OptionKey(IntEnum):
     """ Klasa z kluczami/nazwami opcji do ustawiania w menu opcji.
         Przydatne przy zapisie opcji do pliku czy ustawianiu nowych klawiszy
     """
@@ -12,4 +12,3 @@ class optionsKeys(IntEnum):
     VOLUME = 20
     WINDOW_WIDTH = 21
     WINDOW_HEIGHT = 22
-

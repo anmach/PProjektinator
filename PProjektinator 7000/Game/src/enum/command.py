@@ -43,6 +43,9 @@ class Command(IntEnum):
     # polecenie odczytania pliku opcji
     READ_OPTIONS = 0x93,
 
+    #polecenie zapisu do pliku
+    SAVE_OPTIONS = 0x94
+
     #POLECENIA DO STEROWANIA NA POZIOMIE POZIOMU
     #polecenie do skoku
     JUMP = 0b1,
