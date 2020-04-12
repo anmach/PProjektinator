@@ -5,7 +5,7 @@ from src.controller.controllerOptions import ControllerOptions
 from src.enum.command import Command
 import pygame as py
 
-class Options(ProgramMode):
+class OptionsMenu(ProgramMode):
     def __init__(self, display):
         self._model = ModelOptions()
         self._view = ViewOptions(display)

@@ -40,8 +40,10 @@ class Command(IntEnum):
     #polecenie do przejścia do menu opcji
     OPTIONS = 0x92,
 
-    #POLECENIA DO STEROWANIA NA POZIOMIE POZIOMU 
-    #wartości są sprawdzane
+    # polecenie odczytania pliku opcji
+    READ_OPTIONS = 0x93,
+
+    #POLECENIA DO STEROWANIA NA POZIOMIE POZIOMU
     #polecenie do skoku
     JUMP = 0b1,
 

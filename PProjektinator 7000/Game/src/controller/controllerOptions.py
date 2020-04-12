@@ -51,7 +51,7 @@ class ControllerOptions(Controller):
                     for slider in self._sliders:
                         slider.set_is_pushed(0)
                
-    #w menu nie ma potrzeby przekazywania modelu do widoku
+    # w menu nie ma potrzeby przekazywania modelu do widoku
     def communicateMV(self, model, view):
         pass
 

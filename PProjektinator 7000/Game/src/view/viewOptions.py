@@ -78,6 +78,7 @@ class ViewOptions(View):
         #ukazanie nowej zawartości użytkownikowi
         py.display.update()
 
+    # gettery | settery
     def get_sliders(self):
         return self.__sliders
 
