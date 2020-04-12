@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from src.model.model import Model
 from src.view.view import View
 from src.controller.controller import Controller
+import pygame as py
 
 
 class ProgramMode(ABC):
@@ -29,6 +30,10 @@ class ProgramMode(ABC):
 
             #renderowanie
             self.render()
+
+            #ograniczenie fps?
+            clock = py.time.Clock()
+            clock.tick(60)
 
     #metoda tworząca odpowiedni nowy tryb i uruchamiająca go
     @abstractmethod
