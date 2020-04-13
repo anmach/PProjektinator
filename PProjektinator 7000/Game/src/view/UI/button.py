@@ -53,4 +53,4 @@ class Button(Control):
 
     # gettery | settery
     def get_text(self):
-        return self.__text
+        return self.__text.get_text()

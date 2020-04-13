@@ -39,3 +39,6 @@ class Text(Control):
     def set_text(self, text):
         self.__text = text
         self._size = self.__font.size(self.__text)
+
+    def get_text(self):
+        return self.__text
