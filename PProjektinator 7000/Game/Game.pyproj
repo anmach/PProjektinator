@@ -47,6 +47,9 @@
     <Compile Include="src\enum\editingMode.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="src\enum\objectType.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="src\Game.py" />
     <Compile Include="src\model\modelLevelEditor.py">
       <SubType>Code</SubType>

@@ -59,6 +59,9 @@ class ControllerLevel(Controller):
                     self._command &= ~Command.ATTACK
                 if event.key == py.K_s:
                     self._command &= ~Command.CROUCH
+                if event.key == py.K_r:
+                    self._command &= ~Command.TELEKINESIS
+                    print("The force is NOT strong with this one.\n")
 
     #metoda pozwalająca przekazać model do widoku w celu jego wyrenderowania
     def communicateMV(self, model, view):

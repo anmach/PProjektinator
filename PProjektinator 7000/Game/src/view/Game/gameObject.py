@@ -2,12 +2,9 @@ import pygame as py
 
 class GameObject(py.sprite.Sprite):
     """Bazowa klasa obiektów w modelu - platform, gracza i obiektów dynamicznych"""
-    def __init__(self, x, y, width, height, gravity, image_source):
+    def __init__(self, x, y, width, height, gravity, type, image_source):
         super().__init__()
-        self.x = x
-        self.y = y
-        self.width = width
-        self.height = height
+        self.type = type
         self.spd_x = 0
         self.spd_y = 0
         self.does_gravity = gravity #bool decyduje czy na obiekt działa grawitacja
@@ -19,6 +16,7 @@ class GameObject(py.sprite.Sprite):
         else:
             self.surf.fill((255, 255, 255))
         self.rect = self.surf.get_rect()
+        self.rect.move_ip(x, y)
 
      #v----GETTERY----v
     def get_x(self):
@@ -42,8 +40,11 @@ class GameObject(py.sprite.Sprite):
     def set_spd_y(self, spd):
         self.spd_y = spd
 
-  #  def check_collision_at(self, target, x, y):
-   #     if ((x + self.width > target.x) and (x < target.x + target.width)) or ((y + self.height > target.y) and (y < targe.y + target.height)):
-    #        return True
-     #   else:
-      #      return False
+    def check_collision_ip(self, target, x, y):
+        return ((target.rect.x < self.rect.x + x + self.rect.width) \
+           and (target.rect.x + target.rect.width > self.rect.x + x))\
+           and ((target.rect.y < self.rect.y + y + self.rect.height)\
+           and (target.rect.y + target.rect.height > self.rect.y + y))
+
+    def update(self):
+        self.rect.move_ip(self.spd_x, self.spd_y)
