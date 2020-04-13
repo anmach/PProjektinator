@@ -11,6 +11,8 @@ class ControllerOptions(Controller):
         self._command = Command.READ_OPTIONS
 
         self._key_pressed = 0
+        self._button_pressed_index = 0
+
         self._is_mouse_pressed = 0
         
         # tablica sliderów
@@ -22,6 +24,7 @@ class ControllerOptions(Controller):
             for event in py.event.get():
                 if event.type == py.KEYDOWN:
                     self._key_pressed = event.key
+                    self._controls[self._button_pressed_index].set_text(chr(self._key_pressed))
                     self._command = Command.CONTINUE
                     break
         elif self._is_mouse_pressed == 0:            
@@ -37,6 +40,7 @@ class ControllerOptions(Controller):
                         # sprawdzanie czy nad daną kontrolką jest kursor
                         if control.get_is_focused():
                             self._command = control.get_command()
+                            self._button_pressed_index = self._controls.index(control)
                             break
                     for slider in self._sliders:
                         #sprawdzenie czy nad sliderem jest kursor
@@ -61,7 +65,7 @@ class ControllerOptions(Controller):
                     for slider in self._sliders:
                         slider.set_is_pushed(0)
                
-    # w menu nie ma potrzeby przekazywania modelu do widoku
+    # komunikacja opcji wyświetlanych i opcji w modelu
     def communicateMV(self, model, view):
         if self._command == Command.SAVE_OPTIONS:
             view.update_options()

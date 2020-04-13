@@ -10,8 +10,6 @@ class ViewOptions(View):
 
     def __init__(self, surface, options = []):
         super().__init__(surface)
-        self.__choosen_one_key = 0
-        self.__changed_position = 0
 
         # tablica opcji -- tablica[x] = (optionKey, wartość)
         self._options = options
@@ -46,15 +44,15 @@ class ViewOptions(View):
         # kolumna 2 - przyciski do zmiany sterowania
         for option in self._options:
             if option[0] == OptionKey.KEY_GO_LEFT:
-                self.__buttons.append(Button(str(option[1]), text_size, (x_column2 * surface.get_size()[0], optionsY * surface.get_size()[1]), True, Command.OPTIONS_CHANGE_KEY))
+                self.__buttons.append(Button(chr(option[1]), text_size, (x_column2 * surface.get_size()[0], optionsY * surface.get_size()[1]), True, Command.OPTIONS_CHANGE_KEY))
                 self._controls.append(self.__buttons[-1])
                 self.__buttons_optionKeys.append(OptionKey.KEY_GO_LEFT)
             elif option[0] == OptionKey.KEY_GO_RIGHT:
-                self.__buttons.append(Button(str(option[1]), text_size, (x_column2 * surface.get_size()[0], (optionsY + 1 * options_y_offset) * surface.get_size()[1]), True, Command.OPTIONS_CHANGE_KEY))
+                self.__buttons.append(Button(chr(option[1]), text_size, (x_column2 * surface.get_size()[0], (optionsY + 1 * options_y_offset) * surface.get_size()[1]), True, Command.OPTIONS_CHANGE_KEY))
                 self._controls.append(self.__buttons[-1])
                 self.__buttons_optionKeys.append(OptionKey.KEY_GO_RIGHT)
             elif option[0] == OptionKey.KEY_JUMP:
-                self.__buttons.append(Button(str(option[1]), text_size, (x_column2 * surface.get_size()[0], (optionsY + 2 * options_y_offset) * surface.get_size()[1]), True, Command.OPTIONS_CHANGE_KEY))
+                self.__buttons.append(Button(chr(option[1]), text_size, (x_column2 * surface.get_size()[0], (optionsY + 2 * options_y_offset) * surface.get_size()[1]), True, Command.OPTIONS_CHANGE_KEY))
                 self._controls.append(self.__buttons[-1])
                 self.__buttons_optionKeys.append(OptionKey.KEY_JUMP)
 
@@ -118,7 +116,7 @@ class ViewOptions(View):
                     self._options.remove((option[0], option[1]))
                     break
             # dodaje nowy tuple do listy z odpowiednimi wartościami
-            self._options.append((butt_key, str(self.__buttons[iter].get_text())))
+            self._options.append((butt_key, str(ord(self.__buttons[iter].get_text()))))
             iter += 1
 
     # gettery | settery
