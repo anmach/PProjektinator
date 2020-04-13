@@ -57,3 +57,9 @@ class Button(Control):
 
     def set_text(self, text):
         self.__text.set_text(text)
+        self._size = self.__text.get_size()
+        if self.__hasFrame:
+            tmp = list(self._size)
+            tmp[0] += 20
+            tmp[1] += 20
+            self._size = tuple(tmp)
