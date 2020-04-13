@@ -98,6 +98,9 @@
     <Compile Include="src\view\UI\control.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="src\view\UI\imageButton.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="src\view\UI\slider.py">
       <SubType>Code</SubType>
     </Compile>

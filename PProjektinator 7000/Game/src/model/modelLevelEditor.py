@@ -10,6 +10,8 @@ class ModelLevelEditor(Model):
     def __init__(self):
         super().__init__()
 
+        self.__editSurfaceBorder = 0.8
+
         #pobranie informacji o utworzonych już poziomach
         #       v-----inaczej nie działa-----v
         for (_, _, file_list) in os.walk('.\\saves\\levels'):
