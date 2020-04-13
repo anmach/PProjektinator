@@ -8,14 +8,13 @@ import pygame as py
 
 class ViewOptions(View):
 
-    def __init__(self, surface):
+    def __init__(self, surface, options = []):
         super().__init__(surface)
         self.__choosen_one_key = 0
         self.__changed_position = 0
 
         # tablica opcji -- tablica[x] = (optionKey, wartość)
-        # TO TYLKO CHWILOWE PRZYPISANIE
-        self._options = [(OptionKey.KEY_GO_LEFT, 'a'), (OptionKey.KEY_GO_RIGHT, 'd'), (OptionKey.KEY_JUMP, "space"), (OptionKey.VOLUME, 20)]
+        self._options = options
 
         # tablica przycisków, tekstu i sliderów
         self.__buttons = []
@@ -46,7 +45,7 @@ class ViewOptions(View):
         # tworzenie przycisków i przypisanie każdego z nich do ogólnej tablicy kontrolek
         self.__buttons.append(Button("Wyjdź", 60, (0.2 * surface.get_size()[0], 0.7 * surface.get_size()[1]), True, Command.EXIT))
         self._controls.append(self.__buttons[-1])
-        self.__buttons.append(Button("Zapisz", 60, (0.4 * surface.get_size()[0], 0.7 * surface.get_size()[1]), True, Command.EXIT))
+        self.__buttons.append(Button("Zapisz", 60, (0.4 * surface.get_size()[0], 0.7 * surface.get_size()[1]), True, Command.SAVE_OPTIONS))
         self._controls.append(self.__buttons[-1])
         
         # kolumna 2 - przyciski do zmiany sterowania

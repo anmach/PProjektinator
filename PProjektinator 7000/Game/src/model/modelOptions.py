@@ -14,24 +14,26 @@ class ModelOptions(Model):
     
     # odczyt pliku z zapisanymi opcjami
     def read_options_file(self):    
-        file = open(self.__options_file_name)
+        file = open(self.__options_file_name, 'r')
         
         # odczyt kolejnych linii
         for line in file:
             splitted_line = line.strip().split()
             # dodanie informacji do tablicy opcji
-            self._options.append((splitted_line[0], splitted_line[1]))
+            self._options.append((int(splitted_line[0]), int(splitted_line[1])))
 
         file.close()
 
     # zapis ustawień do pliku
     def save_to_options_file(self):
         file = open(self.__options_file_name, 'w')
-        
+        file.truncate(0)
+
         for option in self._options:
-            file.write(option[0])
+            file.write(str(int(option[0])))
             file.write(' ')
-            file.write(option[1])
+            file.write(str(option[1]))
+            file.write('\n')
 
         file.close()
 
