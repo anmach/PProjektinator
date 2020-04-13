@@ -3,6 +3,7 @@ from src.view.UI.text import Text
 from src.view.UI.button import Button
 from src.view.UI.slider import Slider
 from src.enum.command import Command
+from src.enum.optionKey import OptionKey
 import pygame as py
 
 class ViewOptions(View):
@@ -12,12 +13,16 @@ class ViewOptions(View):
         self.__choosen_one_key = 0
         self.__changed_position = 0
 
-        #tablica przycisków i tekstu
+        # tablica opcji -- tablica[x] = (optionKey, wartość)
+        # TO TYLKO CHWILOWE PRZYPISANIE
+        self._options = [(OptionKey.KEY_GO_LEFT, 'a'), (OptionKey.KEY_GO_RIGHT, 'd'), (OptionKey.KEY_JUMP, "space"), (OptionKey.VOLUME, 20)]
+
+        # tablica przycisków, tekstu i sliderów
         self.__buttons = []
         self.__texts = []
         self.__sliders = []
 
-        #rozmieszczenie po ekranie tekstu i przycisków ustawień
+        # rozmieszczenie po ekranie tekstu i przycisków ustawień
         text_size = 20
         x_column1 = 0.1
         x_column2 = 0.3
@@ -45,15 +50,20 @@ class ViewOptions(View):
         self._controls.append(self.__buttons[-1])
         
         # kolumna 2 - przyciski do zmiany sterowania
-        self.__buttons.append(Button("Ruch w lewo", text_size, (x_column2 * surface.get_size()[0], optionsY * surface.get_size()[1]), True, Command.EXIT))
-        self._controls.append(self.__buttons[-1])
-        self.__buttons.append(Button("Ruch w prawo", text_size, (x_column2 * surface.get_size()[0], (optionsY + 1 * options_y_offset) * surface.get_size()[1]), True, Command.EXIT))
-        self._controls.append(self.__buttons[-1])
-        self.__buttons.append(Button("Skok", text_size, (x_column2 * surface.get_size()[0], (optionsY + 2 * options_y_offset) * surface.get_size()[1]), True, Command.EXIT))
-        self._controls.append(self.__buttons[-1])
+        for option in self._options:
+            if option[0] == OptionKey.KEY_GO_LEFT:
+                self.__buttons.append(Button(str(option[1]), text_size, (x_column2 * surface.get_size()[0], optionsY * surface.get_size()[1]), True, Command.EXIT))
+                self._controls.append(self.__buttons[-1])
+            elif option[0] == OptionKey.KEY_GO_RIGHT:
+                self.__buttons.append(Button(str(option[1]), text_size, (x_column2 * surface.get_size()[0], (optionsY + 1 * options_y_offset) * surface.get_size()[1]), True, Command.EXIT))
+                self._controls.append(self.__buttons[-1])
+            elif option[0] == OptionKey.KEY_JUMP:
+                self.__buttons.append(Button(str(option[1]), text_size, (x_column2 * surface.get_size()[0], (optionsY + 2 * options_y_offset) * surface.get_size()[1]), True, Command.EXIT))
+                self._controls.append(self.__buttons[-1])
 
         # kolumna 4 - slider
-        self.__sliders.append(Slider((x_column4 * surface.get_size()[0], optionsY * surface.get_size()[1])))
+            if option[0] == OptionKey.VOLUME:
+                self.__sliders.append(Slider((x_column4 * surface.get_size()[0], optionsY * surface.get_size()[1]), option[1]))
 
     def render(self):
         #zaktualizowanie stanu kontrolek (np. ich koloru)
@@ -82,3 +92,8 @@ class ViewOptions(View):
     def get_sliders(self):
         return self.__sliders
 
+    def get_options(self):
+        return self._options
+
+    def set_options(self, new_options):
+        self._options = new_options
