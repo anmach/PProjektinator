@@ -8,6 +8,7 @@ class ControllerOptions(Controller):
   #przetwarzanie danych wejściowych
     def __init__(self):
         super().__init__()
+        self._command = Command.READ_OPTIONS
 
         self._is_mouse_pressed = 0
         
@@ -15,7 +16,8 @@ class ControllerOptions(Controller):
         self._sliders = []
 
     def process_input(self):
-        if self._is_mouse_pressed == 0:
+        if self._is_mouse_pressed == 0:            
+            self._command = Command.CONTINUE
             for event in py.event.get():
                 #naciśnięcie X okna
                 if event.type == py.QUIT:
@@ -54,11 +56,14 @@ class ControllerOptions(Controller):
     # w menu nie ma potrzeby przekazywania modelu do widoku
     def communicateMV(self, model, view):
         if self._command == Command.SAVE_OPTIONS:
+            view.update_options()
             model.set_options(view.get_options())
             model.save_to_options_file()
+            self._command == Command.CONTINUE
         if self._command == Command.READ_OPTIONS:
             model.read_options_file()
             view.set_options(model.get_options())
+            self._command == Command.CONTINUE
 
     def get_controls(self, view):
         self._controls = view.get_controls()
