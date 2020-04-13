@@ -19,7 +19,7 @@ class ViewOptions(View):
         # tablica przycisków, tekstu i sliderów
         self.__buttons = []
         self.__texts = []
-        self.__sliders = []
+        self.__sliders = [] # sliders = (OptionKey, Slider)
 
         # rozmieszczenie po ekranie tekstu i przycisków ustawień
         text_size = 20
@@ -62,14 +62,14 @@ class ViewOptions(View):
 
         # kolumna 4 - slider
             if option[0] == OptionKey.VOLUME:
-                self.__sliders.append(Slider((x_column4 * surface.get_size()[0], optionsY * surface.get_size()[1]), option[1]))
+                self.__sliders.append((OptionKey.VOLUME, Slider((x_column4 * surface.get_size()[0], optionsY * surface.get_size()[1]), option[1])))
 
     def render(self):
         #zaktualizowanie stanu kontrolek (np. ich koloru)
         for control in self._controls:
             control.update()
         for slider in self.__sliders:
-            slider.update()
+            slider[1].update()
 
         #wypełnienie ekranu kolorem
         self._surface.fill((250, 200, 190))
@@ -82,14 +82,33 @@ class ViewOptions(View):
             tex.draw(self._surface)
 
         for sli in self.__sliders:
-            sli.draw(self._surface)
+            sli[1].draw(self._surface)
 
         #ukazanie nowej zawartości użytkownikowi
         py.display.update()
 
+    # aktualizacja opcji
+    def update_options(self):
+        self.update_options_from_sliders()
+
+    # aktualizacja opcji na podstawie stanu sliderów
+    def update_options_from_sliders(self):
+        for slide in self.__sliders:
+            for option in self._options:
+                # czy klucz opcji zgadza się z kluczem przypisanym sliderowi
+                if option[0] == slide[0]:
+                    # usuwam tuple, bo nie da się ich zmieniać
+                    self._options.remove((option[0], option[1]))
+                    break
+            # dodaje nowy tuple do listy z odpowiednimi wartościami
+            self._options.append((slide[0], slide[1].get_current_value()))
+
     # gettery | settery
     def get_sliders(self):
-        return self.__sliders
+        sliders = []
+        for slide in self.__sliders:
+            sliders.append(slide[1])
+        return sliders
 
     def get_options(self):
         return self._options

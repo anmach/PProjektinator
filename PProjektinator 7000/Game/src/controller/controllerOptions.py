@@ -56,6 +56,7 @@ class ControllerOptions(Controller):
     # w menu nie ma potrzeby przekazywania modelu do widoku
     def communicateMV(self, model, view):
         if self._command == Command.SAVE_OPTIONS:
+            view.update_options()
             model.set_options(view.get_options())
             model.save_to_options_file()
             self._command == Command.CONTINUE
