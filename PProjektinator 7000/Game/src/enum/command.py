@@ -35,7 +35,7 @@ class Command(IntEnum):
     CLICKED_LMB = 0x90,
 
     #polecenie do wykonanie odpowiedniej akcji na polu edycyjnym przeypisanej do PPM
-    CLICKED_RMP = 0x91,
+    CLICKED_RMB = 0x91,
     
     #polecenie do przejścia do menu opcji
     OPTIONS = 0x92,
