@@ -25,10 +25,10 @@ class ControllerLevel(Controller):
 
     #przetwarzanie danych wejściowych
     def process_input(self):
+        self._command &= ~Command.ATTACK
         for event in py.event.get():
             self._command = self._command & 0x7F;
             #wyłączenie strzelania
-            self._command &= ~Command.ATTACK
 
             #naciśnięcie X okna
             if event.type == py.QUIT:
