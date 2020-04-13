@@ -43,8 +43,11 @@ class Command(IntEnum):
     # polecenie odczytania pliku opcji
     READ_OPTIONS = 0x93,
 
-    #polecenie zapisu do pliku
+    # polecenie zapisu do pliku
     SAVE_OPTIONS = 0x94
+
+    # polecenie zmiany klawisza sterującego w opcjach
+    OPTIONS_CHANGE_KEY = 0x95
 
     #POLECENIA DO STEROWANIA NA POZIOMIE POZIOMU
     #polecenie do skoku
