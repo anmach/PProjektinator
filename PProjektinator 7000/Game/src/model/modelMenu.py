@@ -15,3 +15,5 @@ class ModelMenu(Model):
             self._changeMode = True
         elif self._command == Command.OPTIONS:
             self._changeMode = True
+        elif self._command == Command.EDIT:
+            self._changeMode = True

@@ -22,6 +22,9 @@ class ViewMenu(View):
         self.__buttons.append(Button("Opcje", 60, (0.2 * surface.get_size()[0], 0.3* surface.get_size()[1]), True, Command.OPTIONS))
         self._controls.append(self.__buttons[-1])
 
+        self.__buttons.append(Button("Edytor", 60, (0.2 * surface.get_size()[0], 0.1* surface.get_size()[1]), True, Command.EDIT))
+        self._controls.append(self.__buttons[-1])
+
     def render(self):
         #zaktualizowanie stanu kontrolek (np. ich koloru)
         for control in self._controls:
