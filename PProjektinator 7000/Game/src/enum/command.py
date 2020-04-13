@@ -28,26 +28,29 @@ class Command(IntEnum):
     #polecenie do utworzenia nowego poziomu
     CREATE_NEW = 0x88,
 
+    #polecenie do utworzenia nowego poziomu
+    OPEN = 0x89,
+
     #polecenie do zapisania aktualnie modyfikowanego poziomu
-    SAVE = 0x89,
+    SAVE = 0x90,
 
     #polecenie do wykonania odpowiedniej akcji na polu edycyjnym przypisanej do LPM
-    CLICKED_LMB = 0x90,
+    CLICKED_LMB = 0x91,
 
     #polecenie do wykonanie odpowiedniej akcji na polu edycyjnym przeypisanej do PPM
-    CLICKED_RMB = 0x91,
+    CLICKED_RMB = 0x92,
     
     #polecenie do przejścia do menu opcji
-    OPTIONS = 0x92,
+    OPTIONS = 0x93,
 
     # polecenie odczytania pliku opcji
-    READ_OPTIONS = 0x93,
+    READ_OPTIONS = 0x94,
 
     # polecenie zapisu do pliku
-    SAVE_OPTIONS = 0x94
+    SAVE_OPTIONS = 0x95
 
     # polecenie zmiany klawisza sterującego w opcjach
-    OPTIONS_CHANGE_KEY = 0x95
+    OPTIONS_CHANGE_KEY = 0x96
 
     #POLECENIA DO STEROWANIA NA POZIOMIE POZIOMU
     #polecenie do skoku
