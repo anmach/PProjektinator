@@ -50,3 +50,7 @@ class Button(Control):
         self.__text.draw(surface)
         if self.__hasFrame:
             py.draw.rect(surface, self._colours[self._isFocused], py.Rect(self._pos, self._size), 1)
+
+    # gettery | settery
+    def get_text(self):
+        return self.__text
