@@ -4,6 +4,7 @@ class GameObject(py.sprite.Sprite):
     """Bazowa klasa obiektów w modelu - platform, gracza i obiektów dynamicznych"""
     def __init__(self, x, y, width, height, gravity, type, image_source):
         super().__init__()
+        self.direction = 1
         self.type = type
         self.spd_x = 0
         self.spd_y = 0
@@ -20,10 +21,10 @@ class GameObject(py.sprite.Sprite):
 
      #v----GETTERY----v
     def get_x(self):
-        return self.x
+        return self.rect.x
 
     def get_y(self):
-        return self.y
+        return self.rect.y
     
     def get_image(self):
         return self._image
@@ -47,4 +48,8 @@ class GameObject(py.sprite.Sprite):
            and (target.rect.y + target.rect.height > self.rect.y + y))
 
     def update(self):
+        if self.spd_x > 0:
+            self.direction = 1
+        if self.spd_x < 0:
+             self.direction = -1
         self.rect.move_ip(self.spd_x, self.spd_y)
