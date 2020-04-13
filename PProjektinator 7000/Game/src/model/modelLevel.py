@@ -55,6 +55,7 @@ class ModelLevel(Model):
             self.tele_objs[self.tele_idx].set_spd_y(spd_y)
         else:
             self.tele_objs[self.tele_idx].does_gravity = True
+            self.tele_objs[self.tele_idx].spd_x = 0
             self.telekinesis = False
             self.__player.set_spd_x(spd_x)  
             if self._command & Command.ATTACK & ~0x80:
