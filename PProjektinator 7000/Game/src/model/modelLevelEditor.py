@@ -29,6 +29,7 @@ class ModelLevelEditor(Model):
 
     #metoda aktualizująca stan wewnętrzego modelu programu
     def update(self):
+        self.__mode = EditingMode.PLATFORM_CREATION
         if self._command == Command.EXIT:
             self._runMode = False
 
@@ -75,7 +76,7 @@ class ModelLevelEditor(Model):
                     pass
             
             #prawy przycisk myszki
-            elif self._command == Command.CLICKED_RMP:
+            elif self._command == Command.CLICKED_RMB:
 
                 #w trybie tworzenia platformy
                 if self.__mode == EditingMode.PLATFORM_CREATION:
