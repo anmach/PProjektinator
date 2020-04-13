@@ -38,8 +38,8 @@ class ViewOptions(View):
         self.__texts.append(Text("Skok", text_size, (x_column1 * surface.get_size()[0], (optionsY + 2 * options_y_offset) * surface.get_size()[1])))
         
         # kolumna 3 - tekst
-        self.__texts.append(Text("Rozdzielczość", text_size, (x_column3 * surface.get_size()[0], optionsY * surface.get_size()[1])))
-        self.__texts.append(Text("Głośność?", text_size, (x_column3 * surface.get_size()[0], (optionsY + options_y_offset) * surface.get_size()[1])))
+        self.__texts.append(Text("Głośność", text_size, (x_column3 * surface.get_size()[0], (optionsY) * surface.get_size()[1])))
+        self.__texts.append(Text("Rozdzielczość", text_size, (x_column3 * surface.get_size()[0], (optionsY + options_y_offset) * surface.get_size()[1])))
         
         # kolumna 2 - przyciski do zmiany sterowania
         for option in self._options:
