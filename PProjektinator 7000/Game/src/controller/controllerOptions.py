@@ -10,13 +10,21 @@ class ControllerOptions(Controller):
         super().__init__()
         self._command = Command.READ_OPTIONS
 
+        self._key_pressed = 0
         self._is_mouse_pressed = 0
         
         # tablica sliderów
         self._sliders = []
 
     def process_input(self):
-        if self._is_mouse_pressed == 0:            
+        # zmiana klawisza sterowania -> odczyt nowego
+        if self._command == Command.OPTIONS_CHANGE_KEY:
+            for event in py.event.get():
+                if event.type == py.KEYDOWN:
+                    self._key_pressed = event.key
+                    self._command = Command.CONTINUE
+                    break
+        elif self._is_mouse_pressed == 0:            
             self._command = Command.CONTINUE
             for event in py.event.get():
                 #naciśnięcie X okna

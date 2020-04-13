@@ -18,7 +18,8 @@ class ViewOptions(View):
 
         # tablica przycisków, tekstu i sliderów
         self.__buttons = []
-        self.__texts = []
+        self.__buttons_optionKeys = [] # opisy przycisków na indeksach odpowiadających tym z wyższej tablicy
+        self.__texts = [] 
         self.__sliders = [] # sliders = (OptionKey, Slider)
 
         # rozmieszczenie po ekranie tekstu i przycisków ustawień
@@ -41,28 +42,31 @@ class ViewOptions(View):
         # kolumna 3 - tekst
         self.__texts.append(Text("Rozdzielczość", text_size, (x_column3 * surface.get_size()[0], optionsY * surface.get_size()[1])))
         self.__texts.append(Text("Głośność?", text_size, (x_column3 * surface.get_size()[0], (optionsY + options_y_offset) * surface.get_size()[1])))
+        
+        # kolumna 2 - przyciski do zmiany sterowania
+        for option in self._options:
+            if option[0] == OptionKey.KEY_GO_LEFT:
+                self.__buttons.append(Button(str(option[1]), text_size, (x_column2 * surface.get_size()[0], optionsY * surface.get_size()[1]), True, Command.OPTIONS_CHANGE_KEY))
+                self._controls.append(self.__buttons[-1])
+                self.__buttons_optionKeys.append(OptionKey.KEY_GO_LEFT)
+            elif option[0] == OptionKey.KEY_GO_RIGHT:
+                self.__buttons.append(Button(str(option[1]), text_size, (x_column2 * surface.get_size()[0], (optionsY + 1 * options_y_offset) * surface.get_size()[1]), True, Command.OPTIONS_CHANGE_KEY))
+                self._controls.append(self.__buttons[-1])
+                self.__buttons_optionKeys.append(OptionKey.KEY_GO_RIGHT)
+            elif option[0] == OptionKey.KEY_JUMP:
+                self.__buttons.append(Button(str(option[1]), text_size, (x_column2 * surface.get_size()[0], (optionsY + 2 * options_y_offset) * surface.get_size()[1]), True, Command.OPTIONS_CHANGE_KEY))
+                self._controls.append(self.__buttons[-1])
+                self.__buttons_optionKeys.append(OptionKey.KEY_JUMP)
+
+        # kolumna 4 - slider
+            if option[0] == OptionKey.VOLUME:
+                self.__sliders.append((OptionKey.VOLUME, Slider((x_column4 * surface.get_size()[0], optionsY * surface.get_size()[1]), option[1])))
 
         # tworzenie przycisków i przypisanie każdego z nich do ogólnej tablicy kontrolek
         self.__buttons.append(Button("Wyjdź", 60, (0.2 * surface.get_size()[0], 0.7 * surface.get_size()[1]), True, Command.EXIT))
         self._controls.append(self.__buttons[-1])
         self.__buttons.append(Button("Zapisz", 60, (0.4 * surface.get_size()[0], 0.7 * surface.get_size()[1]), True, Command.SAVE_OPTIONS))
         self._controls.append(self.__buttons[-1])
-        
-        # kolumna 2 - przyciski do zmiany sterowania
-        for option in self._options:
-            if option[0] == OptionKey.KEY_GO_LEFT:
-                self.__buttons.append(Button(str(option[1]), text_size, (x_column2 * surface.get_size()[0], optionsY * surface.get_size()[1]), True, Command.EXIT))
-                self._controls.append(self.__buttons[-1])
-            elif option[0] == OptionKey.KEY_GO_RIGHT:
-                self.__buttons.append(Button(str(option[1]), text_size, (x_column2 * surface.get_size()[0], (optionsY + 1 * options_y_offset) * surface.get_size()[1]), True, Command.EXIT))
-                self._controls.append(self.__buttons[-1])
-            elif option[0] == OptionKey.KEY_JUMP:
-                self.__buttons.append(Button(str(option[1]), text_size, (x_column2 * surface.get_size()[0], (optionsY + 2 * options_y_offset) * surface.get_size()[1]), True, Command.EXIT))
-                self._controls.append(self.__buttons[-1])
-
-        # kolumna 4 - slider
-            if option[0] == OptionKey.VOLUME:
-                self.__sliders.append((OptionKey.VOLUME, Slider((x_column4 * surface.get_size()[0], optionsY * surface.get_size()[1]), option[1])))
 
     def render(self):
         #zaktualizowanie stanu kontrolek (np. ich koloru)
@@ -90,6 +94,7 @@ class ViewOptions(View):
     # aktualizacja opcji
     def update_options(self):
         self.update_options_from_sliders()
+        self.update_options_from_buttons()
 
     # aktualizacja opcji na podstawie stanu sliderów
     def update_options_from_sliders(self):
@@ -102,6 +107,19 @@ class ViewOptions(View):
                     break
             # dodaje nowy tuple do listy z odpowiednimi wartościami
             self._options.append((slide[0], slide[1].get_current_value()))
+
+    def update_options_from_buttons(self):
+        iter = 0
+        for butt_key in self.__buttons_optionKeys:
+            for option in self._options:
+                # czy klucz opcji zgadza się z kluczem przypisanym sliderowi
+                if option[0] == butt_key:
+                    # usuwam tuple, bo nie da się ich zmieniać
+                    self._options.remove((option[0], option[1]))
+                    break
+            # dodaje nowy tuple do listy z odpowiednimi wartościami
+            self._options.append((butt_key, str(self.__buttons[iter].get_text())))
+            iter += 1
 
     # gettery | settery
     def get_sliders(self):
