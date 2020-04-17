@@ -36,6 +36,9 @@ class ViewOptions(View):
         self.__texts.append(Text("Ruch w lewo", text_size, (x_column1 * surface.get_size()[0], optionsY * surface.get_size()[1])))
         self.__texts.append(Text("Ruch w prawo", text_size, (x_column1 * surface.get_size()[0], (optionsY + 1 * options_y_offset) * surface.get_size()[1])))
         self.__texts.append(Text("Skok", text_size, (x_column1 * surface.get_size()[0], (optionsY + 2 * options_y_offset) * surface.get_size()[1])))
+        self.__texts.append(Text("Kucnięcie", text_size, (x_column1 * surface.get_size()[0], (optionsY + 3 * options_y_offset) * surface.get_size()[1])))
+        self.__texts.append(Text("Atak", text_size, (x_column1 * surface.get_size()[0], (optionsY + 4 * options_y_offset) * surface.get_size()[1])))
+        self.__texts.append(Text("Telekineza", text_size, (x_column1 * surface.get_size()[0], (optionsY + 5 * options_y_offset) * surface.get_size()[1])))
         
         # kolumna 3 - tekst
         self.__texts.append(Text("Głośność", text_size, (x_column3 * surface.get_size()[0], (optionsY) * surface.get_size()[1])))
@@ -54,7 +57,19 @@ class ViewOptions(View):
             elif option[0] == OptionKey.KEY_JUMP:
                 self.__buttons.append(Button(chr(option[1]), text_size, (x_column2 * surface.get_size()[0], (optionsY + 2 * options_y_offset) * surface.get_size()[1]), True, Command.OPTIONS_CHANGE_KEY))
                 self._controls.append(self.__buttons[-1])
-                self.__buttons_optionKeys.append(OptionKey.KEY_JUMP)
+                self.__buttons_optionKeys.append(OptionKey.KEY_JUMP)                
+            elif option[0] == OptionKey.KEY_CROUCH:
+                self.__buttons.append(Button(chr(option[1]), text_size, (x_column2 * surface.get_size()[0], (optionsY + 3 * options_y_offset) * surface.get_size()[1]), True, Command.OPTIONS_CHANGE_KEY))
+                self._controls.append(self.__buttons[-1])
+                self.__buttons_optionKeys.append(OptionKey.KEY_CROUCH)                
+            elif option[0] == OptionKey.KEY_ATTACK:
+                self.__buttons.append(Button(chr(option[1]), text_size, (x_column2 * surface.get_size()[0], (optionsY + 4 * options_y_offset) * surface.get_size()[1]), True, Command.OPTIONS_CHANGE_KEY))
+                self._controls.append(self.__buttons[-1])
+                self.__buttons_optionKeys.append(OptionKey.KEY_ATTACK)                
+            elif option[0] == OptionKey.KEY_TELEKINESIS:
+                self.__buttons.append(Button(chr(option[1]), text_size, (x_column2 * surface.get_size()[0], (optionsY + 5 * options_y_offset) * surface.get_size()[1]), True, Command.OPTIONS_CHANGE_KEY))
+                self._controls.append(self.__buttons[-1])
+                self.__buttons_optionKeys.append(OptionKey.KEY_TELEKINESIS)
 
         # kolumna 4 - slider
             if option[0] == OptionKey.VOLUME:

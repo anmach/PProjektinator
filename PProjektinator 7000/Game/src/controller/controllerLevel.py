@@ -13,9 +13,12 @@ class ControllerLevel(Controller):
         self._command = 0;
 
         #klawisze do sterowania
-        self._go_right = ord('d')
-        self._go_left = ord('a')
-        self._jump = ord(' ')
+        self._key_go_right = ord('d')
+        self._key_go_left = ord('a')
+        self._key_jump = ord(' ')
+        self._key_crouch = ord('s')
+        self._key_attack = ord('f')
+        self._key_telekinesis = ord('r')
 
         # strzelono - trzeba ponownie nacisnąć przycisk
         self._we_already_shooted = 0
@@ -39,43 +42,43 @@ class ControllerLevel(Controller):
                 if event.key == py.K_ESCAPE:
                     self._command = Command.EXIT
                 #skakanie
-                elif event.key == self._jump:
+                elif event.key == self._key_jump:
                     self._command += Command.JUMP
                     self._command &= ~Command.CROUCH
                 #kucanie
-                elif event.key == py.K_s:
+                elif event.key == self._key_crouch:
                     self._command += Command.CROUCH
                     self._command &= ~Command.JUMP
                 #atak
-                elif event.key == py.K_f:
+                elif event.key == self._key_attack:
                     if self._we_already_shooted == 0:
                         self._command += Command.ATTACK
                         self._we_already_shooted = 1
                 #rozpoczęcie telekinezy
-                elif event.key == py.K_r:
+                elif event.key == self._key_telekinesis:
                     print("The force is strong with this one.\n")
                     self._command = Command.TELEKINESIS
                 #poruszanie się lewo/prawo
-                elif event.key == self._go_left:
+                elif event.key == self._key_go_left:
                     self._command += Command.GO_LEFT
                     self._command &= ~Command.GO_RIGHT
-                elif event.key == self._go_right:
+                elif event.key == self._key_go_right:
                     self._command += Command.GO_RIGHT
                     self._command &= ~Command.GO_LEFT
 
             elif event.type == py.KEYUP:
-                if event.key == self._go_left:
+                if event.key == self._key_go_left:
                     self._command &= ~Command.GO_LEFT
-                elif event.key == self._go_right:
+                elif event.key == self._key_go_right:
                     self._command &= ~Command.GO_RIGHT
-                elif event.key == self._jump:
+                elif event.key == self._key_jump:
                     self._command &= ~Command.JUMP
-                elif event.key == py.K_f:
+                elif event.key == self._key_attack:
                     # zwolniony przycisk -> można znowu strzelić
                     self._we_already_shooted = 0
-                elif event.key == py.K_s:
+                elif event.key == self._key_crouch:
                     self._command &= ~Command.CROUCH
-                elif event.key == py.K_r:
+                elif event.key == self._key_telekinesis:
                     self._command &= ~Command.TELEKINESIS
                     print("The force is NOT strong with this one.\n")
 
@@ -99,13 +102,16 @@ class ControllerLevel(Controller):
             int_optionKey = int(splitted_line[0])
             # dodanie informacji do tablicy opcji
             if int_optionKey == OptionKey.KEY_GO_LEFT:
-                self._go_left = int(splitted_line[1])
-                #self._steering.append((int(splitted_line[1]), Command.GO_LEFT))                
+                self._key_go_left = int(splitted_line[1])             
             elif int_optionKey == OptionKey.KEY_GO_RIGHT:                
-                self._go_right = int(splitted_line[1])
-                #self._steering.append((int(splitted_line[1]), Command.JUMP))                
+                self._key_go_right = int(splitted_line[1])             
             elif int_optionKey == OptionKey.KEY_JUMP:
-                self._jump = int(splitted_line[1])
-                #self._steering.append((int(splitted_line[1]), Command.GO_RIGHT))
+                self._key_jump = int(splitted_line[1])
+            if int_optionKey == OptionKey.KEY_CROUCH:
+                self._key_crouch = int(splitted_line[1])             
+            elif int_optionKey == OptionKey.KEY_ATTACK:                
+                self._key_attack = int(splitted_line[1])             
+            elif int_optionKey == OptionKey.KEY_TELEKINESIS:
+                self._key_telekinesis = int(splitted_line[1])
 
         file.close()

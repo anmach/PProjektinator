@@ -8,6 +8,9 @@ class OptionKey(IntEnum):
     KEY_GO_LEFT = 1
     KEY_GO_RIGHT = 2
     KEY_JUMP = 3
+    KEY_CROUCH = 4
+    KEY_ATTACK = 5
+    KEY_TELEKINESIS = 6
 
     VOLUME = 20
     WINDOW_WIDTH = 21
