@@ -16,7 +16,7 @@ class Menu(ProgramMode):
         self._model = ModelMenu()
 
         #menu główne ustala początkową rozdzielczość ekranu (możliwa zmiana w przyszłości na wczytywanie zapisanych ustawień z pliku)
-        display = py.display.set_mode((1000, 700))
+        display = py.display.set_mode()
         self._view = ViewMenu(display)
 
         self._controller = ControllerMenu()
