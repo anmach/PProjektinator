@@ -39,18 +39,27 @@ class Command(IntEnum):
 
     #polecenie do wykonanie odpowiedniej akcji na polu edycyjnym przeypisanej do PPM
     CLICKED_RMB = 0x92,
-    
+
+    #polecenie do wybrania nowego obiektu w edytorze
+    OBJECT_SELECTED = 0x93,
+
+    #polecenie do przejścia w tryb przenoszenia obiektóws
+    RELOCATE_OBJECT = 0x94,
+
+    #polecenie do przejścia w tryb usuwania obiektów
+    DELETE_OBJECT = 0x95,
+
     #polecenie do przejścia do menu opcji
-    OPTIONS = 0x93,
+    OPTIONS = 0x100,
 
     # polecenie odczytania pliku opcji
-    READ_OPTIONS = 0x94,
+    READ_OPTIONS = 0x101,
 
     # polecenie zapisu do pliku
-    SAVE_OPTIONS = 0x95
+    SAVE_OPTIONS = 0x102
 
     # polecenie zmiany klawisza sterującego w opcjach
-    OPTIONS_CHANGE_KEY = 0x96
+    OPTIONS_CHANGE_KEY = 0x103
 
     #POLECENIA DO STEROWANIA NA POZIOMIE POZIOMU
     #polecenie do skoku

@@ -11,5 +11,8 @@ class EditingMode(IntEnum):
     #wstawianie nowego obiektu
     OBJECT_PLACEMENT = 2,
 
-    #przenoszenie obiektów i ewentualne ich usunięcie
-    MOVE_OR_DELETE = 3
+    #przenoszenie obiektów
+    OBJECT_RELOCATING = 3,
+
+    #usuwanie obiektów
+    DELETION = 4
