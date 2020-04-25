@@ -2,6 +2,7 @@ from src.view.view import View
 from src.view.UI.text import Text
 from src.view.UI.button import Button
 from src.view.UI.slider import Slider
+from src.view.UI.buttonsBox import ButtonsBox
 from src.enum.command import Command
 from src.enum.optionKey import OptionKey
 import pygame as py
@@ -72,8 +73,16 @@ class ViewOptions(View):
                 self.__buttons_optionKeys.append(OptionKey.KEY_TELEKINESIS)
 
         # kolumna 4 - slider
-            if option[0] == OptionKey.VOLUME:
+            elif option[0] == OptionKey.VOLUME:
                 self.__sliders.append((OptionKey.VOLUME, Slider((x_column4 * surface.get_size()[0], optionsY * surface.get_size()[1]), option[1])))
+            
+        # kolumna 4 - rozdzielczość
+        buttBox = []
+        buttBox.append(Button("720x480", text_size, (0, 0), True, Command.OPTIONS_CHANGE_KEY))
+        buttBox.append(Button("1280x720", text_size, (0, 0), True, Command.OPTIONS_CHANGE_KEY))
+        buttBox.append(Button("xDxD", text_size, (0, 0), True, Command.OPTIONS_CHANGE_KEY))
+        self._buttons_box = ButtonsBox((x_column4 * surface.get_size()[0], (optionsY + options_y_offset) * surface.get_size()[1]), buttBox)
+
 
         # tworzenie przycisków i przypisanie każdego z nich do ogólnej tablicy kontrolek
         self.__buttons.append(Button("Wyjdź", 60, (0.2 * surface.get_size()[0], 0.7 * surface.get_size()[1]), True, Command.EXIT))
@@ -87,6 +96,7 @@ class ViewOptions(View):
             control.update()
         for slider in self.__sliders:
             slider[1].update()
+        self._buttons_box.update()
 
         #wypełnienie ekranu kolorem
         self._surface.fill((250, 200, 190))
@@ -100,6 +110,8 @@ class ViewOptions(View):
 
         for sli in self.__sliders:
             sli[1].draw(self._surface)
+
+        self._buttons_box.draw(self._surface)
 
         #ukazanie nowej zawartości użytkownikowi
         py.display.update()
