@@ -28,7 +28,7 @@ class Command(IntEnum):
     #polecenie do utworzenia nowego poziomu
     CREATE_NEW = 0x88,
 
-    #polecenie do utworzenia nowego poziomu
+    #polecenie do wczytania poziomu
     OPEN = 0x89,
 
     #polecenie do zapisania aktualnie modyfikowanego poziomu

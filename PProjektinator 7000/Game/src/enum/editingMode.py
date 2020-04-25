@@ -9,4 +9,7 @@ class EditingMode(IntEnum):
     PLATFORM_CREATION = 1,
 
     #wstawianie nowego obiektu
-    OBJECT_PLACEMENT = 2
+    OBJECT_PLACEMENT = 2,
+
+    #przenoszenie obiektów i ewentualne ich usunięcie
+    MOVE_OR_DELETE = 3
