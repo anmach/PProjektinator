@@ -49,6 +49,12 @@ class Command(IntEnum):
     #polecenie do przejścia w tryb usuwania obiektów
     DELETE_OBJECT = 0x95,
 
+    #polecenie do przejścia do przodu w liście obiektów
+    NEXT_OBJECTS = 0x96,
+
+    #polecenie do przejścia do tyłu w liście obiektów
+    PREV_OBJECTS = 0x97,
+
     #polecenie do przejścia do menu opcji
     OPTIONS = 0x100,
 
