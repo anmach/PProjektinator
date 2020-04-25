@@ -10,8 +10,6 @@ class ModelLevelEditor(Model):
     def __init__(self):
         super().__init__()
 
-        self.__editSurfaceBorder = 0.8
-
         #pobranie informacji o utworzonych już poziomach
         #       v-----inaczej nie działa-----v
         for (_, _, file_list) in os.walk('.\\saves\\levels'):
@@ -26,12 +24,15 @@ class ModelLevelEditor(Model):
         #współrzędne punktów nowej platformy
         self.__new_platform_coords = (-1, -1)
 
+        #czy aktualnie jest przemieszczany obiekt (tylko w trybie MOVE_OR_DELETE)
+        self.__isMoved = False
+
         #aktualny tryb pracy
         self.__mode = EditingMode.NONE
 
     #metoda aktualizująca stan wewnętrzego modelu programu
     def update(self):
-        self.__mode = EditingMode.PLATFORM_CREATION
+        #self.__mode = EditingMode.PLATFORM_CREATION
         if self._command == Command.EXIT:
             self._runMode = False
 
@@ -53,6 +54,7 @@ class ModelLevelEditor(Model):
             pass
             #zapisanie aktualnie modyfikowanego poziomu
 
+        #interpretacja akcji użytkownika zależy od trybu w znajduje się edytor
         elif self.__mode != EditingMode.NONE:
 
             #lewy przycisk myszki
@@ -63,6 +65,7 @@ class ModelLevelEditor(Model):
                     #TODO
                     #sprawdzenie czy nie nachodzi/koliduje z innymi obiektami
                     #albo i bez tego, gdyż wtedy można [łatwiej] robić platformy, które nie są prostokątami
+                    #może przyczepianie się do już istniejącej?
             
                     if self.__new_platform_coords == (-1, -1):
                         self.__new_platform_coords = py.mouse.get_pos()
@@ -76,6 +79,15 @@ class ModelLevelEditor(Model):
                     #TODO
                     #sprawdzenie kolizji i dodanie do poziomu
                     pass
+
+                elif self.__mode == EditingMode.MOVE_OR_DELETE:
+                    #TODO
+                    #przeniesienie trzymanej rzeczy
+                    if self.__isMoved == True:
+                        pass
+                    #sprawdzenie na co wskazuje kursor i "chwycenie tego"
+                    else:
+                        pass
             
             #prawy przycisk myszki
             elif self._command == Command.CLICKED_RMB:

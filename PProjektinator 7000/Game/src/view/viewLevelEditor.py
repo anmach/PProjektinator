@@ -22,45 +22,7 @@ class ViewLevelEditor(View):
         self.__texts = []
 
         #tworzenie przycisków, tekstu i przypisanie każdego z nich do ogólnej tablicy kontrolek
-
-        #poziom wcześniej
-        self.__buttons.append(Button("<-", 20, (0.82 * surface.get_size()[0], 0.02 * surface.get_size()[1]), False, Command.PREV_LEVEL))
-        self._controls.append(self.__buttons[-1])
-        
-        #tekst wyświetlający aktualnie wybrany poziom
-        self.__texts.append(Text("", 28, (0.89 * surface.get_size()[0], 0.015 * surface.get_size()[1])))
-        self._controls.append(self.__texts[-1])
-
-        #poziom dalej
-        self.__buttons.append(Button("->", 20, (0.96 * surface.get_size()[0], 0.02 * surface.get_size()[1]), False, Command.NEXT_LEVEL))
-        self._controls.append(self.__buttons[-1])
-
-        self.__buttons.append(Button("Otwórz", 30, (0.85 * surface.get_size()[0], 0.10 * surface.get_size()[1]), False, Command.OPEN))
-        self._controls.append(self.__buttons[-1])
-
-        self.__buttons.append(Button("Nowy", 30, (0.86 * surface.get_size()[0], 0.17 * surface.get_size()[1]), False, Command.CREATE_NEW))
-        self._controls.append(self.__buttons[-1])
-
-        self.__buttons.append(Button("Zapisz", 30, (0.855 * surface.get_size()[0], 0.24 * surface.get_size()[1]), False, Command.SAVE))
-        self._controls.append(self.__buttons[-1])
-        
-        #przewijanie kontrolek w lewo
-        self.__buttons.append(Button("<-", 20, (0.86 * surface.get_size()[0], 0.69 * surface.get_size()[1]), False, Command.PREV_LEVEL))
-        self._controls.append(self.__buttons[-1])
-
-        self.__imageButtons.append(ImageButton(".\\res\\sprites\\player.png", (0.81 * surface.get_size()[0], 0.5 * surface.get_size()[1]), (50, 50), False))
-        self._controls.append(self.__imageButtons[-1])
-
-        self.__imageButtons.append(ImageButton(".\\res\\sprites\\platform tiles\\x3\\tile internal x3.png", (0.90 * surface.get_size()[0], 0.5 * surface.get_size()[1]), (50, 50), False))
-        self._controls.append(self.__imageButtons[-1])
-
-        #przewijanie kontrolek w lewo
-        self.__buttons.append(Button("->", 20, (0.92 * surface.get_size()[0], 0.69 * surface.get_size()[1]), False, Command.NEXT_LEVEL))
-        self._controls.append(self.__buttons[-1])
-
-        self.__buttons.append(Button("Wyjdz", 30, (0.86 * surface.get_size()[0], 0.93 * surface.get_size()[1]), False, Command.EXIT))
-        self._controls.append(self.__buttons[-1])
-
+        self.addAllControls()
 
         #wyświetlany nr poziomu
         self.__levelToEdit = 0
@@ -70,6 +32,50 @@ class ViewLevelEditor(View):
 
         #aktualny tryb pracy modelu
         self.__mode = EditingMode.NONE
+
+
+    def addAllControls(self):
+        #poziom wcześniej
+        self.__buttons.append(Button("<-", 20, (0.82 * self._surface.get_size()[0], 0.02 * self._surface.get_size()[1]), False, Command.PREV_LEVEL))
+        self._controls.append(self.__buttons[-1])
+        
+        #tekst wyświetlający aktualnie wybrany poziom
+        self.__texts.append(Text("", 28, (0.89 * self._surface.get_size()[0], 0.015 * self._surface.get_size()[1])))
+        self._controls.append(self.__texts[-1])
+
+        #poziom dalej
+        self.__buttons.append(Button("->", 20, (0.96 * self._surface.get_size()[0], 0.02 * self._surface.get_size()[1]), False, Command.NEXT_LEVEL))
+        self._controls.append(self.__buttons[-1])
+
+        #trzy kolejne raczej wiadomo
+        self.__buttons.append(Button("Otwórz", 30, (0.85 * self._surface.get_size()[0], 0.10 * self._surface.get_size()[1]), False, Command.OPEN))
+        self._controls.append(self.__buttons[-1])
+
+        self.__buttons.append(Button("Nowy", 30, (0.86 * self._surface.get_size()[0], 0.17 * self._surface.get_size()[1]), False, Command.CREATE_NEW))
+        self._controls.append(self.__buttons[-1])
+
+        self.__buttons.append(Button("Zapisz", 30, (0.855 * self._surface.get_size()[0], 0.24 * self._surface.get_size()[1]), False, Command.SAVE))
+        self._controls.append(self.__buttons[-1])
+        
+        #przewijanie kontrolek w lewo
+        self.__buttons.append(Button("<-", 20, (0.86 * self._surface.get_size()[0], 0.69 * self._surface.get_size()[1]), False, Command.PREV_LEVEL))
+        self._controls.append(self.__buttons[-1])
+
+        #dodanie obiektu gracza
+        self.__imageButtons.append(ImageButton(".\\res\\sprites\\player.png", (0.81 * self._surface.get_size()[0], 0.5 * self._surface.get_size()[1]), (50, 50), False, Command.OBJECT_SELECTED))
+        self._controls.append(self.__imageButtons[-1])
+
+        #dodanie obiektu platformy
+        self.__imageButtons.append(ImageButton(".\\res\\sprites\\platform tiles\\x3\\tile internal x3.png", (0.90 * self._surface.get_size()[0], 0.5 * self._surface.get_size()[1]), (50, 50), False, Command.OBJECT_SELECTED))
+        self._controls.append(self.__imageButtons[-1])
+
+        #przewijanie kontrolek w lewo
+        self.__buttons.append(Button("->", 20, (0.92 * self._surface.get_size()[0], 0.69 * self._surface.get_size()[1]), False, Command.NEXT_LEVEL))
+        self._controls.append(self.__buttons[-1])
+
+        #tez wiadomo
+        self.__buttons.append(Button("Wyjdz", 30, (0.86 * self._surface.get_size()[0], 0.93 * self._surface.get_size()[1]), False, Command.EXIT))
+        self._controls.append(self.__buttons[-1])
 
     #metoda renderująca
     def render(self):
@@ -90,9 +96,12 @@ class ViewLevelEditor(View):
         #pole edycyjne
         py.draw.rect(self._surface, (240, 240, 240), (0, 0, self.__editSurfaceBorder * self._surface.get_size()[0], self._surface.get_size()[1]))
         
+        #rysowanie kształtu nowej platformy
         if self.__mode == EditingMode.PLATFORM_CREATION and py.mouse.get_pos()[0] < self.__editSurfaceBorder * self._surface.get_size()[0]:
+            #jeden wierzchołek
             if self.__newPlatformCoords == (-1, -1):
                 py.draw.circle(self._surface, (174, 13, 24), py.mouse.get_pos(), 5)
+            #cały prostokąt
             else:
                 x0 = min(self.__newPlatformCoords[0], py.mouse.get_pos()[0])
                 x1 = max(self.__newPlatformCoords[0], py.mouse.get_pos()[0])

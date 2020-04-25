@@ -22,7 +22,7 @@ class ControllerLevelEditor(Controller):
                 self._command = Command.EXIT
 
             #kliknięcie myszką
-            if event.type == py.MOUSEBUTTONDOWN:
+            elif event.type == py.MOUSEBUTTONDOWN:
 
                 #pobranie stanu przycisków myszy
                 buttons = py.mouse.get_pressed()
@@ -30,15 +30,27 @@ class ControllerLevelEditor(Controller):
                 #0 - LPM
                 #2 - RPM
                 if buttons[0]:
+
+                    for control in self._controls:
+
+                        #sprawdzanie czy nad daną kontrolką jest kursor
+                        if control.get_is_focused():
+
+                            #pobranie z niej polecenia
+                            self._command = control.get_command()
+
+                            #sprawdzenie czy była to kontrolka do wybrania obiektu gry
+                            if self._command == Command.OBJECT_SELECTED:
+                                #TODO
+                                #przekazanie info o tym jaki to konkretnie obiekt
+                                pass
+                            return
+
                     self._command = Command.CLICKED_LMB
                 elif buttons[2]:
                     self._command = Command.CLICKED_RMB
 
-                for control in self._controls:
-                    #sprawdzanie czy nad daną kontrolką jest kursor
-                    if control.get_is_focused():
-                        #pobranie z niej polecenia
-                        self._command = control.get_command()
+                
             else:
                 self._command = Command.CONTINUE
 

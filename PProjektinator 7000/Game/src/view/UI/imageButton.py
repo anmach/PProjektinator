@@ -26,31 +26,24 @@ class ImageButton(Control):
                 scale = min(size[0] / self.__image.get_rect().size[0], size[1] / self.__image.get_rect().size[1])
                 
                 #skalowanie obrazu
-                self.__image = py.transform.scale(self.__image, (int(self.__image.get_rect().size[0] * scale), int(self.__image.get_rect().size[1] * scale)))
-
+                self._size = (int(self.__image.get_rect().size[0] * scale), int(self.__image.get_rect().size[1] * scale))
+                self.__image = py.transform.scale(self.__image, (self._size[0], self._size[1]))
+                
         #przesunięcię obrazu na środek
         self.__imageOffset = (size[0] - self.__image.get_rect().size[0], size[1] - self.__image.get_rect().size[1])
             
-    #metoda do aktualizowania stanu kontrolki, np. zmiany koloru
+    #metoda do aktualizowania stanu kontrolki
     def update(self):
-        pass
         #pobranie pozycji kursora
-        #mousePos = py.mouse.get_pos()
-        #if mousePos[0] >= self._pos[0] and mousePos[0] <= self._pos[0] + self._size[0] and mousePos[1] >= self._pos[1] and mousePos[1] <= self._pos[1] + self._size[1]:
-        #    self._isFocused = 1
-        #    self.__text.set_is_focused(1)
-       # else: 
-       #     self._isFocused = 0
-       #     self.__text.set_is_focused(0)
+        mousePos = py.mouse.get_pos()
+        if mousePos[0] >= self._pos[0] + self.__imageOffset[0] and mousePos[0] <= self._pos[0] + self.__imageOffset[0] + self._size[0] and mousePos[1] >= self._pos[1] + self.__imageOffset[1] and mousePos[1] <= self._pos[1] + self.__imageOffset[1] + self._size[1]:
+            self._isFocused = 1
+        else: 
+            self._isFocused = 0
 
     #metoda do wyrysowania kontrolki
     def draw(self, surface):
         surface.blit(self.__image, (self._pos[0] + self.__imageOffset[0], self._pos[1] + self.__imageOffset[1]))
-
-    # gettery | settery
-   # def get_text(self):
-    #    return self.__text.get_text()
-
-    #def set_text(self, text):
-    #    self.__text.set_text(text)
-
+        #rysowanie ramki jako podsietlenia
+        if self._isFocused:
+            py.draw.rect(surface, (255, 200, 0), (self._pos[0] + self.__imageOffset[0], self._pos[1] + self.__imageOffset[1], self._size[0], self._size[1]), 3)
