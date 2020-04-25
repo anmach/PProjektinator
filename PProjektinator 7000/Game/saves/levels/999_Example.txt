@@ -1,0 +1,48 @@
+# znakiem '#' oznaczamy linijkę komentarza (skoro python no to python)
+# znakiem '$' oznaczamy koniec pliku (jeśli wykrycie końca pliku jest łatwe i w ogóle przyjemne oraz trywialne to może zrezygnować z takiego oznaczania)
+# wartości pól znajdują się zawsze jako jedyne w danym wierszu
+# znakiem '@' oznaczamy rozpoczęcie strefy nowego obiektu
+# poniżej to moja propozycja struktury pliku, komentarze opisują każdą linijkę dla naszej wygody, bo jeśli coś będzie nie tak z wczytywaniem czy zapisywaniem (a może z jeszcze czymś innym) to ciężko byłoby odgadnąć co czym jest z samych liczb
+@
+# ID obiektu (czy coś innego co jednoznacznie identyfikuje klasę) - wiemy jak odczytać tę część pliku
+12
+# Gracz
+# wsp. x
+270
+# wsp. y
+144
+# szerokość
+69
+# wysokość
+420
+# % hp
+105
+# strona w którą patrzy (0 - lewo, 1 - prawo)
+1
+@
+# ID
+501
+#platforma
+# wsp. x
+1
+# wsp. y
+2
+# szer.
+3
+# wys.
+4
+@
+# ID
+88
+#nie wiem co tam jeszcze jest
+# wsp. x
+22
+# wsp. y
+22
+# sz
+22
+# w
+22
+# czy jest fajnie (0 - nie, 1 - tak)
+1
+$
