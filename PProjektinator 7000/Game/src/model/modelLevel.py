@@ -21,7 +21,7 @@ class ModelLevel(Model):
 
         self.objs = py.sprite.Group()
         self.__all_sprites = py.sprite.Group()
-        self.__player = Player(".\\res\\sprites\\player.png")
+        self.__player = Player(".\\res\\sprites\\player\\")
         self.telekinesis = False
         self.tele_idx = 0
         self.tele_objs = [crate1, crate2]

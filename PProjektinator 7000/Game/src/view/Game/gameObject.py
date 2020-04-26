@@ -1,4 +1,5 @@
 import pygame as py
+import os
 
 class GameObject(py.sprite.Sprite):
     """Bazowa klasa obiektów w modelu - platform, gracza i obiektów dynamicznych"""
@@ -10,9 +11,13 @@ class GameObject(py.sprite.Sprite):
         self.spd_y = 0
         self.does_gravity = gravity #bool decyduje czy na obiekt działa grawitacja
         self.surf = py.Surface((width, height))
+        self.frame_id = 0 #Wskaźnik na obecną klatkę.
+        self._frames = list()
         #obrazek
         if (image_source != None):
-            self._image = py.image.load(image_source).convert()
+            for name in os.listdir(image_source):
+                self._frames.append(open(os.path.join(image_source,name), "r"))
+            self._image = py.image.load(self._frames[self.frame_id]).convert()
             #self.surf.set_colorkey((255, 255, 0))
         else:
             self.surf.fill((255, 255, 255))
@@ -40,6 +45,10 @@ class GameObject(py.sprite.Sprite):
 
     def set_spd_y(self, spd):
         self.spd_y = spd
+
+    def set_frame_by_id(self, frame_id):
+        self.frame_id = frame_id
+        self._image = py.image.load(self._frames[self.frame_id]).convert()
 
     def check_collision_ip(self, target, x, y):
         return ((target.rect.x < self.rect.x + x + self.rect.width) \
