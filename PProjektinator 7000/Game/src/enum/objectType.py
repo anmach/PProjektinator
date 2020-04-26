@@ -1,7 +1,7 @@
 from enum import IntEnum
 
 class ObjectType(object):
-    """Klasa typów obiektów w grze"""
+    """Enum typów obiektów w grze"""
     # obiekt nieruchomy
     STATIC = 0b0000_0000
     # obiekt ruchomy

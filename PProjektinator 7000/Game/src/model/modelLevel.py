@@ -25,16 +25,14 @@ class ModelLevel(Model):
         self.telekinesis = False
         self.tele_idx = 0
         self.tele_objs = [crate1, crate2]
+        self.no_jumps = 0
 
         self.__all_sprites.add(self.__player)
         
-        self.objs.add(crate1)
-        self.objs.add(crate2)
-        self.objs.add(platform1)
-        self.objs.add(platform2)
-
-        for entity in self.objs:
-            self.__all_sprites.add(entity)
+        self.__all_sprites.add(crate1)
+        self.__all_sprites.add(crate2)
+        self.__all_sprites.add(platform1)
+        self.__all_sprites.add(platform2)
 
 
     def movement(self):
@@ -61,37 +59,34 @@ class ModelLevel(Model):
             if self._command & Command.ATTACK & ~0x80:
                 bullet = GameObject(self.__player.get_x(), self.__player.get_y(), 10, 5, False, ObjectType.BULLET ^ ObjectType.DYNAMIC, None)
                 bullet.set_spd_x(10 * self.__player.direction)
-                self.objs.add(bullet)
                 self.__all_sprites.add(bullet)
+            if self._command & Command.JUMP & ~0x80:
+                if self.no_jumps > 0:
+                    self.__player.spd_y = -20
+                    self.no_jumps -= 1
 
         if self._command == Command.EXIT:                               # wyjście
             self._runMode = False
 
-        self.__player.spd_y += 1 if self.__player.does_gravity else 0   #działanie grawitacji
-
-        for entity in self.objs:
+        for entity in self.__all_sprites:
             if entity.type == ObjectType.DYNAMIC:
                 entity.spd_y += 1 if entity.does_gravity else\
                                 0
 
 
     def collisions(self):
-        for entity in self.objs:
-            if self.__player.check_collision_ip(entity, 0, self.__player.spd_y):
-                self.__player.spd_y = -20 if self._command & Command.JUMP & ~0x80 and (not self.telekinesis) else\
-                                        0
-            if self.__player.check_collision_ip(entity, self.__player.spd_x, 0):
-                self.__player.spd_x = 0
+        for entity in self.__all_sprites:
 
-            for dynamic in self.objs:
+            for dynamic in self.__all_sprites:
                 if (dynamic.type & ObjectType.DYNAMIC) and dynamic != entity:
                     if dynamic.check_collision_ip(entity, 0, dynamic.spd_y):
                         dynamic.spd_y = 0
+                        if dynamic == self.__player:
+                            self.no_jumps = 2
 
                     if dynamic.check_collision_ip(entity, dynamic.spd_x, 0):
                         dynamic.spd_x = 0
                         if dynamic.type & ObjectType.BULLET:
-                            self.objs.remove(dynamic)
                             self.__all_sprites.remove(dynamic)
                             del dynamic
 
@@ -102,11 +97,10 @@ class ModelLevel(Model):
         
         # kolizje
         self.collisions()
-
+        print(self.no_jumps)
         # update obiektów (pozycji)
-        for entity in self.objs:
+        for entity in self.__all_sprites:
             entity.update()
-        self.__player.update()
 
 #------------END update-----------------------------
 

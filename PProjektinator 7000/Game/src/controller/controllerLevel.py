@@ -51,9 +51,7 @@ class ControllerLevel(Controller):
                     self._command &= ~Command.JUMP
                 #atak
                 elif event.key == self._key_attack:
-                    if self._we_already_shooted == 0:
-                        self._command += Command.ATTACK
-                        self._we_already_shooted = 1
+                    self._command |= Command.ATTACK
                 #rozpoczęcie telekinezy
                 elif event.key == self._key_telekinesis:
                     print("The force is strong with this one.\n")
@@ -71,11 +69,6 @@ class ControllerLevel(Controller):
                     self._command &= ~Command.GO_LEFT
                 elif event.key == self._key_go_right:
                     self._command &= ~Command.GO_RIGHT
-                elif event.key == self._key_jump:
-                    self._command &= ~Command.JUMP
-                elif event.key == self._key_attack:
-                    # zwolniony przycisk -> można znowu strzelić
-                    self._we_already_shooted = 0
                 elif event.key == self._key_crouch:
                     self._command &= ~Command.CROUCH
                 elif event.key == self._key_telekinesis:
@@ -92,6 +85,8 @@ class ControllerLevel(Controller):
 
     def give_command(self, model):
         model.set_command(self._command)
+        self._command &= ~Command.JUMP
+        self._command &= ~Command.ATTACK
 
     def read_steering_from_file(self):
         file = open('.\\saves\\opszyns.txt', 'r')
