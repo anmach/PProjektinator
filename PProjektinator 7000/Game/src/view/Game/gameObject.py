@@ -9,6 +9,8 @@ class GameObject(py.sprite.Sprite):
         self.type = type
         self.spd_x = 0
         self.spd_y = 0
+        self.width = width
+        self.height = height
         self.does_gravity = gravity #bool decyduje czy na obiekt działa grawitacja
         self.surf = py.Surface((width, height))
         self.frame_id = 0 #Wskaźnik na obecną klatkę.
@@ -16,8 +18,8 @@ class GameObject(py.sprite.Sprite):
         #obrazek
         if (image_source != None):
             for name in os.listdir(image_source):
-                self._frames.append(open(os.path.join(image_source,name), "r"))
-            self.surf = py.image.load(self._frames[self.frame_id])
+                self._frames.append(os.path.join(image_source,name))
+            self.surf = py.image.load(open(self._frames[self.frame_id], "r"))
             self.surf = py.transform.scale(self.surf, (width, height))
             #self.surf.set_colorkey((255, 255, 0))
         else:
@@ -48,9 +50,12 @@ class GameObject(py.sprite.Sprite):
         self.spd_y = spd
 
     def set_frame_by_id(self, frame_id):
-        self.frame_id = frame_id
-        self.surf = py.image.load(self._frames[self.frame_id])
-        self.surf = py.transform.scale(self.surf, (width, height))
+        if frame_id >= len(self._frames):
+            self.frame_id = 1
+        else:
+            self.frame_id = frame_id
+        self.surf = py.image.load(open(self._frames[self.frame_id], "r"))
+        self.surf = py.transform.scale(self.surf, (self.width, self.height))
 
     def check_collision_ip(self, target, x, y):
         return ((target.rect.x < self.rect.x + x + self.rect.width) \
