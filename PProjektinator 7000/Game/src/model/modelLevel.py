@@ -58,7 +58,8 @@ class ModelLevel(Model):
             self.__player.set_spd_x(spd_x)  
             if self._command & Command.ATTACK & ~0x80:
                 bullet = GameObject(self.__player.get_x(), self.__player.get_y(), 10, 5, False, ObjectType.BULLET ^ ObjectType.DYNAMIC, None)
-                bullet.set_spd_x(10 * self.__player.direction)
+                bull_spd = -10 if self.__player.direction else 10
+                bullet.set_spd_x(bull_spd)
                 self.__all_sprites.add(bullet)
             if self._command & Command.JUMP & ~0x80:
                 if self.no_jumps > 0:
@@ -85,8 +86,9 @@ class ModelLevel(Model):
                             self.no_jumps = 2
 
                     if dynamic.check_collision_ip(entity, dynamic.spd_x, 0):
-                        dynamic.spd_x = 0
-                        if dynamic.type & ObjectType.BULLET:
+                        if not (dynamic.type & ObjectType.BULLET):
+                           dynamic.spd_x = 0
+                        if dynamic.type & ObjectType.BULLET and entity != self.__player:
                             self.__all_sprites.remove(dynamic)
                             del dynamic
 
@@ -97,7 +99,6 @@ class ModelLevel(Model):
         
         # kolizje
         self.collisions()
-        print(self.no_jumps)
         # update obiektów (pozycji)
         for entity in self.__all_sprites:
             entity.update()
