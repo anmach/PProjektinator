@@ -5,7 +5,7 @@ class GameObject(py.sprite.Sprite):
     """Bazowa klasa obiektów w modelu - platform, gracza i obiektów dynamicznych"""
     def __init__(self, x, y, width, height, gravity, type, image_source):
         super().__init__()
-        self.direction = 1
+        self.direction = False
         self.type = type
         self.spd_x = 0
         self.spd_y = 0
@@ -17,7 +17,8 @@ class GameObject(py.sprite.Sprite):
         if (image_source != None):
             for name in os.listdir(image_source):
                 self._frames.append(open(os.path.join(image_source,name), "r"))
-            self._image = py.image.load(self._frames[self.frame_id]).convert()
+            self.surf = py.image.load(self._frames[self.frame_id])
+            self.surf = py.transform.scale(self.surf, (width, height))
             #self.surf.set_colorkey((255, 255, 0))
         else:
             self.surf.fill((255, 255, 255))
@@ -48,7 +49,8 @@ class GameObject(py.sprite.Sprite):
 
     def set_frame_by_id(self, frame_id):
         self.frame_id = frame_id
-        self._image = py.image.load(self._frames[self.frame_id]).convert()
+        self.surf = py.image.load(self._frames[self.frame_id])
+        self.surf = py.transform.scale(self.surf, (width, height))
 
     def check_collision_ip(self, target, x, y):
         return ((target.rect.x < self.rect.x + x + self.rect.width) \
@@ -58,7 +60,11 @@ class GameObject(py.sprite.Sprite):
 
     def update(self):
         if self.spd_x > 0:
-            self.direction = 1
+            if self.direction == True:
+                self.surf = py.transform.flip(self.surf, True, False)
+                self.direction = False
         if self.spd_x < 0:
-             self.direction = -1
+            if self.direction == False:
+                self.direction = True
+                self.surf = py.transform.flip(self.surf, True, False)
         self.rect.move_ip(self.spd_x, self.spd_y)
