@@ -42,7 +42,7 @@ class ControllerLevelEditor(Controller):
                             #sprawdzenie czy była to kontrolka do wybrania obiektu gry
                             if self._command == Command.OBJECT_SELECTED:
                                 #TODO
-                                #przekazanie info o tym jaki to konkretnie obiekt
+                                #przekazanie info o tym jaki to konkretnie obiekt (nr w tablicy? - pomysł na przyszłość)
                                 pass
                             return
 

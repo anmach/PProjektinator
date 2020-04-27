@@ -1,6 +1,7 @@
 from .model import Model
 from src.enum.command import Command
 from src.enum.editingMode import EditingMode
+from src.view.Game.gameObject import GameObject
 import os
 import pygame as py
 
@@ -24,15 +25,18 @@ class ModelLevelEditor(Model):
         #współrzędne punktów nowej platformy
         self.__new_platform_coords = (-1, -1)
 
-        #czy aktualnie jest przemieszczany obiekt (tylko w trybie MOVE_OR_DELETE)
+        #czy aktualnie jest przemieszczany obiekt
         self.__isMoved = False
 
         #aktualny tryb pracy
         self.__mode = EditingMode.NONE
 
+        #tabela dla obiektów w grze
+        self.__gameObjectsArr = []
+
     #metoda aktualizująca stan wewnętrzego modelu programu
     def update(self):
-        #self.__mode = EditingMode.PLATFORM_CREATION
+        
         if self._command == Command.EXIT:
             self._runMode = False
 
@@ -69,10 +73,23 @@ class ModelLevelEditor(Model):
             
                     if self.__new_platform_coords == (-1, -1):
                         self.__new_platform_coords = py.mouse.get_pos()
+
+                        for game_object in self.__gameObjectsArr:
+                            if game_object is GameObject:
+                                if abs(game_object.get_x() - self.__new_platform_coords[0]) < 10 and abs(game_object.get_y() - self.__new_platform_coords[1]) < 10:
+                                    newPos = (game_object.get_x(), game_object.get_y())
+                                    self.__new_platform_coords = newPos
+                                #else if abs(game_object.get_x() + game_object.get - self.__new_platform_coords[0]) < 10 and abs(game_object.get_y() - self.__new_platform_coords[1]) < 10
                     else:
                         #TODO
                         #dodanie nowej platformy o współrzędnych wierzchołków [tworzących przekątną] - (self.__newPlatformCoords, py.mouse.get_pos())
+                        x0 = min(self.__newPlatformCoords[0], py.mouse.get_pos()[0])
+                        x1 = max(self.__newPlatformCoords[0], py.mouse.get_pos()[0])
 
+                        y0 = min(self.__newPlatformCoords[1], py.mouse.get_pos()[1])
+                        y1 = max(self.__newPlatformCoords[1], py.mouse.get_pos()[1])
+
+                        self.__gameObjectsArr.append(GameObject(x0, y0, x1 - x0, y1 - y0, False, ObjectType.STATIC, None))
                         self.__new_platform_coords = (-1, -1)
             
                 elif self.__mode == EditingMode.OBJECT_PLACEMENT:

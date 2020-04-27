@@ -34,48 +34,49 @@ class ViewLevelEditor(View):
         self.__mode = EditingMode.NONE
 
 
+    def addButton(self, newButton):
+        self.__buttons.append(newButton)
+        self._controls.append(newButton)
+
+    def addText(self, newText):
+        self.__texts.append(newText)
+        self._controls.append(newText)
+
+    def addImageButton(self, newImageButton):
+        self.__imageButtons.append(newImageButton)
+        self._controls.append(newImageButton)
+
     def addAllControls(self):
         #poziom wcześniej
-        self.__buttons.append(Button("<-", 20, (0.82 * self._surface.get_size()[0], 0.02 * self._surface.get_size()[1]), False, Command.PREV_LEVEL))
-        self._controls.append(self.__buttons[-1])
+        self.addButton(Button("<-", 20, (0.82 * self._surface.get_size()[0], 0.02 * self._surface.get_size()[1]), False, Command.PREV_LEVEL))
         
         #tekst wyświetlający aktualnie wybrany poziom
-        self.__texts.append(Text("", 28, (0.89 * self._surface.get_size()[0], 0.015 * self._surface.get_size()[1])))
-        self._controls.append(self.__texts[-1])
-
+        self.addText(Text("", 28, (0.89 * self._surface.get_size()[0], 0.015 * self._surface.get_size()[1])))
+        
         #poziom dalej
-        self.__buttons.append(Button("->", 20, (0.96 * self._surface.get_size()[0], 0.02 * self._surface.get_size()[1]), False, Command.NEXT_LEVEL))
-        self._controls.append(self.__buttons[-1])
-
+        self.addButton(Button("->", 20, (0.96 * self._surface.get_size()[0], 0.02 * self._surface.get_size()[1]), False, Command.NEXT_LEVEL))
+        
         #trzy kolejne raczej wiadomo
-        self.__buttons.append(Button("Otwórz", 30, (0.85 * self._surface.get_size()[0], 0.10 * self._surface.get_size()[1]), False, Command.OPEN))
-        self._controls.append(self.__buttons[-1])
+        self.addButton(Button("Otwórz", 30, (0.85 * self._surface.get_size()[0], 0.10 * self._surface.get_size()[1]), False, Command.OPEN))
 
-        self.__buttons.append(Button("Nowy", 30, (0.86 * self._surface.get_size()[0], 0.17 * self._surface.get_size()[1]), False, Command.CREATE_NEW))
-        self._controls.append(self.__buttons[-1])
+        self.addButton(Button("Nowy", 30, (0.86 * self._surface.get_size()[0], 0.17 * self._surface.get_size()[1]), False, Command.CREATE_NEW))
 
-        self.__buttons.append(Button("Zapisz", 30, (0.855 * self._surface.get_size()[0], 0.24 * self._surface.get_size()[1]), False, Command.SAVE))
-        self._controls.append(self.__buttons[-1])
+        self.addButton(Button("Zapisz", 30, (0.855 * self._surface.get_size()[0], 0.24 * self._surface.get_size()[1]), False, Command.SAVE))
         
         #przewijanie kontrolek w lewo
-        self.__buttons.append(Button("<-", 20, (0.86 * self._surface.get_size()[0], 0.69 * self._surface.get_size()[1]), False, Command.PREV_LEVEL))
-        self._controls.append(self.__buttons[-1])
+        self.addButton(Button("<-", 20, (0.86 * self._surface.get_size()[0], 0.69 * self._surface.get_size()[1]), False, Command.PREV_LEVEL))
 
         #dodanie obiektu gracza
-        self.__imageButtons.append(ImageButton(".\\res\\sprites\\player.png", (0.81 * self._surface.get_size()[0], 0.5 * self._surface.get_size()[1]), (50, 50), False, Command.OBJECT_SELECTED))
-        self._controls.append(self.__imageButtons[-1])
+        self.addImageButton(ImageButton(".\\res\\sprites\\player\\player.png", (0.81 * self._surface.get_size()[0], 0.5 * self._surface.get_size()[1]), (50, 50), False, Command.OBJECT_SELECTED))
 
         #dodanie obiektu platformy
-        self.__imageButtons.append(ImageButton(".\\res\\sprites\\platform tiles\\x3\\tile internal x3.png", (0.90 * self._surface.get_size()[0], 0.5 * self._surface.get_size()[1]), (50, 50), False, Command.OBJECT_SELECTED))
-        self._controls.append(self.__imageButtons[-1])
+        self.addImageButton(ImageButton(".\\res\\sprites\\platform tiles\\x3\\tile internal x3.png", (0.90 * self._surface.get_size()[0], 0.5 * self._surface.get_size()[1]), (50, 50), False, Command.OBJECT_SELECTED))
 
         #przewijanie kontrolek w lewo
-        self.__buttons.append(Button("->", 20, (0.92 * self._surface.get_size()[0], 0.69 * self._surface.get_size()[1]), False, Command.NEXT_LEVEL))
-        self._controls.append(self.__buttons[-1])
+        self.addButton(Button("->", 20, (0.92 * self._surface.get_size()[0], 0.69 * self._surface.get_size()[1]), False, Command.NEXT_LEVEL))
 
         #tez wiadomo
-        self.__buttons.append(Button("Wyjdz", 30, (0.86 * self._surface.get_size()[0], 0.93 * self._surface.get_size()[1]), False, Command.EXIT))
-        self._controls.append(self.__buttons[-1])
+        self.addButton(Button("Wyjdz", 30, (0.86 * self._surface.get_size()[0], 0.93 * self._surface.get_size()[1]), False, Command.EXIT))
 
     #metoda renderująca
     def render(self):
