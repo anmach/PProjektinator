@@ -86,6 +86,9 @@
     <Compile Include="src\programModes\programMode.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="src\view\Game\movingPlatform.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="src\view\Game\player.py">
       <SubType>Code</SubType>
     </Compile>

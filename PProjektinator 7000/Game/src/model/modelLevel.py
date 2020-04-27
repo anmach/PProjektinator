@@ -1,5 +1,6 @@
 from .model import Model
 from src.view.Game.gameObject import GameObject
+from src.view.Game.movingPlatform import MovingPlatform
 from src.view.Game.player import Player
 from src.enum.command import Command
 from src.enum.objectType import ObjectType
@@ -17,6 +18,10 @@ class ModelLevel(Model):
         platform2 = GameObject(200, 300, 200, 400, False, ObjectType.STATIC, None)
         crate1 = GameObject(450, 100, 100, 100, True, ObjectType.DYNAMIC, None)
         crate2 = GameObject(450, 0, 50, 50, True, ObjectType.DYNAMIC, None)
+        movPlat = MovingPlatform(100, 200, 100, 50, False, ObjectType.KINEMATIC, None, 0, 200)
+        movPlat.spd_x = 0
+        movPlat.spd_y = 2
+
         self.level_number = level_number
 
         self.objs = py.sprite.Group()
@@ -33,6 +38,7 @@ class ModelLevel(Model):
         self.__all_sprites.add(crate2)
         self.__all_sprites.add(platform1)
         self.__all_sprites.add(platform2)
+        self.__all_sprites.add(movPlat)
 
 
     def movement(self):
@@ -77,16 +83,18 @@ class ModelLevel(Model):
 
     def collisions(self):
         for entity in self.__all_sprites:
-
             for dynamic in self.__all_sprites:
                 if (dynamic.type & ObjectType.DYNAMIC) and dynamic != entity:
                     if dynamic.check_collision_ip(entity, 0, dynamic.spd_y):
-                        dynamic.spd_y = 0
+                        if entity.type == ObjectType.KINEMATIC and dynamic.spd_y > 0:
+                            dynamic.spd_y_other = entity.spd_y
+                            dynamic.spd_x_other = entity.spd_x
                         if dynamic == self.__player:
                             self.no_jumps = 2
+                        dynamic.spd_y = 0
 
                     if dynamic.check_collision_ip(entity, dynamic.spd_x, 0):
-                        if not (dynamic.type & ObjectType.BULLET):
+                        if not (dynamic.type & ObjectType.BULLET or entity.type & ObjectType.KINEMATIC):
                            dynamic.spd_x = 0
                         if dynamic.type & ObjectType.BULLET and entity != self.__player:
                             self.__all_sprites.remove(dynamic)

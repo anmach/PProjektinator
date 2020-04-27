@@ -25,5 +25,9 @@ class Player(GameObject):
         if self.spd_x == 0:
             self.isWalking = False
         self.surf = py.transform.flip(self.surf, self.direction, False)
-        self.rect.move_ip(self.spd_x, self.spd_y)
+        self.rect.move_ip(self.spd_x + self.spd_x_other, self.spd_y + self.spd_y_other)
+        self.spd_x_other = 0
+        self.spd_y_other = 0
+
+
 

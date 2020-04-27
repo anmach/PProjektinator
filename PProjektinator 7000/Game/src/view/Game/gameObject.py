@@ -8,7 +8,9 @@ class GameObject(py.sprite.Sprite):
         self.direction = False
         self.type = type
         self.spd_x = 0
+        self.spd_x_other = 0
         self.spd_y = 0
+        self.spd_y_other = 0
         self.width = width
         self.height = height
         self.does_gravity = gravity #bool decyduje czy na obiekt działa grawitacja
@@ -72,4 +74,7 @@ class GameObject(py.sprite.Sprite):
             if self.direction == False:
                 self.direction = True
                 self.surf = py.transform.flip(self.surf, True, False)
-        self.rect.move_ip(self.spd_x, self.spd_y)
+        self.rect.move_ip(self.spd_x + self.spd_x_other, self.spd_y + self.spd_y_other)
+        self.spd_x_other = 0
+        self.spd_y_other = 0
+
