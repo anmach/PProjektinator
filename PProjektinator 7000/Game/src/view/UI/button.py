@@ -69,3 +69,9 @@ class Button(Control):
             self.__text.set_pos(((pos[0] + 10), (pos[1] + 10)))
         else:
             self.__text.set_pos(pos)
+
+    def get_primary_colour(self):
+        return self._colours[0]
+    
+    def set_primary_colour(self, colour):
+        self._colours[0] = colour

@@ -14,6 +14,9 @@ class ButtonsBox(Control):
         super().__init__(position, buttons[0].get_command())
         self._buttons = buttons
         self._button_chosen = self._buttons[index_button_chosen]
+        self._old_colour = self._button_chosen.get_primary_colour()
+        self._chosen_colour = (0, 0, 0)
+        self._button_chosen.set_primary_colour(self._chosen_colour)
 
         # Maksymalna liczba kolumn 
         self._rows = rows
@@ -62,7 +65,16 @@ class ButtonsBox(Control):
             button.draw(surface)
 
     def set_button_chosen(self, button):
-        self._button_chosen = button
+        for butt in self._buttons:
+            if butt == button:
+                self._button_chosen.set_primary_colour(self._old_colour)
+                self._button_chosen = button
+                self._old_colour = self._button_chosen.get_primary_colour()
+                self._button_chosen.set_primary_colour(self._chosen_colour)
+                break
 
     def get_button_chosen(self):
         return self._button_chosen
+
+    def get_buttons(self):
+        return self._buttons

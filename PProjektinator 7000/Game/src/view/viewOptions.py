@@ -30,6 +30,9 @@ class ViewOptions(View):
         optionsY = 0.15
         options_y_offset = 0.07
 
+        width = 1000
+        height = 700
+
         # tworzenie wyświetlanego tekstu
         self.__texts.append(Text("Ustawienia", 60, (0.35 * surface.get_size()[0], 0.03 * surface.get_size()[1])))
 
@@ -77,11 +80,23 @@ class ViewOptions(View):
                 self.__sliders.append((OptionKey.VOLUME, Slider((x_column4 * surface.get_size()[0], optionsY * surface.get_size()[1]), option[1])))
             
         # kolumna 4 - rozdzielczość
+            elif option[0] == OptionKey.WINDOW_HEIGHT:
+                height = option[1]
+            elif option[0] == OptionKey.WINDOW_WIDTH:
+                width = option[1]
         buttBox = []
-        buttBox.append(Button("720x480", text_size, (0, 0), True, Command.OPTIONS_CHANGE_KEY))
-        buttBox.append(Button("1280x720", text_size, (0, 0), True, Command.OPTIONS_CHANGE_KEY))
-        buttBox.append(Button("xDxD", text_size, (0, 0), True, Command.OPTIONS_CHANGE_KEY))
-        self._buttons_box = ButtonsBox((x_column4 * surface.get_size()[0], (optionsY + options_y_offset) * surface.get_size()[1]), buttBox)
+        index_button_chosen = 0
+        buttBox.append(Button("720x480", text_size, (0, 0), True, Command.CHANGE_BUTTONS_BOX))
+        self._controls.append(buttBox[-1])
+        buttBox.append(Button("1280x720", text_size, (0, 0), True, Command.CHANGE_BUTTONS_BOX))
+        if width == 1280 and height == 720:
+            index_button_chosen = 1
+        self._controls.append(buttBox[-1])
+        buttBox.append(Button("600x500", text_size, (0, 0), True, Command.CHANGE_BUTTONS_BOX))
+        if width == 600 and height == 500:
+            index_button_chosen = 2
+        self._controls.append(buttBox[-1])
+        self._buttons_box = ButtonsBox((x_column4 * surface.get_size()[0], (optionsY + options_y_offset) * surface.get_size()[1]), buttBox, index_button_chosen)
 
 
         # tworzenie przycisków i przypisanie każdego z nich do ogólnej tablicy kontrolek
@@ -120,6 +135,7 @@ class ViewOptions(View):
     def update_options(self):
         self.update_options_from_sliders()
         self.update_options_from_buttons()
+        self.update_options_from_buttonsBox()
 
     # aktualizacja opcji na podstawie stanu sliderów
     def update_options_from_sliders(self):
@@ -137,7 +153,7 @@ class ViewOptions(View):
         iter = 0
         for butt_key in self.__buttons_optionKeys:
             for option in self._options:
-                # czy klucz opcji zgadza się z kluczem przypisanym sliderowi
+                # czy klucz opcji zgadza się z kluczem przypisanym przyciskowi
                 if option[0] == butt_key:
                     # usuwam tuple, bo nie da się ich zmieniać
                     self._options.remove((option[0], option[1]))
@@ -146,12 +162,46 @@ class ViewOptions(View):
             self._options.append((butt_key, str(ord(self.__buttons[iter].get_text()))))
             iter += 1
 
+    def update_options_from_buttonsBox(self):
+        #w buttonBox mamy tylko rozdzielczość, więc to sprawdzamy
+
+        #zdobywamy aktualnie ustawione wartości rozdzielczości:
+        width = 1000
+        height = 700
+        button_text = self._buttons_box.get_button_chosen().get_text()
+        if button_text == "1280x720":
+            width = 1280
+            height = 720
+        elif button_text == "600x500":
+            width = 600
+            height = 500
+        elif button_text == "720x480":
+            width = 720
+            height = 480
+
+        #usuwamy stare i zapisujemy nowe opcje
+        for option in self._options:
+                # czy klucz opcji zgadza się z kluczem przypisanym szerokości/wysokości ekranu
+                if option[0] == OptionKey.WINDOW_HEIGHT:
+                    # usuwam tuple, bo nie da się ich zmieniać
+                    self._options.remove((option[0], option[1]))
+                elif option[0] == OptionKey.WINDOW_WIDTH:
+                    # usuwam tuple, bo nie da się ich zmieniać
+                    self._options.remove((option[0], option[1]))
+        
+        self._options.append((OptionKey.WINDOW_HEIGHT, str(height)))
+        self._options.append((OptionKey.WINDOW_WIDTH, str(width)))
+
+
     # gettery | settery
     def get_sliders(self):
         sliders = []
         for slide in self.__sliders:
             sliders.append(slide[1])
         return sliders
+
+    def get_buttons_box(self):
+        return self._buttons_box
 
     def get_options(self):
         return self._options

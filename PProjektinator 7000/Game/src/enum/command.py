@@ -67,6 +67,9 @@ class Command(IntEnum):
     # polecenie zmiany klawisza sterującego w opcjach
     OPTIONS_CHANGE_KEY = 0x103
 
+    #polecenie zmiany odczytu z ButtonsBox...
+    CHANGE_BUTTONS_BOX = 0x104
+
     #POLECENIA DO STEROWANIA NA POZIOMIE POZIOMU
     #polecenie do skoku
     JUMP = 0b1,
