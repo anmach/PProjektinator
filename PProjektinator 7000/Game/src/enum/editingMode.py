@@ -12,7 +12,7 @@ class EditingMode(IntEnum):
     OBJECT_PLACEMENT = 2,
 
     #przenoszenie obiektów
-    OBJECT_RELOCATING = 3,
+    OBJECT_RELOCATION = 3,
 
     #usuwanie obiektów
     DELETION = 4
