@@ -36,7 +36,7 @@ class GameObject(py.sprite.Sprite):
     def get_y(self):
         return self.rect.y
     
-    def get_w(self):
+    def get_width(self):
         return self.width
 
     def get_height(self):
