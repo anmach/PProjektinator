@@ -51,6 +51,9 @@ class GameObject(py.sprite.Sprite):
     def get_spd_y(self):
         return self.spd_y
 
+    def get_type(self):
+        return self.type
+
     #v----SETTERY----v
     def set_spd_x(self, spd):
         self.spd_x = spd
