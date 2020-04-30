@@ -29,13 +29,19 @@ class GameObject(py.sprite.Sprite):
         self.rect = self.surf.get_rect()
         self.rect.move_ip(x, y)
 
-     #v----GETTERY----v
+    #v----GETTERY----v
     def get_x(self):
         return self.rect.x
 
     def get_y(self):
         return self.rect.y
     
+    def get_w(self):
+        return self.width
+
+    def get_height(self):
+        return self.height
+
     def get_image(self):
         return self._image
 
@@ -45,6 +51,7 @@ class GameObject(py.sprite.Sprite):
     def get_spd_y(self):
         return self.spd_y
 
+    #v----SETTERY----v
     def set_spd_x(self, spd):
         self.spd_x = spd
 
@@ -59,6 +66,7 @@ class GameObject(py.sprite.Sprite):
         self.surf = py.image.load(open(self._frames[self.frame_id], "r"))
         self.surf = py.transform.scale(self.surf, (self.width, self.height))
 
+    #v----POZOSTAŁE----v
     def check_collision_ip(self, target, x, y):
         return ((target.rect.x < self.rect.x + x + self.rect.width) \
            and (target.rect.x + target.rect.width > self.rect.x + x))\
