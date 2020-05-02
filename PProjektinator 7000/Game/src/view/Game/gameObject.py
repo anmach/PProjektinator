@@ -1,5 +1,6 @@
 import pygame as py
 import os
+from src.enum.objectType import ObjectType
 
 class GameObject(py.sprite.Sprite):
     """Bazowa klasa obiektów w modelu - platform, gracza i obiektów dynamicznych"""
@@ -89,8 +90,8 @@ class GameObject(py.sprite.Sprite):
         self.spd_x_other = 0
         self.spd_y_other = 0
 
-    #metoda służąca do zapisywania aktualnego stanu obiektu do pliku
-    def saveToFile(self, file):
+    #metoda służąca do zapisywania do pliku aktualnego stanu obiektu 
+    def save_to_file(self, file):
         file.write('@<JAKIEŚ ID>')
         file.write('#direction\n' + str(self.direction) + '\n')
         file.write('#type\n' + str(self.type) + '\n')
@@ -101,6 +102,37 @@ class GameObject(py.sprite.Sprite):
         file.write('#width\n' + str(self.width) + '\n')
         file.write('#height\n' + str(self.height) + '\n')
         file.write('#does_gravity\n' + str(self.does_gravity) + '\n')
-        #file.write('#surf\n' + str(self.surf) + '\n')
         file.write('#frame_id\n' + str(self.frame_id) + '\n')
-        
+
+    #metoda służąca do wczytania z pliku zapisanego stanu obiektu 
+    def load_from_file(self, file):
+        #trzeba pamiętać, że ta metoda nie ustawia wszystkich pól! (surf, image)
+        #TODO - uzupełnić???
+
+        #liczba pól, które wczytujemy
+        fieldsCount = 10
+        #licznik wczytanych wartości
+        counter = 0
+        #tablica wczytanych wierszy
+        lines = []
+
+        #wczytanie wszytkich wierszy z pominięciem komentarzy
+        for line in file:
+            if line[0] != '#':
+                lines.append(line)
+                counter += 1
+                if counter == fieldsCount:
+                    break
+
+        #przypisanie wczytanych wartości
+        self.direction = bool(lines[0])
+        self.type = ObjectType(lines[1])
+        self.spd_x = float(lines[2])
+        self.spd_x_other = float(lines[3])
+        self.spd_y = float(lines[4])
+        self.spd_y_other = float(lines[5])
+        self.width = int(lines[6])
+        self.height = int(lines[7])
+        self.frame_id = int(lines[8])
+        self.does_gravity = bool(lines[9])
+

@@ -32,10 +32,44 @@ class MovingPlatform(GameObject):
         file.write('#width\n' + str(self.width) + '\n')
         file.write('#height\n' + str(self.height) + '\n')
         file.write('#does_gravity\n' + str(self.does_gravity) + '\n')
-        #file.write('#surf\n' + str(self.surf) + '\n')
         file.write('#frame_id\n' + str(self.frame_id) + '\n')
         file.write('#path_max_x\n' + str(self.path_max_x) + '\n')
         file.write('#path_max_y\n' + str(self.path_max_y) + '\n')
         file.write('#path_cur_x\n' + str(self.path_cur_x) + '\n')
         file.write('#path_cur_y\n' + str(self.path_cur_y) + '\n')
 
+    #metoda służąca do wczytania z pliku zapisanego stanu obiektu 
+    def load_from_file(self, file):
+        #trzeba pamiętać, że ta metoda nie ustawia wszystkich pól! (surf, image)
+        #TODO - uzupełnić???
+
+        #liczba pól, które wczytujemy
+        fieldsCount = 14
+        #licznik wczytanych wartości
+        counter = 0
+        #tablica wczytanych wierszy
+        lines = []
+
+        #wczytanie wszytkich wierszy z pominięciem komentarzy
+        for line in file:
+            if line[0] != '#':
+                lines.append(line)
+                counter += 1
+                if counter == fieldsCount:
+                    break
+
+        #przypisanie wczytanych wartości
+        self.direction = bool(lines[0])
+        self.type = ObjectType(lines[1])
+        self.spd_x = float(lines[2])
+        self.spd_x_other = float(lines[3])
+        self.spd_y = float(lines[4])
+        self.spd_y_other = float(lines[5])
+        self.width = int(lines[6])
+        self.height = int(lines[7])
+        self.frame_id = int(lines[8])
+        self.does_gravity = bool(lines[9])
+        self.path_max_x = int(lines[10])
+        self.path_max_y = int(lines[11])
+        self.path_cur_x = int(lines[12])
+        self.path_cur_y = int(lines[13])
