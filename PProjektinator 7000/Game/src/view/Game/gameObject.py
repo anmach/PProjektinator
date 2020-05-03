@@ -77,7 +77,16 @@ class GameObject(py.sprite.Sprite):
            and ((target.rect.y < self.rect.y + y + self.rect.height)\
            and (target.rect.y + target.rect.height > self.rect.y + y))
 
+    def check_collision_ip_below(self, target, x, y):
+        return target.rect.y < self.rect.y + y + self.rect.height \
+           and target.rect.y + 15 > self.rect.y + self.rect.height \
+           and target.rect.x < self.rect.x + x + self.rect.width \
+           and target.rect.x + target.rect.width > self.rect.x + x
+
+
     def update(self):
+        if self.spd_y > 20:
+            self.spd_y = 20
         if self.spd_x > 0:
             if self.direction == True:
                 self.surf = py.transform.flip(self.surf, True, False)

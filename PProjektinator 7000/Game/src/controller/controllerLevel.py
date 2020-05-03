@@ -19,9 +19,9 @@ class ControllerLevel(Controller):
         self._key_crouch = ord('s')
         self._key_attack = ord('f')
         self._key_telekinesis = ord('r')
+        self._key_go_up = ord('w')
 
         # strzelono - trzeba ponownie nacisnąć przycisk
-        self._we_already_shooted = 0
 
         #odczytanie sterowania z pliku opcji
         self.read_steering_from_file()
@@ -63,6 +63,8 @@ class ControllerLevel(Controller):
                 elif event.key == self._key_go_right:
                     self._command += Command.GO_RIGHT
                     self._command &= ~Command.GO_LEFT
+                elif event.key == self._key_go_up:
+                    self._command += Command.GO_UP
 
             elif event.type == py.KEYUP:
                 if event.key == self._key_go_left:
@@ -74,6 +76,8 @@ class ControllerLevel(Controller):
                 elif event.key == self._key_telekinesis:
                     self._command &= ~Command.TELEKINESIS
                     print("The force is NOT strong with this one.\n")
+                elif event.key == self._key_go_up:
+                    self._command &= ~Command.GO_UP
 
     #metoda pozwalająca przekazać model do widoku w celu jego wyrenderowania
     def communicateMV(self, model, view):

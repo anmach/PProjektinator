@@ -74,8 +74,8 @@ class Command(IntEnum):
     #polecenie do skoku
     JUMP = 0b1,
 
-    #polecenie do podwójnego skoku
-    DOUBLE_JUMP = 0b10,
+    #polecenie do ruchu w górę - telekineza
+    GO_UP = 0b10,
 
     #polecenie do ruchu w prawo
     GO_RIGHT = 0b100,
@@ -91,3 +91,4 @@ class Command(IntEnum):
     
     #polecenie do złapania obiektu do poruszania siłą umysłu
     TELEKINESIS = 0b1_000_000
+

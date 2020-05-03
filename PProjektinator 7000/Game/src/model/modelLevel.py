@@ -18,9 +18,12 @@ class ModelLevel(Model):
         platform2 = GameObject(200, 300, 200, 400, False, ObjectType.STATIC, None)
         crate1 = GameObject(450, 100, 100, 100, True, ObjectType.DYNAMIC, None)
         crate2 = GameObject(450, 0, 50, 50, True, ObjectType.DYNAMIC, None)
-        movPlat = MovingPlatform(100, 200, 100, 50, False, ObjectType.KINEMATIC, None, 0, 200)
+        movPlat = MovingPlatform(600, 200, 100, 30, False, ObjectType.KINEMATIC, None, 0, 200)
+        movPlat2 = MovingPlatform(700, 200, 100, 30, False, ObjectType.KINEMATIC, None, 200, 0)
         movPlat.spd_x = 0
+        movPlat2.spd_x = 2
         movPlat.spd_y = 2
+        movPlat2.spd_y = 0
 
         self.level_number = level_number
 
@@ -39,6 +42,7 @@ class ModelLevel(Model):
         self.__all_sprites.add(platform1)
         self.__all_sprites.add(platform2)
         self.__all_sprites.add(movPlat)
+        self.__all_sprites.add(movPlat2)
 
 
     def movement(self):
@@ -54,7 +58,7 @@ class ModelLevel(Model):
                 self.tele_idx = (self.tele_idx + 1) % len(self.tele_objs)
             self.tele_objs[self.tele_idx].set_spd_x(spd_x)
             spd_y = 5 if self._command & Command.CROUCH & ~0x80 else \
-                    -5 if self._command & Command.JUMP & ~0x80 else \
+                    -5 if self._command & Command.GO_UP & ~0x80 else \
                     0
             self.tele_objs[self.tele_idx].set_spd_y(spd_y)
         else:
@@ -85,21 +89,26 @@ class ModelLevel(Model):
         for entity in self.__all_sprites:
             for dynamic in self.__all_sprites:
                 if (dynamic.type & ObjectType.DYNAMIC) and dynamic != entity:
-                    if dynamic.check_collision_ip(entity, 0, dynamic.spd_y):
-                        if entity.type == ObjectType.KINEMATIC and dynamic.spd_y > 0:
+                    if entity.type & ObjectType.STATIC or entity.type & ObjectType.DYNAMIC:
+                        if dynamic.check_collision_ip(entity, 0, dynamic.spd_y):
+                            if dynamic == self.__player:
+                                self.no_jumps = 2
+                            dynamic.spd_y = 0
+
+                        if dynamic.check_collision_ip(entity, dynamic.spd_x, 0):
+                           dynamic.spd_x = 0
+                           if dynamic.type & ObjectType.BULLET and entity != self.__player:
+                               self.__all_sprites.remove(dynamic)
+                               del dynamic
+
+                    if entity.type & ObjectType.KINEMATIC:
+                        if dynamic.check_collision_ip_below(entity, 0, dynamic.spd_y + dynamic.spd_y_other):
+                            if dynamic.spd_y >= 0:
+                                dynamic.spd_y = 0
                             dynamic.spd_y_other = entity.spd_y
                             dynamic.spd_x_other = entity.spd_x
-                        if dynamic == self.__player:
-                            self.no_jumps = 2
-                        dynamic.spd_y = 0
-
-                    if dynamic.check_collision_ip(entity, dynamic.spd_x, 0):
-                        if not (dynamic.type & ObjectType.BULLET or entity.type & ObjectType.KINEMATIC):
-                           dynamic.spd_x = 0
-                        if dynamic.type & ObjectType.BULLET and entity != self.__player:
-                            self.__all_sprites.remove(dynamic)
-                            del dynamic
-
+                            if dynamic == self.__player:
+                                self.no_jumps = 2
 
     def update(self):
 

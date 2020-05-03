@@ -9,6 +9,8 @@ class Player(GameObject):
         self.isWalking = False
 
     def update(self):
+        if self.spd_y > 20:
+            self.spd_y = 20
         if self.isWalking:
             self.frame_id += 1
         else:
