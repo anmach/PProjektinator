@@ -50,36 +50,43 @@ class ViewLevelEditor(View):
         self._controls.append(newImageButton)
 
     def add_all_controls(self):
+        surface_size_x = self._surface.get_size()[0]
+        surface_size_y = self._surface.get_size()[1]
+
+        smallest_button_size = int(surface_size_x * 0.016)
+        biggest_button_size = int(surface_size_x * 0.024)
+        image_button_size = int(surface_size_x * 0.039)
+
         #poziom wcześniej
-        self.add_button(Button("<-", 20, (0.82 * self._surface.get_size()[0], 0.02 * self._surface.get_size()[1]), False, Command.PREV_LEVEL))
+        self.add_button(Button("<-", smallest_button_size, (0.82 * surface_size_x, 0.02 * surface_size_y), False, Command.PREV_LEVEL))
         
         #tekst wyświetlający aktualnie wybrany poziom
-        self.add_text(Text("", 28, (0.89 * self._surface.get_size()[0], 0.015 * self._surface.get_size()[1])))
+        self.add_text(Text("", biggest_button_size, (0.89 * surface_size_x, 0.015 * surface_size_y)))
         
         #poziom dalej
-        self.add_button(Button("->", 20, (0.96 * self._surface.get_size()[0], 0.02 * self._surface.get_size()[1]), False, Command.NEXT_LEVEL))
+        self.add_button(Button("->", smallest_button_size, (0.96 * surface_size_x, 0.02 * surface_size_y), False, Command.NEXT_LEVEL))
         
         #trzy kolejne raczej wiadomo
-        self.add_button(Button("Otwórz", 30, (0.85 * self._surface.get_size()[0], 0.10 * self._surface.get_size()[1]), False, Command.OPEN))
+        self.add_button(Button("Otwórz", biggest_button_size, (0.85 * surface_size_x, 0.10 * surface_size_y), False, Command.OPEN))
 
-        self.add_button(Button("Nowy", 30, (0.86 * self._surface.get_size()[0], 0.17 * self._surface.get_size()[1]), False, Command.CREATE_NEW))
+        self.add_button(Button("Nowy", biggest_button_size, (0.86 * surface_size_x, 0.17 * surface_size_y), False, Command.CREATE_NEW))
 
-        self.add_button(Button("Zapisz", 30, (0.855 * self._surface.get_size()[0], 0.24 * self._surface.get_size()[1]), False, Command.SAVE))
+        self.add_button(Button("Zapisz", biggest_button_size, (0.855 * surface_size_x, 0.24 * surface_size_y), False, Command.SAVE))
         
         #przewijanie kontrolek w lewo
-        self.add_button(Button("<-", 20, (0.86 * self._surface.get_size()[0], 0.69 * self._surface.get_size()[1]), False, Command.PREV_LEVEL))
+        self.add_button(Button("<-", smallest_button_size, (0.86 * surface_size_x, 0.69 * surface_size_y), False, Command.PREV_LEVEL))
 
         #dodanie obiektu gracza
-        self.add_image_button(ImageButton(".\\res\\sprites\\player\\player.png", (0.81 * self._surface.get_size()[0], 0.5 * self._surface.get_size()[1]), (50, 50), False, Command.OBJECT_SELECTED, Command.PLACE_PLAYER))
+        self.add_image_button(ImageButton(".\\res\\sprites\\player\\player.png", (0.81 * surface_size_x, 0.5 * surface_size_y), (image_button_size, image_button_size), False, Command.OBJECT_SELECTED, Command.PLACE_PLAYER))
 
         #dodanie obiektu platformy
-        self.add_image_button(ImageButton(".\\res\\sprites\\platform tiles\\x3\\tile internal x3.png", (0.90 * self._surface.get_size()[0], 0.5 * self._surface.get_size()[1]), (50, 50), False, Command.OBJECT_SELECTED, Command.CREATE_PLATFORM))
+        self.add_image_button(ImageButton(".\\res\\sprites\\platform tiles\\x3\\tile internal x3.png", (0.90 * surface_size_x, 0.5 * surface_size_y), (image_button_size, image_button_size), False, Command.OBJECT_SELECTED, Command.CREATE_PLATFORM))
 
         #przewijanie kontrolek w lewo
-        self.add_button(Button("->", 20, (0.92 * self._surface.get_size()[0], 0.69 * self._surface.get_size()[1]), False, Command.NEXT_LEVEL))
+        self.add_button(Button("->", smallest_button_size, (0.92 * surface_size_x, 0.69 * surface_size_y), False, Command.NEXT_LEVEL))
 
         #tez wiadomo
-        self.add_button(Button("Wyjdz", 30, (0.86 * self._surface.get_size()[0], 0.93 * self._surface.get_size()[1]), False, Command.EXIT))
+        self.add_button(Button("Wyjdz", biggest_button_size, (0.86 * surface_size_x, 0.93 * surface_size_y), False, Command.EXIT))
 
     #metoda renderująca
     def render(self):
