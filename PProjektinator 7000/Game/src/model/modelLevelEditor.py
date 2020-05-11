@@ -24,7 +24,9 @@ class ModelLevelEditor(Model):
         self.__level_to_edit = 0
 
         #współrzędne punktów nowej platformy
-        self.__new_platform_coords = (-1, -1)
+        self.__new_platform_first_vertex_pos = (-1, -1)
+        self.__new_platform_second_vertex_pos = (-1, -1)
+        self.__new_platform_vertex_number = 1
 
         #czy aktualnie jest przemieszczany obiekt
         self.__is_moved = False
@@ -36,7 +38,7 @@ class ModelLevelEditor(Model):
         self.__game_objects_arr = []
 
         #maksymalna odległość dla przyciągania wierzchołków
-        self.__snap_distance = 25
+        self.__snap_distance = 10
 
         self.__all_sprites = py.sprite.Group()
 
@@ -62,8 +64,8 @@ class ModelLevelEditor(Model):
             pass
 
         elif self._command == Command.SAVE and self.__chosen_level != -1:
-            pass
             #zapisanie aktualnie modyfikowanego poziomu
+            pass
 
         elif self._command == Command.CREATE_PLATFORM:
             self.__mode = EditingMode.PLATFORM_CREATION
@@ -72,82 +74,70 @@ class ModelLevelEditor(Model):
             self.__mode = EditingMode.OBJECT_PLACEMENT
 
         #interpretacja akcji użytkownika zależy od trybu w znajduje się edytor
-        elif self.__mode != EditingMode.NONE:
+            
+        #tworzenie nowej platformy
+        if self.__mode == EditingMode.PLATFORM_CREATION:
+            #TODO
+            #sprawdzenie czy nie nachodzi/koliduje z innymi obiektami
 
-            #lewy przycisk myszki
+            mouse_pos = py.mouse.get_pos()
+            new_vertex_pos = mouse_pos
+
+            for game_object in self.__game_objects_arr:
+                    if type(game_object) is GameObject and game_object.get_type() == ObjectType.STATIC:
+                        x0 = game_object.get_x()
+                        x1 = game_object.get_x() + game_object.get_width()
+                        
+                        y0 = game_object.get_y()
+                        y1 = game_object.get_y() + game_object.get_height()
+
+                        #jeżeli różnica między pozycją kursora myszki, a wierzchołkiem istniejącej platformy jest mniejsza niż ustalona
+                        #wartość to nowy wierzchołek jest "przyczepiany" do już istniejącego
+                        if abs(mouse_pos[0] - x0) < self.__snap_distance and abs(mouse_pos[1] - y0) < self.__snap_distance:
+                            new_vertex_pos = (x0, y0)
+                        elif abs(mouse_pos[0] - x1) < self.__snap_distance and abs(mouse_pos[1] - y0) < self.__snap_distance:
+                            new_vertex_pos = (x1, y0)
+                        elif abs(mouse_pos[0] - x0) < self.__snap_distance and abs(mouse_pos[1] - y1) < self.__snap_distance:
+                            new_vertex_pos = (x0, y1)
+                        elif abs(mouse_pos[0] - x1) < self.__snap_distance and abs(mouse_pos[1] - y1) < self.__snap_distance:
+                            new_vertex_pos = (x1, y1)
+
+            if self.__new_platform_vertex_number == 1:
+                self.__new_platform_first_vertex_pos = new_vertex_pos
+            else:
+                self.__new_platform_second_vertex_pos = new_vertex_pos
+
             if self._command == Command.CLICKED_LMB:
-            
-                #tworzenie nowej platformy
-                if self.__mode == EditingMode.PLATFORM_CREATION:
-                    #TODO
-                    #sprawdzenie czy nie nachodzi/koliduje z innymi obiektami
+                if self.__new_platform_vertex_number == 1:
+                    self.__new_platform_vertex_number = 2
+                else:
+                    #dodanie nowej platformy
+                    x0 = min(self.__new_platform_first_vertex_pos[0], self.__new_platform_second_vertex_pos[0])
+                    x1 = max(self.__new_platform_first_vertex_pos[0], self.__new_platform_second_vertex_pos[0])
+                                                                      
+                    y0 = min(self.__new_platform_first_vertex_pos[1], self.__new_platform_second_vertex_pos[1])
+                    y1 = max(self.__new_platform_first_vertex_pos[1], self.__new_platform_second_vertex_pos[1])
 
-                    mouse_pos = py.mouse.get_pos()
-                    new_vertex_pos = mouse_pos
+                    new_object = GameObject(x0, y0, x1 - x0, y1 - y0, False, ObjectType.STATIC, None)
 
-                    for game_object in self.__game_objects_arr:
-                            if type(game_object) is GameObject and game_object.get_type() == ObjectType.STATIC:
-                                x0 = game_object.get_x()
-                                x1 = game_object.get_x() + game_object.get_width()
-                                
-                                y0 = game_object.get_y()
-                                y1 = game_object.get_y() + game_object.get_height()
+                    self.__game_objects_arr.append(new_object)
+                    self.__all_sprites.add(new_object)
 
-                                #jeżeli różnica między pozycją kursora myszki, a wierzchołkiem istniejącej platformy jest mniejsza niż ustalona
-                                #wartość to nowy wierzchołek jest "przyczepiany" do już istniejącego
-                                if abs(mouse_pos[0] - x0) < self.__snap_distance and abs(mouse_pos[1] - y0) < self.__snap_distance:
-                                    new_vertex_pos = (x0, y0)
-                                elif abs(mouse_pos[0] - x1) < self.__snap_distance and abs(mouse_pos[1] - y0) < self.__snap_distance:
-                                    new_vertex_pos = (x1, y0)
-                                elif abs(mouse_pos[0] - x0) < self.__snap_distance and abs(mouse_pos[1] - y1) < self.__snap_distance:
-                                    new_vertex_pos = (x0, y1)
-                                elif abs(mouse_pos[0] - x1) < self.__snap_distance and abs(mouse_pos[1] - y1) < self.__snap_distance:
-                                    new_vertex_pos = (x1, y1)
-                                else:
-                                    new_vertex_pos = mouse_pos
+                    self.__new_platform_first_vertex_pos = self.__new_platform_second_vertex_pos = (-1, -1)
+                    self.__new_platform_vertex_number = 1
+            if self._command == Command.CLICKED_RMB:
 
-                    if self.__new_platform_coords == (-1, -1):
-                        self.__new_platform_coords = new_vertex_pos
-                    else:
-                        #dodanie nowej platformy o współrzędnych wierzchołków [tworzących przekątną] - (self.__newPlatformCoords, pozycja_kursora)
-                        x0 = min(self.__new_platform_coords[0], new_vertex_pos[0])
-                        x1 = max(self.__new_platform_coords[0], new_vertex_pos[0])
+                if self.__new_platform_vertex_number == 1:
+                    self.__new_platform_first_vertex_pos = (-1, -1)
+                    self.__mode = EditingMode.NONE
+                else:
+                    self.__new_platform_second_vertex_pos = (-1, -1)
+                    self.__new_platform_vertex_number = 1
 
-                        y0 = min(self.__new_platform_coords[1], new_vertex_pos[1])
-                        y1 = max(self.__new_platform_coords[1], new_vertex_pos[1])
-
-                        new_object = GameObject(x0, y0, x1 - x0, y1 - y0, False, ObjectType.STATIC, None)
-
-                        self.__game_objects_arr.append(new_object)
-                        self.__all_sprites.add(new_object)
-
-                        self.__new_platform_coords = (-1, -1)
-            
-                #elif self.__mode == EditingMode.OBJECT_PLACEMENT:
-                    #TODO
-                    #sprawdzenie kolizji i dodanie do poziomu
-                    #pass
-
-                #TODO
-                #elif inne tryby jeszcze (bo była zmiana)
-            
-            #prawy przycisk myszki
-            elif self._command == Command.CLICKED_RMB:
-
-                #w trybie tworzenia platformy
-                if self.__mode == EditingMode.PLATFORM_CREATION:
-
-                    #ale bez wierzchołków - wychodzimy z tego trybu
-                    if self.__new_platform_coords == (-1, -1):
-                        self.__mode = EditingMode.NONE
-
-                    #już z jednym wierzchołkiem - usuwamy go
-                    else:
-                        self.__new_platform_coords = (-1, -1)
-
-                #w trybie wstawianie nowego obiektu
-                elif self.__mode == EditingMode.OBJECT_PLACEMENT:
-                    self.__mode == EditingMode.NONE
+        elif self.__mode == EditingMode.OBJECT_PLACEMENT:
+            #TODO zrobić to
+            pass
+        
 
     def load_level_from_file(self):
         #odczyt wybranego przez użytkownika pliku
@@ -160,8 +150,11 @@ class ModelLevelEditor(Model):
     def get_level_to_edit_number(self):
         return self.__level_to_edit
 
-    def get_new_platform_coords(self):
-        return self.__new_platform_coords
+    def get_new_platform_first_vertex_pos(self):
+        return self.__new_platform_first_vertex_pos
+
+    def get_new_platform_second_vertex_pos(self):
+        return self.__new_platform_second_vertex_pos
 
     def get_mode(self):
         return self.__mode
