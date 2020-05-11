@@ -86,6 +86,7 @@ class ControllerLevel(Controller):
     def communicateMV(self, model, view):
         view.set_player(model.get_player())
         view.set_all_sprites(model.get_all_sprites())
+        view.set_paused(model.is_paused())
 
     def get_controls(self, view):
         self._controls = view.get_controls()

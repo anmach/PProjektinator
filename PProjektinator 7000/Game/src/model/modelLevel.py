@@ -13,7 +13,7 @@ class ModelLevel(Model):
     def __init__(self, level_number):
         super().__init__()
 
-        self._paused = False
+        self.__paused = False
         self._shot_sound = py.mixer.Sound(".\\res\\sounds\\crossbow-shot.wav")
 
         # czytanie levelu z pliku ale jeszcze nie teraz
@@ -72,7 +72,7 @@ class ModelLevel(Model):
             self.__player.set_spd_x(spd_x)  
             if self._command & Command.ATTACK & ~0x80:      # tu się strzela
                 py.mixer.Sound.play(self._shot_sound)
-                bullet = GameObject(self.__player.get_x(), self.__player.get_y(), 10, 5, False, ObjectType.BULLET ^ ObjectType.DYNAMIC, None)
+                bullet = GameObject(self.__player.get_x(), self.__player.get_y() + 50, 80, 40, False, ObjectType.BULLET ^ ObjectType.DYNAMIC, ".\\res\\sprites\\effects\\shooting\\")
                 bull_spd = -10 if self.__player.direction else 10
                 bullet.set_spd_x(bull_spd)
                 self.__all_sprites.add(bullet)
@@ -124,9 +124,9 @@ class ModelLevel(Model):
             self._runMode = False
 
         if self._command & Command.PAUSE & ~0x80:
-            self._paused = True if not self._paused else False
+            self.__paused = True if not self.__paused else False
 
-        if not self._paused:
+        if not self.__paused:
             self.movement()
             
         # kolizje
@@ -143,3 +143,6 @@ class ModelLevel(Model):
 
     def get_all_sprites(self):
         return self.__all_sprites
+
+    def is_paused(self):
+        return self.__paused
