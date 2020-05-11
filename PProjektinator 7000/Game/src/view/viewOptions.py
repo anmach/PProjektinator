@@ -20,64 +20,66 @@ class ViewOptions(View):
         self.__buttons_optionKeys = [] # opisy przycisków na indeksach odpowiadających tym z wyższej tablicy
         self.__texts = [] 
         self.__sliders = [] # sliders = (OptionKey, Slider)
+                
+        surface_size_x = surface.get_size()[0]
+        surface_size_y = surface.get_size()[1]
 
         # rozmieszczenie po ekranie tekstu i przycisków ustawień
-        text_size = 20
+        small_control_size = int(0.02 * surface_size_x)
         x_column1 = 0.1
         x_column2 = 0.3
         x_column3 = 0.5
         x_column4 = 0.7
         optionsY = 0.15
         options_y_offset = 0.07
-
-        width = 1000
-        height = 700
+                
+        big_control_size = int(0.04 * surface_size_x)
 
         # tworzenie wyświetlanego tekstu
-        self.__texts.append(Text("Ustawienia", 60, (0.35 * surface.get_size()[0], 0.03 * surface.get_size()[1])))
+        self.__texts.append(Text("Ustawienia", big_control_size, (0.35 * surface_size_x, 0.03 * surface_size_y)))
 
         # kolumna 1 - tekst dotyczący zmiany sterowania
-        self.__texts.append(Text("Ruch w lewo", text_size, (x_column1 * surface.get_size()[0], optionsY * surface.get_size()[1])))
-        self.__texts.append(Text("Ruch w prawo", text_size, (x_column1 * surface.get_size()[0], (optionsY + 1 * options_y_offset) * surface.get_size()[1])))
-        self.__texts.append(Text("Skok", text_size, (x_column1 * surface.get_size()[0], (optionsY + 2 * options_y_offset) * surface.get_size()[1])))
-        self.__texts.append(Text("Kucnięcie", text_size, (x_column1 * surface.get_size()[0], (optionsY + 3 * options_y_offset) * surface.get_size()[1])))
-        self.__texts.append(Text("Atak", text_size, (x_column1 * surface.get_size()[0], (optionsY + 4 * options_y_offset) * surface.get_size()[1])))
-        self.__texts.append(Text("Telekineza", text_size, (x_column1 * surface.get_size()[0], (optionsY + 5 * options_y_offset) * surface.get_size()[1])))
+        self.__texts.append(Text("Ruch w lewo", small_control_size, (x_column1 * surface_size_x, optionsY * surface_size_y)))
+        self.__texts.append(Text("Ruch w prawo", small_control_size, (x_column1 * surface_size_x, (optionsY + 1 * options_y_offset) * surface_size_y)))
+        self.__texts.append(Text("Skok", small_control_size, (x_column1 * surface_size_x, (optionsY + 2 * options_y_offset) * surface_size_y)))
+        self.__texts.append(Text("Kucnięcie", small_control_size, (x_column1 * surface_size_x, (optionsY + 3 * options_y_offset) * surface_size_y)))
+        self.__texts.append(Text("Atak", small_control_size, (x_column1 * surface_size_x, (optionsY + 4 * options_y_offset) * surface_size_y)))
+        self.__texts.append(Text("Telekineza", small_control_size, (x_column1 * surface_size_x, (optionsY + 5 * options_y_offset) * surface_size_y)))
         
         # kolumna 3 - tekst
-        self.__texts.append(Text("Głośność", text_size, (x_column3 * surface.get_size()[0], (optionsY) * surface.get_size()[1])))
-        self.__texts.append(Text("Rozdzielczość", text_size, (x_column3 * surface.get_size()[0], (optionsY + options_y_offset) * surface.get_size()[1])))
+        self.__texts.append(Text("Głośność", small_control_size, (x_column3 * surface_size_x, (optionsY) * surface_size_y)))
+        self.__texts.append(Text("Rozdzielczość", small_control_size, (x_column3 * surface_size_x, (optionsY + options_y_offset) * surface_size_y)))
         
         # kolumna 2 - przyciski do zmiany sterowania
         for option in self._options:
             if option[0] == OptionKey.KEY_GO_LEFT:
-                self.__buttons.append(Button(chr(option[1]), text_size, (x_column2 * surface.get_size()[0], optionsY * surface.get_size()[1]), True, Command.OPTIONS_CHANGE_KEY))
+                self.__buttons.append(Button(chr(option[1]), small_control_size, (x_column2 * surface_size_x, optionsY * surface_size_y), True, Command.OPTIONS_CHANGE_KEY))
                 self._controls.append(self.__buttons[-1])
                 self.__buttons_optionKeys.append(OptionKey.KEY_GO_LEFT)
             elif option[0] == OptionKey.KEY_GO_RIGHT:
-                self.__buttons.append(Button(chr(option[1]), text_size, (x_column2 * surface.get_size()[0], (optionsY + 1 * options_y_offset) * surface.get_size()[1]), True, Command.OPTIONS_CHANGE_KEY))
+                self.__buttons.append(Button(chr(option[1]), small_control_size, (x_column2 * surface_size_x, (optionsY + 1 * options_y_offset) * surface_size_y), True, Command.OPTIONS_CHANGE_KEY))
                 self._controls.append(self.__buttons[-1])
                 self.__buttons_optionKeys.append(OptionKey.KEY_GO_RIGHT)
             elif option[0] == OptionKey.KEY_JUMP:
-                self.__buttons.append(Button(chr(option[1]), text_size, (x_column2 * surface.get_size()[0], (optionsY + 2 * options_y_offset) * surface.get_size()[1]), True, Command.OPTIONS_CHANGE_KEY))
+                self.__buttons.append(Button(chr(option[1]), small_control_size, (x_column2 * surface_size_x, (optionsY + 2 * options_y_offset) * surface_size_y), True, Command.OPTIONS_CHANGE_KEY))
                 self._controls.append(self.__buttons[-1])
                 self.__buttons_optionKeys.append(OptionKey.KEY_JUMP)                
             elif option[0] == OptionKey.KEY_CROUCH:
-                self.__buttons.append(Button(chr(option[1]), text_size, (x_column2 * surface.get_size()[0], (optionsY + 3 * options_y_offset) * surface.get_size()[1]), True, Command.OPTIONS_CHANGE_KEY))
+                self.__buttons.append(Button(chr(option[1]), small_control_size, (x_column2 * surface_size_x, (optionsY + 3 * options_y_offset) * surface_size_y), True, Command.OPTIONS_CHANGE_KEY))
                 self._controls.append(self.__buttons[-1])
                 self.__buttons_optionKeys.append(OptionKey.KEY_CROUCH)                
             elif option[0] == OptionKey.KEY_ATTACK:
-                self.__buttons.append(Button(chr(option[1]), text_size, (x_column2 * surface.get_size()[0], (optionsY + 4 * options_y_offset) * surface.get_size()[1]), True, Command.OPTIONS_CHANGE_KEY))
+                self.__buttons.append(Button(chr(option[1]), small_control_size, (x_column2 * surface_size_x, (optionsY + 4 * options_y_offset) * surface_size_y), True, Command.OPTIONS_CHANGE_KEY))
                 self._controls.append(self.__buttons[-1])
                 self.__buttons_optionKeys.append(OptionKey.KEY_ATTACK)                
             elif option[0] == OptionKey.KEY_TELEKINESIS:
-                self.__buttons.append(Button(chr(option[1]), text_size, (x_column2 * surface.get_size()[0], (optionsY + 5 * options_y_offset) * surface.get_size()[1]), True, Command.OPTIONS_CHANGE_KEY))
+                self.__buttons.append(Button(chr(option[1]), small_control_size, (x_column2 * surface_size_x, (optionsY + 5 * options_y_offset) * surface_size_y), True, Command.OPTIONS_CHANGE_KEY))
                 self._controls.append(self.__buttons[-1])
                 self.__buttons_optionKeys.append(OptionKey.KEY_TELEKINESIS)
 
         # kolumna 4 - slider
             elif option[0] == OptionKey.VOLUME:
-                self.__sliders.append((OptionKey.VOLUME, Slider((x_column4 * surface.get_size()[0], optionsY * surface.get_size()[1]), option[1])))
+                self.__sliders.append((OptionKey.VOLUME, Slider((x_column4 * surface_size_x, optionsY * surface_size_y), option[1], bar_size = (0.25 * surface_size_x, 0.04 * surface_size_y))))
             
         # kolumna 4 - rozdzielczość
             elif option[0] == OptionKey.WINDOW_HEIGHT:
@@ -86,23 +88,23 @@ class ViewOptions(View):
                 width = option[1]
         buttBox = []
         index_button_chosen = 0
-        buttBox.append(Button("720x480", text_size, (0, 0), True, Command.CHANGE_BUTTONS_BOX))
+        buttBox.append(Button("720x480", small_control_size, (0, 0), True, Command.CHANGE_BUTTONS_BOX))
         self._controls.append(buttBox[-1])
-        buttBox.append(Button("1280x720", text_size, (0, 0), True, Command.CHANGE_BUTTONS_BOX))
+        buttBox.append(Button("1280x720", small_control_size, (0, 0), True, Command.CHANGE_BUTTONS_BOX))
         if width == 1280 and height == 720:
             index_button_chosen = 1
         self._controls.append(buttBox[-1])
-        buttBox.append(Button("600x500", text_size, (0, 0), True, Command.CHANGE_BUTTONS_BOX))
+        buttBox.append(Button("600x500", small_control_size, (0, 0), True, Command.CHANGE_BUTTONS_BOX))
         if width == 600 and height == 500:
             index_button_chosen = 2
         self._controls.append(buttBox[-1])
-        self._buttons_box = ButtonsBox((x_column4 * surface.get_size()[0], (optionsY + options_y_offset) * surface.get_size()[1]), buttBox, index_button_chosen)
+        self._buttons_box = ButtonsBox((x_column4 * surface_size_x, (optionsY + options_y_offset) * surface_size_y), buttBox, index_button_chosen)
 
 
         # tworzenie przycisków i przypisanie każdego z nich do ogólnej tablicy kontrolek
-        self.__buttons.append(Button("Wyjdź", 60, (0.2 * surface.get_size()[0], 0.7 * surface.get_size()[1]), True, Command.EXIT))
+        self.__buttons.append(Button("Wyjdź", big_control_size, (0.2 * surface_size_x, 0.7 * surface_size_y), True, Command.EXIT))
         self._controls.append(self.__buttons[-1])
-        self.__buttons.append(Button("Zapisz", 60, (0.4 * surface.get_size()[0], 0.7 * surface.get_size()[1]), True, Command.SAVE_OPTIONS))
+        self.__buttons.append(Button("Zapisz", big_control_size, (0.4 * surface_size_x, 0.7 * surface_size_y), True, Command.SAVE_OPTIONS))
         self._controls.append(self.__buttons[-1])
 
     def render(self):

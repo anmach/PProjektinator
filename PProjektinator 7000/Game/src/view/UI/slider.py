@@ -5,7 +5,7 @@ import pygame as py
 class Slider(Control):
     """ Klasa reprezentująca... slider """
 
-    def __init__(self, bar_position, initial_value = 0, values = (0, 100), bar_size = (200,20), control_size = (20,30), primary_colour = (180, 150, 200), secondary_colour = (240, 240, 240), bar_colour = (200, 100, 120)):
+    def __init__(self, bar_position, initial_value = 0, values = (0, 100), bar_size = (200,20), primary_colour = (180, 150, 200), secondary_colour = (240, 240, 240), bar_colour = (200, 100, 120)):
         super().__init__()
 
         # suwak został naciśnięty i nie należy zwalniac podświetlenia
@@ -32,9 +32,9 @@ class Slider(Control):
             self._current_value = initial_value
         
         # pozycja i wielkość kontrolki
-        self._size = control_size
-        pos_x = self._bar_position[0] + self._change * self._current_value - control_size[0]/2
-        pos_y = self._bar_position[1] + self._bar_size[1]/2 - control_size[1]/2
+        self._size = (bar_size[0]/10, bar_size[1] + bar_size[1]/2)
+        pos_x = self._bar_position[0] + self._change * self._current_value - self._size[0]/2
+        pos_y = self._bar_position[1] + self._bar_size[1]/2 - self._size[1]/2
         self._pos = (pos_x, pos_y)
 
     # metoda do aktualizowania stanu slidera, np. zmiany koloru

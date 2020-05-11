@@ -17,22 +17,27 @@ class ViewLevelBrowser(View):
         self.__buttons = []
         self.__texts = []
 
+        # ważne rozmiary
+        surface_size_x = surface.get_size()[0]
+        surface_size_y = surface.get_size()[1]
+        button_size = int(0.04 * surface_size_x)
+
         #tworzenie przycisków i przypisanie każdego z nich do ogólnej tablicy kontrolek
-        self.__buttons.append(Button("Wyjdz", 50, (0.8 * surface.get_size()[0], 0.8 * surface.get_size()[1]), True, Command.EXIT))
+        self.__buttons.append(Button("Wyjdz", button_size, (0.8 * surface_size_x, 0.8 * surface_size_y), True, Command.EXIT))
         self._controls.append(self.__buttons[-1])
 
-        self.__buttons.append(Button("Graj", 60, (0.42 * surface.get_size()[0], 0.7 * surface.get_size()[1]), True, Command.PLAY))
+        self.__buttons.append(Button("Graj", button_size, (0.42 * surface_size_x, 0.7 * surface_size_y), True, Command.PLAY))
         self._controls.append(self.__buttons[-1])
 
         #propozycja - dodać nową klasę kontrolek, gdzie nie ma tekstu tylko grafika
-        self.__buttons.append(Button("->", 40, (0.7 * surface.get_size()[0], 0.4 * surface.get_size()[1]), True, Command.NEXT_LEVEL))
+        self.__buttons.append(Button("->", button_size, (0.7 * surface_size_x, 0.4 * surface_size_y), True, Command.NEXT_LEVEL))
         self._controls.append(self.__buttons[-1])
 
-        self.__buttons.append(Button("<-", 40, (0.2 * surface.get_size()[0], 0.4 * surface.get_size()[1]), True, Command.PREV_LEVEL))
+        self.__buttons.append(Button("<-", button_size, (0.2 * surface_size_x, 0.4 * surface_size_y), True, Command.PREV_LEVEL))
         self._controls.append(self.__buttons[-1])
 
         #tekst wyświetlający aktualnie wybrany poziom
-        self.__texts.append(Text("", 60, (0.45 * surface.get_size()[0], 0.385 * surface.get_size()[1])))
+        self.__texts.append(Text("", button_size, (0.45 * surface_size_x, 0.385 * surface_size_y)))
         self._controls.append(self.__texts[-1])
 
     #metoda renderująca

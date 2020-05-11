@@ -12,17 +12,22 @@ class ViewMenu(View):
         #tablica przycisków
         self.__buttons = []
 
+        surface_size_x = surface.get_size()[0]
+        surface_size_y = surface.get_size()[1]
+
+        button_size = int(0.04 * surface_size_x)
+
         #tworzenie przycisków i przypisanie każdego z nich do ogólnej tablicy kontrolek
-        self.__buttons.append(Button("Wyjdź", 60, (0.2 * surface.get_size()[0], 0.7 * surface.get_size()[1]), True, Command.EXIT))
+        self.__buttons.append(Button("Wyjdź", button_size, (0.2 * surface_size_x, 0.7 * surface_size_y), True, Command.EXIT))
         self._controls.append(self.__buttons[-1])
 
-        self.__buttons.append(Button("Przeglądaj poziomy", 60, (0.2 * surface.get_size()[0], 0.5 * surface.get_size()[1]), True, Command.BROWSE_LVL))
+        self.__buttons.append(Button("Przeglądaj poziomy", button_size, (0.2 * surface_size_x, 0.5 * surface_size_y), True, Command.BROWSE_LVL))
         self._controls.append(self.__buttons[-1])
         
-        self.__buttons.append(Button("Opcje", 60, (0.2 * surface.get_size()[0], 0.3* surface.get_size()[1]), True, Command.OPTIONS))
+        self.__buttons.append(Button("Opcje", button_size, (0.2 * surface_size_x, 0.3* surface_size_y), True, Command.OPTIONS))
         self._controls.append(self.__buttons[-1])
 
-        self.__buttons.append(Button("Edytor", 60, (0.2 * surface.get_size()[0], 0.1* surface.get_size()[1]), True, Command.EDIT))
+        self.__buttons.append(Button("Edytor", button_size, (0.2 * surface_size_x, 0.1* surface_size_y), True, Command.EDIT))
         self._controls.append(self.__buttons[-1])
 
     def render(self):
