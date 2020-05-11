@@ -35,7 +35,9 @@ class ModelLevelEditor(Model):
         #tabela dla obiektów w grze
         self.__game_objects_arr = []
 
-        self.__snap_distance = 10
+        self.__snap_distance = 100
+
+        self.__all_sprites = py.sprite.Group()
 
     #metoda aktualizująca stan wewnętrzego modelu programu
     def update(self):
@@ -62,6 +64,12 @@ class ModelLevelEditor(Model):
             pass
             #zapisanie aktualnie modyfikowanego poziomu
 
+        elif self._command == Command.CREATE_PLATFORM:
+            self.__mode = EditingMode.PLATFORM_CREATION
+        
+        elif self._command == Command.PLACE_PLAYER:
+            self.__mode = EditingMode.OBJECT_PLACEMENT
+
         #interpretacja akcji użytkownika zależy od trybu w znajduje się edytor
         elif self.__mode != EditingMode.NONE:
 
@@ -73,11 +81,11 @@ class ModelLevelEditor(Model):
                     #TODO
                     #sprawdzenie czy nie nachodzi/koliduje z innymi obiektami
 
-                    newVertexPos = (0, 0)
                     mouse_pos = py.mouse.get_pos()
+                    newVertexPos = mouse_pos
 
                     for game_object in self.__game_objects_arr:
-                            if game_object is GameObject and game_object.get_type() == ObjectType.STATIC:
+                            if type(game_object) is GameObject and game_object.get_type() == ObjectType.STATIC:
                                 x0 = game_object.get_x()
                                 x1 = game_object.get_x() + game_object.get_width()
                                 
@@ -101,13 +109,17 @@ class ModelLevelEditor(Model):
                         self.__new_platform_coords = newVertexPos
                     else:
                         #dodanie nowej platformy o współrzędnych wierzchołków [tworzących przekątną] - (self.__newPlatformCoords, pozycja_kursora)
-                        x0 = min(self.__newPlatformCoords[0], mouse_pos[0])
-                        x1 = max(self.__newPlatformCoords[0], mouse_pos[0])
+                        x0 = min(self.__new_platform_coords[0], newVertexPos[0])
+                        x1 = max(self.__new_platform_coords[0], newVertexPos[0])
 
-                        y0 = min(self.__newPlatformCoords[1], mouse_pos[1])
-                        y1 = max(self.__newPlatformCoords[1], mouse_pos[1])
+                        y0 = min(self.__new_platform_coords[1], newVertexPos[1])
+                        y1 = max(self.__new_platform_coords[1], newVertexPos[1])
 
-                        self.__game_objects_arr.append(GameObject(x0, y0, x1 - x0, y1 - y0, False, ObjectType.STATIC, None))
+                        newObject = GameObject(x0, y0, x1 - x0, y1 - y0, False, ObjectType.STATIC, None)
+
+                        self.__game_objects_arr.append(newObject)
+                        self.__all_sprites.add(newObject)
+
                         self.__new_platform_coords = (-1, -1)
             
                 #elif self.__mode == EditingMode.OBJECT_PLACEMENT:
@@ -152,3 +164,6 @@ class ModelLevelEditor(Model):
 
     def get_mode(self):
         return self.__mode
+
+    def get_all_sprites(self):
+        return self.__all_sprites

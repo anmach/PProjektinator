@@ -33,6 +33,8 @@ class ViewLevelEditor(View):
         #aktualny tryb pracy modelu
         self.__mode = EditingMode.NONE
 
+        self.__all_sprites = py.sprite.Group()
+
 
     def addButton(self, newButton):
         self.__buttons.append(newButton)
@@ -67,10 +69,10 @@ class ViewLevelEditor(View):
         self.addButton(Button("<-", 20, (0.86 * self._surface.get_size()[0], 0.69 * self._surface.get_size()[1]), False, Command.PREV_LEVEL))
 
         #dodanie obiektu gracza
-        self.addImageButton(ImageButton(".\\res\\sprites\\player\\player.png", (0.81 * self._surface.get_size()[0], 0.5 * self._surface.get_size()[1]), (50, 50), False, Command.OBJECT_SELECTED))
+        self.addImageButton(ImageButton(".\\res\\sprites\\player\\player.png", (0.81 * self._surface.get_size()[0], 0.5 * self._surface.get_size()[1]), (50, 50), False, Command.OBJECT_SELECTED, Command.PLACE_PLAYER))
 
         #dodanie obiektu platformy
-        self.addImageButton(ImageButton(".\\res\\sprites\\platform tiles\\x3\\tile internal x3.png", (0.90 * self._surface.get_size()[0], 0.5 * self._surface.get_size()[1]), (50, 50), False, Command.OBJECT_SELECTED))
+        self.addImageButton(ImageButton(".\\res\\sprites\\platform tiles\\x3\\tile internal x3.png", (0.90 * self._surface.get_size()[0], 0.5 * self._surface.get_size()[1]), (50, 50), False, Command.OBJECT_SELECTED, Command.CREATE_PLATFORM))
 
         #przewijanie kontrolek w lewo
         self.addButton(Button("->", 20, (0.92 * self._surface.get_size()[0], 0.69 * self._surface.get_size()[1]), False, Command.NEXT_LEVEL))
@@ -97,6 +99,9 @@ class ViewLevelEditor(View):
         #pole edycyjne
         py.draw.rect(self._surface, (240, 240, 240), (0, 0, self.__editSurfaceBorder * self._surface.get_size()[0], self._surface.get_size()[1]))
         
+        for entity in self.__all_sprites:
+            self._surface.blit(entity.surf, entity.rect)
+
         #rysowanie kształtu nowej platformy
         if self.__mode == EditingMode.PLATFORM_CREATION and py.mouse.get_pos()[0] < self.__editSurfaceBorder * self._surface.get_size()[0]:
             #jeden wierzchołek
@@ -119,8 +124,13 @@ class ViewLevelEditor(View):
         py.display.update()
     
 
+    #v----GETTERY----v
+    def get_image_buttons(self):
+        return self.__imageButtons
+
     #v----SETTERY----v
-    def set_model(self, levelNum, platCoords, mode):
+    def set_model(self, levelNum, platCoords, mode, all_sprites):
         self.__texts[0].set_text(str(levelNum))
         self.__newPlatformCoords = platCoords
         self.__mode = mode
+        self.__all_sprites = all_sprites
