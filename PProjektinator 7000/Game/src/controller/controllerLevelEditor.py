@@ -6,10 +6,12 @@ class ControllerLevelEditor(Controller):
 
     def __init__(self):
         super().__init__()
+        self.__image_buttons = []
 
     #metoda pozwalająca pobrać kontrolki z widoku (do sprawdzenia interakcji użytkownika z nimi)
     def get_controls(self, view):
         self._controls = view.get_controls()
+        self.__image_buttons = view.get_image_buttons()
 
     #główna metoda przetwarzająca i interpretująca dane wejściowe od użytkownika
     def process_input(self):
@@ -42,8 +44,11 @@ class ControllerLevelEditor(Controller):
                             #sprawdzenie czy była to kontrolka do wybrania obiektu gry
                             if self._command == Command.OBJECT_SELECTED:
                                 #TODO
-                                #przekazanie info o tym jaki to konkretnie obiekt (nr w tablicy? - pomysł na przyszłość)
-                                pass
+                                #przekazanie info o tym jaki to konkretnie obiekt (nr w tablicy? - pomysł na przyszłość - jednak inaczej)
+                                for img_butt in self.__image_buttons:
+                                    if control is img_butt:
+                                        self._command = img_butt.get_object_info_command()
+                                        return
                             return
 
                     self._command = Command.CLICKED_LMB
@@ -56,7 +61,8 @@ class ControllerLevelEditor(Controller):
 
     #metoda pozwalająca przekazać model do widoku w celu jego wyrenderowania
     def communicateMV(self, model, view):
-        view.set_model(model.get_level_to_edit_number(), model.get_new_platform_coords(), model.get_mode())
+        view.set_model(model.get_level_to_edit_number(), model.get_new_platform_coords(), model.get_mode(), model.get_all_sprites())
+        #view.set_player(model.get_player())
 
     #metoda pozwalająca na przekazanie polecenia do modelu
     def give_command(self, model):
