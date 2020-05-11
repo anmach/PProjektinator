@@ -35,7 +35,8 @@ class ModelLevelEditor(Model):
         #tabela dla obiektów w grze
         self.__game_objects_arr = []
 
-        self.__snap_distance = 100
+        #maksymalna odległość dla przyciągania wierzchołków
+        self.__snap_distance = 25
 
         self.__all_sprites = py.sprite.Group()
 
@@ -82,7 +83,7 @@ class ModelLevelEditor(Model):
                     #sprawdzenie czy nie nachodzi/koliduje z innymi obiektami
 
                     mouse_pos = py.mouse.get_pos()
-                    newVertexPos = mouse_pos
+                    new_vertex_pos = mouse_pos
 
                     for game_object in self.__game_objects_arr:
                             if type(game_object) is GameObject and game_object.get_type() == ObjectType.STATIC:
@@ -95,30 +96,30 @@ class ModelLevelEditor(Model):
                                 #jeżeli różnica między pozycją kursora myszki, a wierzchołkiem istniejącej platformy jest mniejsza niż ustalona
                                 #wartość to nowy wierzchołek jest "przyczepiany" do już istniejącego
                                 if abs(mouse_pos[0] - x0) < self.__snap_distance and abs(mouse_pos[1] - y0) < self.__snap_distance:
-                                    newVertexPos = (x0, y0)
+                                    new_vertex_pos = (x0, y0)
                                 elif abs(mouse_pos[0] - x1) < self.__snap_distance and abs(mouse_pos[1] - y0) < self.__snap_distance:
-                                    newVertexPos = (x1, y0)
+                                    new_vertex_pos = (x1, y0)
                                 elif abs(mouse_pos[0] - x0) < self.__snap_distance and abs(mouse_pos[1] - y1) < self.__snap_distance:
-                                    newVertexPos = (x0, y1)
+                                    new_vertex_pos = (x0, y1)
                                 elif abs(mouse_pos[0] - x1) < self.__snap_distance and abs(mouse_pos[1] - y1) < self.__snap_distance:
-                                    newVertexPos = (x1, y1)
+                                    new_vertex_pos = (x1, y1)
                                 else:
-                                    newVertexPos = mouse_pos
+                                    new_vertex_pos = mouse_pos
 
                     if self.__new_platform_coords == (-1, -1):
-                        self.__new_platform_coords = newVertexPos
+                        self.__new_platform_coords = new_vertex_pos
                     else:
                         #dodanie nowej platformy o współrzędnych wierzchołków [tworzących przekątną] - (self.__newPlatformCoords, pozycja_kursora)
-                        x0 = min(self.__new_platform_coords[0], newVertexPos[0])
-                        x1 = max(self.__new_platform_coords[0], newVertexPos[0])
+                        x0 = min(self.__new_platform_coords[0], new_vertex_pos[0])
+                        x1 = max(self.__new_platform_coords[0], new_vertex_pos[0])
 
-                        y0 = min(self.__new_platform_coords[1], newVertexPos[1])
-                        y1 = max(self.__new_platform_coords[1], newVertexPos[1])
+                        y0 = min(self.__new_platform_coords[1], new_vertex_pos[1])
+                        y1 = max(self.__new_platform_coords[1], new_vertex_pos[1])
 
-                        newObject = GameObject(x0, y0, x1 - x0, y1 - y0, False, ObjectType.STATIC, None)
+                        new_object = GameObject(x0, y0, x1 - x0, y1 - y0, False, ObjectType.STATIC, None)
 
-                        self.__game_objects_arr.append(newObject)
-                        self.__all_sprites.add(newObject)
+                        self.__game_objects_arr.append(new_object)
+                        self.__all_sprites.add(new_object)
 
                         self.__new_platform_coords = (-1, -1)
             
