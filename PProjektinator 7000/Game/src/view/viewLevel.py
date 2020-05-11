@@ -15,7 +15,7 @@ class ViewLevel(View):
         self._surface.fill((200, 220, 250))
         for entity in self.__all_sprites:
             self._surface.blit(entity.surf, entity.rect)
-        #self._surface.blit(self.__player)
+        #self._surface.blit(self.__player.get_surf(), self.__player.get_rect())
 
         py.display.flip()
 

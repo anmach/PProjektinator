@@ -4,7 +4,7 @@ from src.enum.objectType import ObjectType
 
 class GameObject(py.sprite.Sprite):
     """Bazowa klasa obiektów w modelu - platform, gracza i obiektów dynamicznych"""
-    def __init__(self, x, y, width, height, gravity, type, image_source):
+    def __init__(self, x, y, width, height, gravity, type, image_source, animation_start = 0):
         super().__init__()
         self.direction = False
         self.type = type
@@ -17,6 +17,7 @@ class GameObject(py.sprite.Sprite):
         self.does_gravity = gravity #bool decyduje czy na obiekt działa grawitacja
         self.surf = py.Surface((width, height))
         self.frame_id = 0 #Wskaźnik na obecną klatkę.
+        self.animation_start = animation_start #Wskaźnik na klatkę od której zaczyna się animacja.
         self._frames = list()
         #obrazek
         if (image_source != None):
@@ -55,6 +56,12 @@ class GameObject(py.sprite.Sprite):
     def get_type(self):
         return self.type
 
+    def get_surf(self):
+        return self.surf
+
+    def get_rect(self):
+        return self.rect
+
     #v----SETTERY----v
     def set_spd_x(self, spd):
         self.spd_x = spd
@@ -64,11 +71,11 @@ class GameObject(py.sprite.Sprite):
 
     def set_frame_by_id(self, frame_id):
         if frame_id >= len(self._frames):
-            self.frame_id = 1
+            self.frame_id = self.animation_start
         else:
             self.frame_id = frame_id
         self.surf = py.image.load(open(self._frames[self.frame_id], "r"))
-        self.surf = py.transform.scale(self.surf, (self.width, self.height))
+        self.surf = py.transform.smoothscale(self.surf, (self.width, self.height))
 
     #v----POZOSTAŁE----v
     def check_collision_ip(self, target, x, y):
