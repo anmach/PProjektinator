@@ -8,8 +8,10 @@ class ImageButton(Control):
 
     #size (0, 0) oznacza, że korzystamy z domyślnego rozmiaru obrazu
     #fillScaling - czy skalowanie ma całkowicie wypełnić dany obszar obrazem (True) czy zachować jego proporcje (False)
-    def __init__(self, imagePath, pos, size = (0, 0), fillScaling = True, command = Command.CONTINUE):
+    def __init__(self, imagePath, pos, size = (0, 0), fillScaling = True, command = Command.CONTINUE, object_info_command = Command.CREATE_PLATFORM):
         super().__init__(pos, command, size)
+
+        self.__object_info_command = object_info_command
 
         #stworzenie obiektu odpowiedzialnego za tekst
         self.__image = py.image.load(imagePath)
@@ -47,3 +49,7 @@ class ImageButton(Control):
         #rysowanie ramki jako podsietlenia
         if self._isFocused:
             py.draw.rect(surface, (255, 200, 0), (self._pos[0] + self.__imageOffset[0], self._pos[1] + self.__imageOffset[1], self._size[0], self._size[1]), 3)
+
+    def get_object_info_command(self):
+        return self.__object_info_command
+
