@@ -7,6 +7,7 @@ class Player(GameObject):
     def __init__(self, image_source):
         super().__init__(700, 20, 75, 150, True, ObjectType.DYNAMIC, image_source)
         self.isWalking = False
+        self.is_crouching = False
 
     def update(self):
         if self.spd_y > 20:
@@ -30,6 +31,18 @@ class Player(GameObject):
         self.rect.move_ip(self.spd_x + self.spd_x_other, self.spd_y + self.spd_y_other)
         self.spd_x_other = 0
         self.spd_y_other = 0
+
+    #metoda zaczynająca "kucnięcie"
+    def crouch(self):
+        self.is_crouching = True
+        print ("Crouching start... \n")
+        #zmiana obrazka i przesunięcie o różnice wysokości obrazków
+
+
+    def uncrouch(self):
+        self.is_crouching = False
+        print ("Crouching stoped... \n")
+        #zmiana obrazka na normalny i przesunięcie o różnice wysokości
 
     #metoda służąca do zapisywania aktualnego stanu obiektu do pliku
     def saveToFile(self, file):

@@ -12,6 +12,10 @@ class ModelLevel(Model):
 
     def __init__(self, level_number):
         super().__init__()
+
+        self._paused = False
+        self._shot_sound = py.mixer.Sound(".\\res\\sounds\\crossbow-shot.wav")
+
         # czytanie levelu z pliku ale jeszcze nie teraz
         # stworzenie sztywnego poziomu
         platform1 = GameObject(500, 500, 400, 200, False, ObjectType.STATIC, None)
@@ -66,7 +70,8 @@ class ModelLevel(Model):
             self.tele_objs[self.tele_idx].spd_x = 0
             self.telekinesis = False
             self.__player.set_spd_x(spd_x)  
-            if self._command & Command.ATTACK & ~0x80:
+            if self._command & Command.ATTACK & ~0x80:      # tu się strzela
+                py.mixer.Sound.play(self._shot_sound)
                 bullet = GameObject(self.__player.get_x(), self.__player.get_y(), 10, 5, False, ObjectType.BULLET ^ ObjectType.DYNAMIC, None)
                 bull_spd = -10 if self.__player.direction else 10
                 bullet.set_spd_x(bull_spd)
@@ -75,9 +80,11 @@ class ModelLevel(Model):
                 if self.no_jumps > 0:
                     self.__player.spd_y = -20
                     self.no_jumps -= 1
-
-        if self._command == Command.EXIT:                               # wyjście
-            self._runMode = False
+            if self._command & Command.CROUCH & ~0x80:
+                if not self.__player.is_crouching:
+                    self.__player.crouch()
+            elif self.__player.is_crouching:
+                 self.__player.uncrouch()
 
         for entity in self.__all_sprites:
             if entity.type == ObjectType.DYNAMIC:
@@ -112,13 +119,20 @@ class ModelLevel(Model):
 
     def update(self):
 
-        self.movement()
-        
+        if self._command == Command.EXIT:                               # wyjście
+            self._runMode = False
+
+        if self._command & Command.PAUSE & ~0x80:
+            self._paused = True if not self._paused else False
+
+        if not self._paused:
+            self.movement()
+            
         # kolizje
-        self.collisions()
+            self.collisions()
         # update obiektów (pozycji)
-        for entity in self.__all_sprites:
-            entity.update()
+            for entity in self.__all_sprites:
+                entity.update()
 
 #------------END update-----------------------------
 

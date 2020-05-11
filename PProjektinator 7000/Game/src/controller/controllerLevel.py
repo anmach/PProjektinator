@@ -20,6 +20,7 @@ class ControllerLevel(Controller):
         self._key_attack = ord('f')
         self._key_telekinesis = ord('r')
         self._key_go_up = ord('w')
+        self._key_pause = ord('p')
 
         # strzelono - trzeba ponownie nacisnąć przycisk
 
@@ -41,6 +42,8 @@ class ControllerLevel(Controller):
             elif event.type == py.KEYDOWN:
                 if event.key == py.K_ESCAPE:
                     self._command = Command.EXIT
+                elif event.key == self._key_pause:
+                    self._command |= Command.PAUSE
                 #skakanie
                 elif event.key == self._key_jump:
                     self._command += Command.JUMP
@@ -91,6 +94,7 @@ class ControllerLevel(Controller):
         model.set_command(self._command)
         self._command &= ~Command.JUMP
         self._command &= ~Command.ATTACK
+        self._command &= ~Command.PAUSE
 
     def read_steering_from_file(self):
         file = open('.\\saves\\opszyns.txt', 'r')

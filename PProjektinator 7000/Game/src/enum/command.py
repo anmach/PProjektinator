@@ -90,5 +90,8 @@ class Command(IntEnum):
     ATTACK = 0b100_000,
     
     #polecenie do złapania obiektu do poruszania siłą umysłu
-    TELEKINESIS = 0b1_000_000
+    TELEKINESIS = 0b1_000_000,
+
+    #polecenie pauzy - zdeterminować czy pasuje tu czy do ogólnych poleceń
+    PAUSE = 0b100_000_000
 
