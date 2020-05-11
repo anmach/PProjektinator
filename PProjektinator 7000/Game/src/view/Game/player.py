@@ -36,13 +36,21 @@ class Player(GameObject):
     def crouch(self):
         self.is_crouching = True
         print ("Crouching start... \n")
+        oldHeight = self.rect.height
         #zmiana obrazka i przesunięcie o różnice wysokości obrazków
 
+        #end region zmiany
+        self.rect.move_ip(0, oldHeight - self.rect.height)
+    
 
     def uncrouch(self):
         self.is_crouching = False
         print ("Crouching stoped... \n")
+        oldHeight = self.rect.height
         #zmiana obrazka na normalny i przesunięcie o różnice wysokości
+
+        #koniec zmiany
+        self.rect.move_ip(0, oldHeight - self.rect.height)
 
     #metoda służąca do zapisywania aktualnego stanu obiektu do pliku
     def saveToFile(self, file):

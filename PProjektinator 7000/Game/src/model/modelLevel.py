@@ -103,7 +103,8 @@ class ModelLevel(Model):
                             dynamic.spd_y = 0
 
                         if dynamic.check_collision_ip(entity, dynamic.spd_x, 0):
-                           dynamic.spd_x = 0
+                           if not (entity.type & ObjectType.BULLET or dynamic.type & ObjectType.BULLET):
+                               dynamic.spd_x = 0
                            if dynamic.type & ObjectType.BULLET and entity != self.__player:
                                self.__all_sprites.remove(dynamic)
                                del dynamic

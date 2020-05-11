@@ -31,9 +31,9 @@ class ProgramMode(ABC):
             #renderowanie
             self.render()
 
-            #ograniczenie fps - na razie zbędne
-            #clock = py.time.Clock()
-            #clock.tick(60)
+            #ograniczenie fps - a jednak
+            clock = py.time.Clock()
+            clock.tick(120)
 
     #metoda tworząca odpowiedni nowy tryb i uruchamiająca go
     @abstractmethod
