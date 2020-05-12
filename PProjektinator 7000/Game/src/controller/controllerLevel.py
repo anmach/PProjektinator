@@ -4,6 +4,7 @@ from src.view.viewMenu import ViewMenu
 from src.enum.command import Command
 from src.enum.optionKey import OptionKey
 import pygame as py
+import src.define as define
 
 
 class ControllerLevel(Controller):
@@ -98,7 +99,7 @@ class ControllerLevel(Controller):
         self._command &= ~Command.PAUSE
 
     def read_steering_from_file(self):
-        file = open('.\\saves\\opszyns.txt', 'r')
+        file = open(define.get_options_file_path(), 'r')
         
         # odczyt kolejnych linii
         for line in file:

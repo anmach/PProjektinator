@@ -1,12 +1,13 @@
 from src.model.model import Model
 from src.enum.command import Command
+import src.define as define
 
 class ModelOptions(Model):
     """klasa reprezentująca model menu opcji"""
 
     def __init__(self):
         super().__init__()
-        self.__options_file_name = '.\\saves\\opszyns.txt'
+        self.__options_file_name = define.get_options_file_path()
 
         # stworzenie tablicy z opcjami -- tablica[x] = (optionKey, wartość)
         self._options = []

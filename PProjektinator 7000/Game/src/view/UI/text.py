@@ -1,6 +1,6 @@
 from .control import Control
 import pygame as py
-
+import src.define as define
 
 #klas umożliwiająca wyświetlanie tekstu na ekranie
 class Text(Control):
@@ -17,7 +17,7 @@ class Text(Control):
         self.__textSize = textSize
 
         #utworzenie czcionki z pliku
-        self.__font = py.font.Font("res/fonts/Raleway.ttf", self.__textSize)
+        self.__font = py.font.Font(define.get_raleway_font_path(), self.__textSize)
 
         #określienie miejsca zajmowanego przez tekst
         self._size = self.__font.size(self.__text)

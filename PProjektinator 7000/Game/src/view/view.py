@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 import pygame as py
 from src.enum.optionKey import OptionKey
+import src.define as define
 
 
 class View(ABC):
@@ -20,10 +21,10 @@ class View(ABC):
     @abstractmethod
     def render(self):
         pass
-
+    
     #pobranie rozmiaru ekranu z pliku opszyns.txt
     def get_surface_size_from_file(self):
-        file = open('.\\saves\\opszyns.txt', 'r')
+        file = open(define.get_options_file_path(), 'r')
         width = 1000
         height = 700
         

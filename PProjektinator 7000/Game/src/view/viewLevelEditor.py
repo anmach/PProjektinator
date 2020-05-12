@@ -9,6 +9,8 @@ from src.view.UI.imageButton import ImageButton
 
 import pygame as py
 
+import src.define as define
+
 class ViewLevelEditor(View):
 
     def __init__(self, surface):
@@ -77,10 +79,10 @@ class ViewLevelEditor(View):
         self.add_button(Button("<-", smallest_button_size, (0.86 * surface_size_x, 0.69 * surface_size_y), False, Command.PREV_LEVEL))
 
         #dodanie obiektu gracza
-        self.add_image_button(ImageButton(".\\res\\sprites\\player\\player.png", (0.81 * surface_size_x, 0.5 * surface_size_y), (image_button_size, image_button_size), False, Command.OBJECT_SELECTED, Command.PLACE_PLAYER))
+        self.add_image_button(ImageButton(define.get_player_sprite_path(), (0.81 * surface_size_x, 0.5 * surface_size_y), (image_button_size, image_button_size), False, Command.OBJECT_SELECTED, Command.PLACE_PLAYER))
 
         #dodanie obiektu platformy
-        self.add_image_button(ImageButton(".\\res\\sprites\\platform tiles\\x3\\tile internal x3.png", (0.90 * surface_size_x, 0.5 * surface_size_y), (image_button_size, image_button_size), False, Command.OBJECT_SELECTED, Command.CREATE_PLATFORM))
+        self.add_image_button(ImageButton(define.get_platform_middle_sprite_path(), (0.90 * surface_size_x, 0.5 * surface_size_y), (image_button_size, image_button_size), False, Command.OBJECT_SELECTED, Command.CREATE_PLATFORM))
 
         #przewijanie kontrolek w lewo
         self.add_button(Button("->", smallest_button_size, (0.92 * surface_size_x, 0.69 * surface_size_y), False, Command.NEXT_LEVEL))

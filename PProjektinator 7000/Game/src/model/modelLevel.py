@@ -5,7 +5,7 @@ from src.view.Game.player import Player
 from src.enum.command import Command
 from src.enum.objectType import ObjectType
 import pygame as py
-
+import src.define as define
 
 class ModelLevel(Model):
     """Model poziomu"""
@@ -14,7 +14,7 @@ class ModelLevel(Model):
         super().__init__()
 
         self.__paused = False
-        self._shot_sound = py.mixer.Sound(".\\res\\sounds\\crossbow-shot.wav")
+        self._shot_sound = py.mixer.Sound(define.get_shot_sound_path())
 
         # czytanie levelu z pliku ale jeszcze nie teraz
         # stworzenie sztywnego poziomu
@@ -33,7 +33,7 @@ class ModelLevel(Model):
 
         self.objs = py.sprite.Group()
         self.__all_sprites = py.sprite.Group()
-        self.__player = Player(".\\res\\sprites\\player\\")
+        self.__player = Player(define.get_player_sprites_folder_path())
         self.telekinesis = False
         self.tele_idx = 0
         self.tele_objs = [crate1, crate2]
@@ -72,7 +72,7 @@ class ModelLevel(Model):
             self.__player.set_spd_x(spd_x)  
             if self._command & Command.ATTACK & ~0x80:      # tu się strzela
                 py.mixer.Sound.play(self._shot_sound)
-                bullet = GameObject(self.__player.get_x(), self.__player.get_y() + 50, 80, 40, False, ObjectType.BULLET ^ ObjectType.DYNAMIC, ".\\res\\sprites\\effects\\shooting\\")
+                bullet = GameObject(self.__player.get_x(), self.__player.get_y() + 50, 80, 40, False, ObjectType.BULLET ^ ObjectType.DYNAMIC, define.get_shot_sprite_folder_path())
                 bull_spd = -10 if self.__player.direction else 10
                 bullet.set_spd_x(bull_spd)
                 self.__all_sprites.add(bullet)

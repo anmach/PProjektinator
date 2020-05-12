@@ -5,6 +5,7 @@ from src.view.Game.gameObject import GameObject
 from src.enum.objectType import ObjectType
 import os
 import pygame as py
+import src.define as define
 
 
 class ModelLevelEditor(Model):
@@ -14,7 +15,7 @@ class ModelLevelEditor(Model):
 
         #pobranie informacji o utworzonych już poziomach
         #       v-----inaczej nie działa-----v
-        for (_, _, file_list) in os.walk('.\\saves\\levels'):
+        for (_, _, file_list) in os.walk(define.get_levels_folder_path()):
             self.__level_list = file_list
         
         #nr aktualnie wybranego, edytowanego poziomu

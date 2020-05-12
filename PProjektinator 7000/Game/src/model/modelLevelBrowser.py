@@ -1,7 +1,7 @@
 from src.model.modelMenu import Model
 from src.enum.command import Command
 import os
-
+import src.define as define
 
 class ModelLevelBrowser(Model):
     """klasa reprezentująca model przeglądarki poziomów"""
@@ -11,7 +11,7 @@ class ModelLevelBrowser(Model):
 
         #pobranie informacji o zawartości folderu
         #       v-----inaczej nie działa-----v
-        for (_, _, fileList) in os.walk('.\\saves\\levels'):
+        for (_, _, fileList) in os.walk(define.get_levels_folder_path()):
             self.__levelList = fileList
 
         #nr aktualnie wybranego poziomu
