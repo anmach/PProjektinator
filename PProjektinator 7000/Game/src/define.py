@@ -21,3 +21,6 @@ def get_shot_sprite_folder_path():
 
 def get_levels_folder_path():
     return '.\\saves\\levels'
+
+def get_player_standard_size():
+    return (75, 100)
