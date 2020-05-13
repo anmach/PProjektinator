@@ -65,7 +65,8 @@ class GameObject(py.sprite.Sprite):
     #v----SETTERY----v
     #robię setter z dostosowaniem do aktualnego stanu rzeczy - Kanji
     def set_pos(self, newX, newY):
-        self.rect.move_ip(newX, newY)
+        self.rect.x = newX
+        self.rect.y = newY
 
     def set_spd_x(self, spd):
         self.spd_x = spd
