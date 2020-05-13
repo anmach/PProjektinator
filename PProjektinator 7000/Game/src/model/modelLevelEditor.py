@@ -2,6 +2,7 @@ from .model import Model
 from src.enum.command import Command
 from src.enum.editingMode import EditingMode
 from src.view.Game.gameObject import GameObject
+from src.view.Game.player import Player
 from src.enum.objectType import ObjectType
 import os
 import pygame as py
@@ -45,6 +46,10 @@ class ModelLevelEditor(Model):
 
         self.__object_to_delete_coords = (-1, -1, -1, -1)
 
+        self.__is_player_placed = False
+
+        self.__can_object_be_placed = True
+
     #metoda aktualizująca stan wewnętrzego modelu programu
     def update(self):
         
@@ -85,7 +90,7 @@ class ModelLevelEditor(Model):
             self.__new_platform_vertex_number = 1
         
         elif self._command == Command.PLACE_PLAYER:
-            self.__mode = EditingMode.OBJECT_PLACEMENT
+            self.__mode = EditingMode.PLAYER_PLACEMENT
 
             self.__new_platform_first_vertex_pos = (-1, -1)
             self.__new_platform_second_vertex_pos = (-1, -1)
@@ -95,15 +100,15 @@ class ModelLevelEditor(Model):
             
         #tworzenie nowej platformy
         if self.__mode == EditingMode.PLATFORM_CREATION:
-            update_platform_creation()
+            self.update_platform_creation()
 
         #wstawianie nowego obiektu
-        elif self.__mode == EditingMode.OBJECT_PLACEMENT:
-            update_object_placement()
+        elif self.__mode == EditingMode.PLAYER_PLACEMENT:
+            self.update_player_placement()
         
         #usuwanie obiektu (lub platformy)
         elif self.__mode == EditingMode.DELETION:
-            update_deletion()
+            self.update_deletion()
 
     def update_platform_creation(self):
         #TODO
@@ -163,9 +168,39 @@ class ModelLevelEditor(Model):
                 self.__new_platform_second_vertex_pos = (-1, -1)
                 self.__new_platform_vertex_number = 1
 
-    def update_object_placement(self):
-        #TODO zrobić to
-        pass
+    def update_player_placement(self):
+        #sprawdzenie kolizji - TODO?? ulepszenie tego? żeby nie sprawdzać z każdym obiektem
+        mouse_pos = py.mouse.get_pos()
+        
+        #nowa pozycja gracza - TODO - zmienić dla zmian rozdzielczości
+        x0 = mouse_pos[0] - int(0.5 * define.get_player_standard_size()[0])
+        x1 = x0 + define.get_player_standard_size()[0]
+
+        y0 = mouse_pos[1] - int(0.5 * define.get_player_standard_size()[1])
+        y1 = y0 + define.get_player_standard_size()[1]
+
+        self.__can_object_be_placed = True
+
+        for obj in self.__game_objects_arr:
+            if self.is_colliding((obj.get_x(), obj.get_x() + obj.get_width(), obj.get_y(), obj.get_y() + obj.get_height()), (x0, x1, y0, y1)):
+                self.__can_object_be_placed = False
+                break
+
+        if self._command == Command.CLICKED_LMB and not self.__is_player_placed and self.__can_object_be_placed:
+            #stworzenie gracza
+            new_object = Player(define.get_player_sprites_folder_path())
+            new_object.set_pos(x0, y0)
+            new_object.set_frame_by_id(1)
+
+            #dodanie go do tablicy obiektów i sprajtów
+            self.__game_objects_arr.append(new_object)
+            self.__all_sprites.add(new_object)
+
+            #zapamiętanie, że gracz już został dodany
+            self.__is_player_placed = True
+
+            #po dodaniu zmień tryb
+            self.__mode = EditingMode.NONE
 
     def update_deletion(self):
         obj_to_del_index = -1
@@ -185,7 +220,12 @@ class ModelLevelEditor(Model):
                 break
 
         if self._command == Command.CLICKED_LMB and len(self.__game_objects_arr) > 0 and obj_to_del_index != -1:
-            self.__all_sprites.remove(self.__game_objects_arr.pop(obj_to_del_index))
+            deleted_object = self.__game_objects_arr.pop(obj_to_del_index)
+            self.__all_sprites.remove(deleted_object)
+
+            #jeśli był to gracz to zapamiętaj, że już go nie
+            if isinstance(deleted_object, Player):
+                self.__is_player_placed = False
 
     def load_level_from_file(self):
         #odczyt wybranego przez użytkownika pliku
@@ -193,6 +233,17 @@ class ModelLevelEditor(Model):
         #TODO
         #wczytanie poziomu (najlepiej jakby tu było wywołanie jednej metody klasy odpowiedzialnej za przechowywanie poziomu, ale czy tak będzie....)
         pass
+
+    def is_colliding(self, first = (0, 0, 0, 0), second = (0, 0, 0, 0)):
+        """ funkcja zwraca True jeśli obiekty nachodzą na siebie (nawet dla "wspólnego" wierzchołka czu boku
+        first oraz second zawierają współrzędne w kolejności: x_lewy, x_prawy, y_gorny, y_dolny"""
+
+        if first[0] >= second[0] and first[0] <= second[1] and first[2] >= second[2] and first[2] <= second[3] \
+        or first[1] >= second[0] and first[1] <= second[1] and first[2] >= second[2] and first[2] <= second[3] \
+        or first[0] >= second[0] and first[0] <= second[1] and first[3] >= second[2] and first[3] <= second[3] \
+        or first[1] >= second[0] and first[1] <= second[1] and first[3] >= second[2] and first[3] <= second[3]:
+            return True
+        return False
 
     #v----GETTERY----v
     def get_level_to_edit_number(self):

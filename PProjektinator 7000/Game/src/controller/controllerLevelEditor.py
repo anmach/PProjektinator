@@ -25,16 +25,13 @@ class ControllerLevelEditor(Controller):
 
             #kliknięcie myszką
             elif event.type == py.MOUSEBUTTONDOWN:
-
                 #pobranie stanu przycisków myszy
                 buttons = py.mouse.get_pressed()
 
                 #0 - LPM
                 #2 - RPM
                 if buttons[0]:
-
                     for control in self._controls:
-
                         #sprawdzanie czy nad daną kontrolką jest kursor
                         if control.get_is_focused():
 
@@ -48,14 +45,11 @@ class ControllerLevelEditor(Controller):
                                 for img_butt in self.__image_buttons:
                                     if control is img_butt:
                                         self._command = img_butt.get_object_info_command()
-                                        return
-                            return
-
+                                        return #break???
+                            return #break???
                     self._command = Command.CLICKED_LMB
                 elif buttons[2]:
                     self._command = Command.CLICKED_RMB
-
-                
             else:
                 self._command = Command.CONTINUE
 
