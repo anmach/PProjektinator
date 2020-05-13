@@ -56,13 +56,15 @@ class Command(IntEnum):
     PREV_OBJECTS = 0x97,
 
     #polecenia dodatkowe dla edytora (identyfikowanie konkretnych typów obiektów)
-    CREATE_PLATFORM = 0x1000,
+    OBJECT_NONE = 0x1000
 
-    PLACE_PLAYER = 0x1001,
+    CREATE_PLATFORM = 0x1001,
 
-    PLACE_CRATE = 0x1002,
+    PLACE_PLAYER = 0x1002,
 
-    PLACE_MOVING_PLATFORM = 0x1003,
+    PLACE_CRATE = 0x1003,
+
+    PLACE_MOVING_PLATFORM = 0x1004,
 
     #polecenie do przejścia do menu opcji
     OPTIONS = 0x100,
