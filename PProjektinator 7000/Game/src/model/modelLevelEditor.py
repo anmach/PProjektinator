@@ -43,6 +43,8 @@ class ModelLevelEditor(Model):
 
         self.__all_sprites = py.sprite.Group()
 
+        self.__object_to_delete_coords = (-1, -1, -1, -1)
+
     #metoda aktualizująca stan wewnętrzego modelu programu
     def update(self):
         
@@ -67,6 +69,13 @@ class ModelLevelEditor(Model):
         elif self._command == Command.SAVE and self.__chosen_level != -1:
             #zapisanie aktualnie modyfikowanego poziomu
             pass
+
+        elif self._command == Command.DELETE_OBJECT:
+            self.__mode = EditingMode.DELETION
+
+            self.__new_platform_first_vertex_pos = (-1, -1)
+            self.__new_platform_second_vertex_pos = (-1, -1)
+            self.__new_platform_vertex_number = 1
 
         elif self._command == Command.CREATE_PLATFORM:
             self.__mode = EditingMode.PLATFORM_CREATION
@@ -139,6 +148,21 @@ class ModelLevelEditor(Model):
             #TODO zrobić to
             pass
         
+        elif self.__mode == EditingMode.DELETION:
+            
+            obj_to_del_index = -1
+            self.__object_to_delete_coords = (-1, -1, -1, -1)
+
+            mouse_pos = py.mouse.get_pos()
+
+            for object in self.__game_objects_arr:
+                if object.get_x() <= mouse_pos[0] and object.get_x() + object.get_width() >= mouse_pos[0] and object.get_y() <= mouse_pos[1] and object.get_y() + object.get_height() >= mouse_pos[1]:
+                    self.__object_to_delete_coords = (object.get_x(), object.get_y(), object.get_width(), object.get_height())
+                    obj_to_del_index = self.__game_objects_arr.index(object)
+                    break
+
+            if self._command == Command.CLICKED_LMB and len(self.__game_objects_arr) > 0 and obj_to_del_index != -1:
+                self.__all_sprites.remove(self.__game_objects_arr.pop(obj_to_del_index))
 
     def load_level_from_file(self):
         #odczyt wybranego przez użytkownika pliku
@@ -162,3 +186,6 @@ class ModelLevelEditor(Model):
 
     def get_all_sprites(self):
         return self.__all_sprites
+
+    def get_obj_to_del_coords(self):
+        return self.__object_to_delete_coords

@@ -38,6 +38,8 @@ class ViewLevelEditor(View):
 
         self.__all_sprites = py.sprite.Group()
 
+        self.__object_to_delete_coords = (-1, -1, -1, -1)
+
 
     def add_button(self, newButton):
         self.__buttons.append(newButton)
@@ -87,6 +89,9 @@ class ViewLevelEditor(View):
         #przewijanie kontrolek w lewo
         self.add_button(Button("->", smallest_button_size, (0.92 * surface_size_x, 0.69 * surface_size_y), False, Command.NEXT_LEVEL))
 
+        #usuwanie obiektów
+        self.add_button(Button("X", smallest_button_size, (0.892 * surface_size_x, 0.693 * surface_size_y), False, Command.DELETE_OBJECT, (182, 14, 22), (240, 60, 69)))
+
         #tez wiadomo
         self.add_button(Button("Wyjdz", biggest_button_size, (0.86 * surface_size_x, 0.93 * surface_size_y), False, Command.EXIT))
 
@@ -130,6 +135,10 @@ class ViewLevelEditor(View):
 
                 py.draw.rect(self._surface, (0, 0, 0), (x0, y0, x1 - x0, y1 - y0), 1)
 
+        elif self.__mode == EditingMode.DELETION and py.mouse.get_pos()[0] < self.__edit_surface_border * self._surface.get_size()[0]:
+            if(self.__object_to_delete_coords[0] != -1):
+                py.draw.rect(self._surface, (123, 22, 66), (self.__object_to_delete_coords[0], self.__object_to_delete_coords[1], self.__object_to_delete_coords[2], self.__object_to_delete_coords[3]), 3)
+
         #ukazanie nowej zawartości użytkownikowi
         py.display.update()
     
@@ -139,9 +148,10 @@ class ViewLevelEditor(View):
         return self.__image_buttons
 
     #v----SETTERY----v
-    def set_model(self, level_num, platform_first_coords, platform_second_coords, mode, all_sprites):
+    def set_model(self, level_num, platform_first_coords, platform_second_coords, mode, all_sprites, object_to_delete_coords):
         self.__texts[0].set_text(str(level_num))
         self.__new_platform_first_vertex_pos = platform_first_coords
         self.__new_platform_second_vertex_pos = platform_second_coords
         self.__mode = mode
         self.__all_sprites = all_sprites
+        self.__object_to_delete_coords = object_to_delete_coords
