@@ -55,10 +55,14 @@ class Command(IntEnum):
     #polecenie do przejścia do tyłu w liście obiektów
     PREV_OBJECTS = 0x97,
 
-    #KRYTYCZNE (dwie kolejne) WARTOŚCI - NIE ZMIENIAĆ!!!
-    CREATE_PLATFORM = 0x98,
+    #polecenia dodatkowe dla edytora (identyfikowanie konkretnych typów obiektów)
+    CREATE_PLATFORM = 0x1000,
 
-    PLACE_PLAYER = 0x99,
+    PLACE_PLAYER = 0x1001,
+
+    PLACE_CRATE = 0x1002,
+
+    PLACE_MOVING_PLATFORM = 0x1003,
 
     #polecenie do przejścia do menu opcji
     OPTIONS = 0x100,
