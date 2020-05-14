@@ -22,12 +22,8 @@ class ModelLevel(Model):
         platform2 = GameObject(200, 300, 200, 400, False, ObjectType.STATIC, None)
         crate1 = GameObject(450, 100, 100, 100, True, ObjectType.DYNAMIC, None)
         crate2 = GameObject(450, 0, 50, 50, True, ObjectType.DYNAMIC, None)
-        movPlat = MovingPlatform(600, 200, 100, 30, False, ObjectType.KINEMATIC, None, 0, 200)
-        movPlat2 = MovingPlatform(700, 200, 100, 30, False, ObjectType.KINEMATIC, None, 200, 0)
-        movPlat.spd_x = 0
-        movPlat2.spd_x = 2
-        movPlat.spd_y = 2
-        movPlat2.spd_y = 0
+        movPlat = MovingPlatform(600, 200, 100, 30, False, ObjectType.KINEMATIC, None, 0, 200, 0, 2)
+        movPlat2 = MovingPlatform(700, 200, 100, 30, False, ObjectType.KINEMATIC, None, 200, 0, 2, 0)
 
         self.level_number = level_number
 

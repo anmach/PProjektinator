@@ -39,7 +39,6 @@ class Player(GameObject):
     #metoda zaczynająca "kucnięcie"
     def crouch(self):
         self.is_crouching = True
-        print ("Crouching start... \n")
         oldHeight = self.height
         self.rect.inflate_ip(50, -50)
         self.rect.move_ip(0, (oldHeight - self.rect.height)/2)
@@ -49,7 +48,6 @@ class Player(GameObject):
 
     def uncrouch(self):
         self.is_crouching = False
-        print ("Crouching stoped... \n")
         oldHeight = self.rect.height
         self.rect.inflate_ip(-50, 50)
         self.rect.move_ip(0, (oldHeight - self.rect.height)/2)

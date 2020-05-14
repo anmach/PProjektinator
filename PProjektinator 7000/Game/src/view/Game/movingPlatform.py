@@ -3,12 +3,14 @@ from .gameObject import GameObject
 class MovingPlatform(GameObject):
     """description of class"""
 
-    def __init__(self, x, y, width, height, gravity, type, image_source, path_max_x, path_max_y):
+    def __init__(self, x, y, width, height, gravity, type, image_source, path_max_x, path_max_y, spd_x, spd_y):
         super().__init__(x, y, width, height, gravity, type, image_source)
         self.path_max_x = path_max_x
         self.path_max_y = path_max_y
         self.path_cur_x = 0
         self.path_cur_y = 0
+        self.spd_x = spd_x
+        self.spd_y = spd_y
 
 
     def update(self):
