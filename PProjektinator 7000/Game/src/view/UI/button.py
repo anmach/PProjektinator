@@ -64,6 +64,10 @@ class Button(Control):
             tmp[1] += 20
             self._size = tuple(tmp)
 
+    def set_pos(self, pos):
+        self._pos = pos
+        self.set_text_pos(pos)
+
     def set_text_pos(self, pos):
         if self.__hasFrame:
             self.__text.set_pos(((pos[0] + 10), (pos[1] + 10)))

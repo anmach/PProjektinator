@@ -1,10 +1,13 @@
 from .control import Control
 from src.enum.command import Command
 from .button import Button
+
+import pygame as py
+
 class ImageButtonGroup(Control):
     """może potem dodam opis, ogólnie to to jest taka siatka z możliwością przewijania dostępnych przycisków"""
 
-    def __init__(self, position, command, size, img_buttons = [], division = (1, 1), direction = 1):
+    def __init__(self, position, command, size, img_buttons=[], division=(1, 1), direction=1):
         """metoda inicjalizująca, znaczenie argumentów:
         positon - pozycja, para (x, y)
         size - rozmiar siatki
@@ -14,59 +17,94 @@ class ImageButtonGroup(Control):
 
         super().__init__(position, command, size)
 
-        #dodać skalowanie
-        extra_size = 50
-        self._prev_button = Button("", 20, (0, 0), False, Command.PREV_OBJECTS)
-        self._next_button = Button("", 20, (0, 0), False, Command.PREV_OBJECTS)
-
-        if direction == 0:
-            self._prev_button.set_text("^")
-            self._prev_button.set_pos((self._pos[0] + self._size[0], self._pos[1]))
-            self._next_button.set_text("v")
-            self._prev_button.set_pos((self._pos[0] + self._size[0], self._pos[1] + self._size[1] // 2))
-        else:
-            self._prev_button.set_text("<")
-            self._prev_button.set_pos((self._pos[0], self._pos[1] + self._size[1]))
-            self._next_button.set_text(">")
-            self._prev_button.set_pos((self._pos[0] + self._size[0] // 2, self._pos[1] + self._size[1]))
-
         self.__cell_size = (self._size[0] // division[0], self._size[1] // division[1])
         self.__img_buttons = img_buttons
         self.__direction = direction
         self.__division = division
+        
+        #dodać skalowanie
+        extra_size = 50
 
         if direction == 0:
             self.size = (self._size[0] + extra_size, self._size[1])
         else:
             self.size = (self._size[0], self._size[1] + extra_size)
 
+        self._prev_button = Button("", 20, (0, 0), True, Command.PREV_OBJECTS)
+        self._next_button = Button("", 20, (0, 0), True, Command.NEXT_OBJECTS)
+
+        if direction == 0:
+            self._prev_button.set_text("^")
+            self._prev_button.set_pos((self._pos[0] + self._size[0], self._pos[1]))
+            self._next_button.set_text("v")
+            self._next_button.set_pos((self._pos[0] + self._size[0], self._pos[1] + self._size[1] // 2))
+        else:
+            self._prev_button.set_text("<")
+            self._prev_button.set_pos((self._pos[0], self._pos[1] + self._size[1]))
+            self._next_button.set_text(">")
+            self._next_button.set_pos((self._pos[0] + self._size[0] // 2, self._pos[1] + self._size[1]))
+
         #0 - bez przesunięcia przycisków w siatce
         self.__slide_offset = 0
 
-    #metoda do aktualizowania stanu kontrolki, np. zmiany koloru
+    #metoda do aktualizowania stanu kontrolki, np.  zmiany koloru
     def update(self):
         self._prev_button.update()
         self._next_button.update()
 
+        print(str(py.mouse.get_pos()) + '    ' + str(self._prev_button.get_pos()) + '    ' + str(self._next_button.get_pos()))
+
+        if py.mouse.get_pressed()[0]:
+            if self._prev_button.get_is_focused() and self.__slide_offset > 0:
+                self.__slide_offset -= 1
+            elif self._next_button.get_is_focused():
+               if self.__direction == 0 and self.__slide_offset * self.__division[0] <= len(self.__img_buttons):
+                   self.__slide_offset += 1
+               elif self.__direction == 1 and self.__slide_offset * self.__division[1] <= len(self.__img_buttons):
+                   self.__slide_offset += 1
+
         for i in range(0, self.__division[0] * self.__division[1]):
-            if i >= len(self.__img_buttons):
-                break
+
+
+            #TODO - poprawić - błąd, gdy wymiar ma wartość 1
             if self.__direction == 0:
+                if i + self.__slide_offset * self.__division[0] - 1 >= len(self.__img_buttons):
+                    break
+                new_x = self._pos[0] + self.__cell_size[0] * (i % self.__division[0])
+                new_y = self._pos[1] + self.__cell_size[1] * (i // self.__division[1])
+
+                self.__img_buttons[i + self.__slide_offset * self.__division[0] - 1].set_pos((new_x, new_y))
                 self.__img_buttons[i + self.__slide_offset * self.__division[0] - 1].update()
             else:
+                if i + self.__slide_offset * self.__division[1] - 1 >= len(self.__img_buttons):
+                    break
+                new_x = int(self._pos[0] + self.__cell_size[0] * (i // self.__division[0]))
+                new_y = int(self._pos[1] + self.__cell_size[1] * (i % self.__division[1]))
+
+                self.__img_buttons[i + self.__slide_offset * self.__division[1] - 1].set_pos((new_x, new_y))
                 self.__img_buttons[i + self.__slide_offset * self.__division[1] - 1].update()
+
+    def set_buttons(self, buttons=[]):
+        pass
 
     #metoda do wyrysowania kontrolki
     def draw(self, surface):
         self._prev_button.draw(surface)
         self._next_button.draw(surface)
 
+        for i in range (0, self.__division[0]):
+            for j in range (0, self.__division[1]):
+                py.draw.rect(surface, (20, 20, 20), (self._pos[0] + i * self.__cell_size[0], self._pos[1] + j * self.__cell_size[1], self.__cell_size[0], self.__cell_size[1]), 3)
+        
+        #TODO - usunąć offset dla img button?
         for i in range(0, self.__division[0] * self.__division[1]):
-            if i >= len(self.__img_buttons):
-                break
             if self.__direction == 0:
+                if i + self.__slide_offset * self.__division[0] - 1 >= len(self.__img_buttons):
+                    break
                 self.__img_buttons[i + self.__slide_offset * self.__division[0] - 1].draw(surface)
             else:
+                if i + self.__slide_offset * self.__division[1] - 1 >= len(self.__img_buttons):
+                    break
                 self.__img_buttons[i + self.__slide_offset * self.__division[1] - 1].draw(surface)
 
     def get_focused_button(self):
