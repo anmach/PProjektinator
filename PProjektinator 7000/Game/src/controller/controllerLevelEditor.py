@@ -42,11 +42,8 @@ class ControllerLevelEditor(Controller):
                             if self._command == Command.OBJECT_SELECTED:
                                 #TODO
                                 #przekazanie info o tym jaki to konkretnie obiekt (nr w tablicy? - pomysł na przyszłość - jednak inaczej)
-                                for img_butt in self.__image_buttons:
-                                    if control is img_butt:
-                                        self._command = img_butt.get_object_info_command()
-                                        return #break???
-                            return #break???
+                                self._command = control.get_second_command()
+                            return
                     self._command = Command.CLICKED_LMB
                 elif buttons[2]:
                     self._command = Command.CLICKED_RMB

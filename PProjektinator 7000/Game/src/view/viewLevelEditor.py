@@ -53,7 +53,6 @@ class ViewLevelEditor(View):
 
     def add_image_button(self, newImageButton):
         self.__image_buttons.append(newImageButton)
-        #self._controls.append(newImageButton)
 
     def add_all_controls(self):
         surface_size_x = self._surface.get_size()[0]
@@ -79,30 +78,24 @@ class ViewLevelEditor(View):
 
         self.add_button(Button("Zapisz", biggest_button_size, (0.855 * surface_size_x, 0.24 * surface_size_y), False, Command.SAVE))
         
-        #przewijanie kontrolek w lewo
-        #self.add_button(Button("<-", smallest_button_size, (0.86 * surface_size_x, 0.69 * surface_size_y), False, Command.PREV_LEVEL))
-
         #TODO - pozycja przycisków - zależna od przewijania - przesłanie + i - model view
         #dodanie obiektu gracza
         self.add_image_button(ImageButton(define.get_player_sprite_path(), (0.81 * surface_size_x, 0.5 * surface_size_y), (image_button_size, image_button_size), False, Command.OBJECT_SELECTED, Command.PLACE_PLAYER))
-        #0.81 * surface_size_x, 0.5 * surface_size_y
-
+        
         #dodanie obiektu platformy
         self.add_image_button(ImageButton(define.get_platform_middle_sprite_path(), (0.90 * surface_size_x, 0.5 * surface_size_y), (image_button_size, image_button_size), False, Command.OBJECT_SELECTED, Command.CREATE_PLATFORM))
-        #0.90 * surface_size_x, 0.5 * surface_size_y
+        
         self.add_image_button(ImageButton(define.get_platform_middle_sprite_path(), (0.90 * surface_size_x, 0.5 * surface_size_y), (image_button_size, image_button_size), False, Command.OBJECT_SELECTED, Command.CREATE_PLATFORM))
         self.add_image_button(ImageButton(define.get_platform_middle_sprite_path(), (0.90 * surface_size_x, 0.5 * surface_size_y), (image_button_size, image_button_size), False, Command.OBJECT_SELECTED, Command.CREATE_PLATFORM))
         self.add_image_button(ImageButton(define.get_platform_middle_sprite_path(), (0.90 * surface_size_x, 0.5 * surface_size_y), (image_button_size, image_button_size), False, Command.OBJECT_SELECTED, Command.CREATE_PLATFORM))
         self.add_image_button(ImageButton(define.get_platform_middle_sprite_path(), (0.90 * surface_size_x, 0.5 * surface_size_y), (image_button_size, image_button_size), False, Command.OBJECT_SELECTED, Command.CREATE_PLATFORM))
         self.add_image_button(ImageButton(define.get_platform_middle_sprite_path(), (0.90 * surface_size_x, 0.5 * surface_size_y), (image_button_size, image_button_size), False, Command.OBJECT_SELECTED, Command.CREATE_PLATFORM))
 
-        self.__imageButtonGroup = ImageButtonGroup((0.81 * surface_size_x, 0.5 * surface_size_y), Command.OBJECT_SELECTED, (2 * image_button_size, 2 * image_button_size), self.__image_buttons, (2, 2), 1)
-
-        #przewijanie kontrolek w lewo
-        #self.add_button(Button("->", smallest_button_size, (0.92 * surface_size_x, 0.69 * surface_size_y), False, Command.NEXT_LEVEL))
+        self.__imageButtonGroup = ImageButtonGroup((0.825 * surface_size_x, 0.5 * surface_size_y), Command.OBJECT_SELECTED, (image_button_size, image_button_size), self.__image_buttons, (4, 3), 1)
+        self._controls.append(self.__imageButtonGroup)
 
         #usuwanie obiektów
-        self.add_button(Button("X", smallest_button_size, (0.892 * surface_size_x, 0.693 * surface_size_y), False, Command.DELETE_OBJECT, (182, 14, 22), (240, 60, 69)))
+        self.add_button(Button("X", smallest_button_size, (0.892 * surface_size_x, 0.47 * surface_size_y), False, Command.DELETE_OBJECT, (182, 14, 22), (240, 60, 69)))
 
         #tez wiadomo
         self.add_button(Button("Wyjdz", biggest_button_size, (0.86 * surface_size_x, 0.93 * surface_size_y), False, Command.EXIT))
@@ -113,16 +106,12 @@ class ViewLevelEditor(View):
         for control in self._controls:
             control.update()
 
-        self.__imageButtonGroup.update()
-
         #wypełnienie ekranu kolorem jasno-niebieskim
         self._surface.fill((200, 220, 250))
 
         #wyrysowanie wszystkich przycisków na ekran
         for butt in self._controls:
             butt.draw(self._surface)
-
-        self.__imageButtonGroup.draw(self._surface)
 
         #linia oddzielająca
         py.draw.line(self._surface, (0,0,0), (self.__edit_surface_border * self._surface.get_size()[0], 0.0), (self.__edit_surface_border * self._surface.get_size()[0], self._surface.get_size()[1]), 5)

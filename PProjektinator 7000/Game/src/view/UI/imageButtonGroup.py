@@ -1,7 +1,7 @@
 from .control import Control
 from src.enum.command import Command
 from .button import Button
-
+import src.define as define
 import pygame as py
 
 class ImageButtonGroup(Control):
@@ -17,7 +17,7 @@ class ImageButtonGroup(Control):
 
         super().__init__(position, command, size)
 
-        self.__cell_size = (self._size[0] // division[0], self._size[1] // division[1])
+        self.__cell_size = (self._size[0], self._size[1])
         self.__img_buttons = img_buttons
         self.__direction = direction
         self.__division = division
@@ -25,24 +25,28 @@ class ImageButtonGroup(Control):
         #dodać skalowanie
         extra_size = 50
 
+        #pionowo
         if direction == 0:
-            self.size = (self._size[0] + extra_size, self._size[1])
+            self._size = (self._size[0] * division[0] + extra_size, self._size[1] * division[1])
+        #poziomo
         else:
-            self.size = (self._size[0], self._size[1] + extra_size)
+            self._size = (self._size[0] * division[0], self._size[1] * division[1] + extra_size)
 
-        self._prev_button = Button("", 20, (0, 0), True, Command.PREV_OBJECTS)
-        self._next_button = Button("", 20, (0, 0), True, Command.NEXT_OBJECTS)
+        self._prev_button = Button("", 20, (0, 0), False, Command.PREV_OBJECTS)
+        self._next_button = Button("", 20, (0, 0), False, Command.NEXT_OBJECTS)
 
+        #pionowo
         if direction == 0:
             self._prev_button.set_text("^")
             self._prev_button.set_pos((self._pos[0] + self._size[0], self._pos[1]))
             self._next_button.set_text("v")
             self._next_button.set_pos((self._pos[0] + self._size[0], self._pos[1] + self._size[1] // 2))
+        #poziomo
         else:
             self._prev_button.set_text("<")
-            self._prev_button.set_pos((self._pos[0], self._pos[1] + self._size[1]))
+            self._prev_button.set_pos((self._pos[0] + self._size[0] // 4 - self._prev_button.get_size()[0], self._pos[1] + self._size[1] - extra_size))
             self._next_button.set_text(">")
-            self._next_button.set_pos((self._pos[0] + self._size[0] // 2, self._pos[1] + self._size[1]))
+            self._next_button.set_pos((self._pos[0] + 3 * self._size[0] // 4 , self._pos[1] + self._size[1] - extra_size))
 
         #0 - bez przesunięcia przycisków w siatce
         self.__slide_offset = 0
@@ -51,8 +55,6 @@ class ImageButtonGroup(Control):
     def update(self):
         self._prev_button.update()
         self._next_button.update()
-
-        print(str(py.mouse.get_pos()) + '    ' + str(self._prev_button.get_pos()) + '    ' + str(self._next_button.get_pos()))
 
         if py.mouse.get_pressed()[0]:
             if self._prev_button.get_is_focused() and self.__slide_offset > 0:
@@ -63,8 +65,8 @@ class ImageButtonGroup(Control):
                elif self.__direction == 1 and self.__slide_offset * self.__division[1] <= len(self.__img_buttons):
                    self.__slide_offset += 1
 
+        self._isFocused = False
         for i in range(0, self.__division[0] * self.__division[1]):
-
 
             #TODO - poprawić - błąd, gdy wymiar ma wartość 1
             if self.__direction == 0:
@@ -75,6 +77,9 @@ class ImageButtonGroup(Control):
 
                 self.__img_buttons[i + self.__slide_offset * self.__division[0] - 1].set_pos((new_x, new_y))
                 self.__img_buttons[i + self.__slide_offset * self.__division[0] - 1].update()
+
+                if self.__img_buttons[i + self.__slide_offset * self.__division[0] - 1].get_is_focused():
+                    self._isFocused = True
             else:
                 if i + self.__slide_offset * self.__division[1] - 1 >= len(self.__img_buttons):
                     break
@@ -84,31 +89,48 @@ class ImageButtonGroup(Control):
                 self.__img_buttons[i + self.__slide_offset * self.__division[1] - 1].set_pos((new_x, new_y))
                 self.__img_buttons[i + self.__slide_offset * self.__division[1] - 1].update()
 
+                if self.__img_buttons[i + self.__slide_offset * self.__division[1] - 1].get_is_focused():
+                    self.set_is_focused(True)
+
     def set_buttons(self, buttons=[]):
-        pass
+        self.__img_buttons = buttons
 
     #metoda do wyrysowania kontrolki
     def draw(self, surface):
         self._prev_button.draw(surface)
         self._next_button.draw(surface)
 
-        for i in range (0, self.__division[0]):
-            for j in range (0, self.__division[1]):
-                py.draw.rect(surface, (20, 20, 20), (self._pos[0] + i * self.__cell_size[0], self._pos[1] + j * self.__cell_size[1], self.__cell_size[0], self.__cell_size[1]), 3)
-        
         #TODO - usunąć offset dla img button?
         for i in range(0, self.__division[0] * self.__division[1]):
             if self.__direction == 0:
+                #break, gdy przekroczy zakres
                 if i + self.__slide_offset * self.__division[0] - 1 >= len(self.__img_buttons):
                     break
                 self.__img_buttons[i + self.__slide_offset * self.__division[0] - 1].draw(surface)
             else:
+                #break, gdy przekroczy zakres
                 if i + self.__slide_offset * self.__division[1] - 1 >= len(self.__img_buttons):
                     break
                 self.__img_buttons[i + self.__slide_offset * self.__division[1] - 1].draw(surface)
 
+        for i in range(0, self.__division[0]):
+            for j in range(0, self.__division[1]):
+                py.draw.rect(surface, (20, 20, 20), (self._pos[0] + i * self.__cell_size[0], self._pos[1] + j * self.__cell_size[1], self.__cell_size[0], self.__cell_size[1]), 2)
+        
     def get_focused_button(self):
         for img_butt in self.__img_buttons:
             if img_butt.get_is_focused():
                 return img_butt
         return None
+
+    def get_command(self):
+        for img_butt in self.__img_buttons:
+            if img_butt.get_is_focused():
+                return img_butt.get_command()
+        return Command.CONTINUE
+
+    def get_second_command(self):
+        for img_butt in self.__img_buttons:
+            if img_butt.get_is_focused():
+                return img_butt.get_object_info_command()
+        return Command.OBJECT_NONE

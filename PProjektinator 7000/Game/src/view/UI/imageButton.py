@@ -7,8 +7,9 @@ import pygame as py
 class ImageButton(Control):
 
     #size (0, 0) oznacza, że korzystamy z domyślnego rozmiaru obrazu
-    #fillScaling - czy skalowanie ma całkowicie wypełnić dany obszar obrazem (True) czy zachować jego proporcje (False)
-    def __init__(self, imagePath, pos, size = (0, 0), fillScaling = True, command = Command.CONTINUE, object_info_command = Command.CREATE_PLATFORM):
+    #fillScaling - czy skalowanie ma całkowicie wypełnić dany obszar obrazem
+    #(True) czy zachować jego proporcje (False)
+    def __init__(self, imagePath, pos, size=(0, 0), fillScaling=True, command=Command.CONTINUE, object_info_command=Command.CREATE_PLATFORM):
         super().__init__(pos, command, size)
 
         self.__object_info_command = object_info_command
@@ -32,7 +33,7 @@ class ImageButton(Control):
                 self.__image = py.transform.scale(self.__image, (self._size[0], self._size[1]))
                 
         #przesunięcię obrazu na środek
-        self.__imageOffset = (size[0] - self.__image.get_rect().size[0], size[1] - self.__image.get_rect().size[1])
+        self.__imageOffset = ((size[0] - self.__image.get_rect().size[0]) // 2, (size[1] - self.__image.get_rect().size[1]) // 2)
             
     #metoda do aktualizowania stanu kontrolki
     def update(self):

@@ -24,3 +24,6 @@ def get_levels_folder_path():
 
 def get_player_standard_size():
     return (75, 100)
+
+def get_standard_resolution():
+    return (1280, 720)
