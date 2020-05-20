@@ -1,12 +1,15 @@
 from .control import Control
+from src.enum.optionKey import OptionKey
 from .text import Text
 import pygame as py
 
 class Slider(Control):
     """ Klasa reprezentująca... slider """
 
-    def __init__(self, bar_position, initial_value = 0, values = (0, 100), bar_size = (200,20), primary_colour = (180, 150, 200), secondary_colour = (240, 240, 240), bar_colour = (200, 100, 120)):
+    def __init__(self, bar_position, initial_value = 0, values = (0, 100), bar_size = (200,20), command = OptionKey.VOLUME, primary_colour = (180, 150, 200), secondary_colour = (240, 240, 240), bar_colour = (200, 100, 120)):
         super().__init__()
+
+        self._command = command
 
         # suwak został naciśnięty i nie należy zwalniac podświetlenia
         self._is_pushed = 0
@@ -77,6 +80,12 @@ class Slider(Control):
     # gettery | settery
     def get_current_value(self):
         return self._current_value
+
+    def get_max_value(self):
+        return self._values[1]
+
+    def get_command(self):
+        return self._command
 
     def set_is_pushed(self, new_is_pushed):
         self._is_pushed = new_is_pushed

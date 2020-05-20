@@ -87,4 +87,3 @@ class ControllerOptions(Controller):
     def give_command(self, model):
         model.set_command(self._command)
 
-

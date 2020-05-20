@@ -8,7 +8,7 @@ class ButtonsBox(Control):
 
     def __init__(self, position, buttons, index_button_chosen = 0, rows = 1, columns = 1):
         if len(buttons) == 0:
-            printf('Brak przyciskow w ButtonsBox\n')
+            print('Brak przyciskow w ButtonsBox\n')
             return
 
         super().__init__(position, buttons[0].get_command())

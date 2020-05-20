@@ -15,3 +15,5 @@ class OptionKey(IntEnum):
     VOLUME = 20
     WINDOW_WIDTH = 21
     WINDOW_HEIGHT = 22
+
+    BLINKING_RECT = 23

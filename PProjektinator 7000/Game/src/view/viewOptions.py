@@ -19,7 +19,7 @@ class ViewOptions(View):
         self.__buttons = []
         self.__buttons_optionKeys = [] # opisy przycisków na indeksach odpowiadających tym z wyższej tablicy
         self.__texts = [] 
-        self.__sliders = [] # sliders = (OptionKey, Slider)
+        self.__sliders = []
                 
         surface_size_x = surface.get_size()[0]
         surface_size_y = surface.get_size()[1]
@@ -35,6 +35,8 @@ class ViewOptions(View):
                 
         big_control_size = int(0.04 * surface_size_x)
 
+        enable_blink = 0
+
         # tworzenie wyświetlanego tekstu
         self.__texts.append(Text("Ustawienia", big_control_size, (0.35 * surface_size_x, 0.03 * surface_size_y)))
 
@@ -49,6 +51,7 @@ class ViewOptions(View):
         # kolumna 3 - tekst
         self.__texts.append(Text("Głośność", small_control_size, (x_column3 * surface_size_x, (optionsY) * surface_size_y)))
         self.__texts.append(Text("Rozdzielczość", small_control_size, (x_column3 * surface_size_x, (optionsY + options_y_offset) * surface_size_y)))
+        self.__texts.append(Text("Migające prostokąty", small_control_size, (x_column3 * surface_size_x, (optionsY + options_y_offset*5) * surface_size_y)))
         
         # kolumna 2 - przyciski do zmiany sterowania
         for option in self._options:
@@ -79,13 +82,17 @@ class ViewOptions(View):
 
         # kolumna 4 - slider
             elif option[0] == OptionKey.VOLUME:
-                self.__sliders.append((OptionKey.VOLUME, Slider((x_column4 * surface_size_x, optionsY * surface_size_y), option[1], bar_size = (0.25 * surface_size_x, 0.04 * surface_size_y))))
+                self.__sliders.append(Slider((x_column4 * surface_size_x, optionsY * surface_size_y), option[1], bar_size = (0.25 * surface_size_x, 0.04 * surface_size_y), command = OptionKey.VOLUME))
             
         # kolumna 4 - rozdzielczość
             elif option[0] == OptionKey.WINDOW_HEIGHT:
                 height = option[1]
             elif option[0] == OptionKey.WINDOW_WIDTH:
                 width = option[1]
+            elif option[0] == OptionKey.BLINKING_RECT:
+                enable_blink = option[1]
+
+        # rozdzielczość
         buttBox = []
         index_button_chosen = 0
         buttBox.append(Button("720x480", small_control_size, (0, 0), True, Command.CHANGE_BUTTONS_BOX))
@@ -98,8 +105,18 @@ class ViewOptions(View):
         if width == 600 and height == 500:
             index_button_chosen = 2
         self._controls.append(buttBox[-1])
-        self._buttons_box = ButtonsBox((x_column4 * surface_size_x, (optionsY + options_y_offset) * surface_size_y), buttBox, index_button_chosen)
+        self._buttons_box_resolut = ButtonsBox((x_column4 * surface_size_x, (optionsY + options_y_offset) * surface_size_y), buttBox, index_button_chosen)
 
+        # czy włączyć migające prostokąty
+        buttBox2 = []        
+        index_button_chosen = 0
+        buttBox2.append(Button("ON", small_control_size, (0, 0), True, Command.CHANGE_BUTTONS_BOX))
+        self._controls.append(buttBox2[-1])
+        buttBox2.append(Button("OFF", small_control_size, (0, 0), True, Command.CHANGE_BUTTONS_BOX))
+        if enable_blink == 0:
+            index_button_chosen = 1
+        self._controls.append(buttBox2[-1])        
+        self._buttons_box_blink = ButtonsBox((x_column4 * surface_size_x, (optionsY + options_y_offset * 5) * surface_size_y), buttBox2, index_button_chosen, columns=2)
 
         # tworzenie przycisków i przypisanie każdego z nich do ogólnej tablicy kontrolek
         self.__buttons.append(Button("Wyjdź", big_control_size, (0.2 * surface_size_x, 0.7 * surface_size_y), True, Command.EXIT))
@@ -112,8 +129,9 @@ class ViewOptions(View):
         for control in self._controls:
             control.update()
         for slider in self.__sliders:
-            slider[1].update()
-        self._buttons_box.update()
+            slider.update()
+        self._buttons_box_resolut.update()
+        self._buttons_box_blink.update()
 
         #wypełnienie ekranu kolorem
         self._surface.fill((250, 200, 190))
@@ -126,9 +144,10 @@ class ViewOptions(View):
             tex.draw(self._surface)
 
         for sli in self.__sliders:
-            sli[1].draw(self._surface)
+            sli.draw(self._surface)
 
-        self._buttons_box.draw(self._surface)
+        self._buttons_box_resolut.draw(self._surface)
+        self._buttons_box_blink.draw(self._surface)
 
         #ukazanie nowej zawartości użytkownikowi
         py.display.update()
@@ -144,12 +163,15 @@ class ViewOptions(View):
         for slide in self.__sliders:
             for option in self._options:
                 # czy klucz opcji zgadza się z kluczem przypisanym sliderowi
-                if option[0] == slide[0]:
+                if option[0] == slide.get_command():
                     # usuwam tuple, bo nie da się ich zmieniać
                     self._options.remove((option[0], option[1]))
+
+                    if option[0] == OptionKey.VOLUME:
+                        py.mixer_music.set_volume(slide.get_current_value()/slide.get_max_value())
                     break
             # dodaje nowy tuple do listy z odpowiednimi wartościami
-            self._options.append((slide[0], slide[1].get_current_value()))
+            self._options.append((slide.get_command(), slide.get_current_value()))
 
     def update_options_from_buttons(self):
         iter = 0
@@ -170,7 +192,7 @@ class ViewOptions(View):
         #zdobywamy aktualnie ustawione wartości rozdzielczości:
         width = 1000
         height = 700
-        button_text = self._buttons_box.get_button_chosen().get_text()
+        button_text = self._buttons_box_resolut.get_button_chosen().get_text()
         if button_text == "1280x720":
             width = 1280
             height = 720
@@ -197,13 +219,10 @@ class ViewOptions(View):
 
     # gettery | settery
     def get_sliders(self):
-        sliders = []
-        for slide in self.__sliders:
-            sliders.append(slide[1])
-        return sliders
+        return self.__sliders
 
     def get_buttons_box(self):
-        return self._buttons_box
+        return self._buttons_box_resolut
 
     def get_options(self):
         return self._options
