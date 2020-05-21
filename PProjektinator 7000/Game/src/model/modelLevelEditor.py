@@ -31,6 +31,8 @@ class ModelLevelEditor(Model):
         #liczba ustalonych wierzchołków nowej platformy
         self.__new_platform_vertex_number = 1
 
+        self.__moving_platform_placement_mode = 1
+
         #czy aktualnie jest przemieszczany obiekt
         self.__is_moved = False
 
@@ -77,22 +79,31 @@ class ModelLevelEditor(Model):
         elif self._command == Command.DELETE_OBJECT:
             self.__mode = EditingMode.DELETION
 
-            self.__new_platform_first_vertex_pos = (-1, -1)
-            self.__new_platform_second_vertex_pos = (-1, -1)
+            self.__something_coords = (-1, -1, -1, -1)
             self.__new_platform_vertex_number = 1
 
         elif self._command == Command.CREATE_PLATFORM:
             self.__mode = EditingMode.PLATFORM_CREATION
 
-            self.__new_platform_first_vertex_pos = (-1, -1)
-            self.__new_platform_second_vertex_pos = (-1, -1)
+            self.__something_coords = (-1, -1, -1, -1)
             self.__new_platform_vertex_number = 1
         
         elif self._command == Command.PLACE_PLAYER:
             self.__mode = EditingMode.PLAYER_PLACEMENT
 
-            self.__new_platform_first_vertex_pos = (-1, -1)
-            self.__new_platform_second_vertex_pos = (-1, -1)
+            self.__something_coords = (-1, -1, -1, -1)
+            self.__new_platform_vertex_number = 1
+
+        elif self._command == Command.PLACE_CRATE:
+            self.__mode = EditingMode.CRATE_PLACEMENT
+
+            self.__something_coords = (-1, -1, -1, -1)
+            self.__new_platform_vertex_number = 1
+
+        elif self._command == Command.PLACE_MOVING_PLATFORM:
+            self.__mode = EditingMode.MOVING_PLATFORM_PLACEMENT
+
+            self.__something_coords = (-1, -1, -1, -1)
             self.__new_platform_vertex_number = 1
 
         #interpretacja akcji użytkownika na polu edycyjnym zależy od trybu w
@@ -109,6 +120,12 @@ class ModelLevelEditor(Model):
         #usuwanie obiektu (lub platformy)
         elif self.__mode == EditingMode.DELETION:
             self.update_deletion()
+
+        elif self.__mode == EditingMode.CRATE_PLACEMENT:
+            self.update_crate_placement()
+
+        elif self.__mode == EditingMode.MOVING_PLATFORM_PLACEMENT:
+            self.update_moving_platform_placement()
 
     def update_platform_creation(self):
         #TODO
@@ -209,6 +226,68 @@ class ModelLevelEditor(Model):
 
             #po dodaniu zmień tryb
             self.__mode = EditingMode.NONE
+
+    #TODO - to jest (prawie) to samo co platforma
+    def update_crate_placement(self):
+         mouse_pos = py.mouse.get_pos()
+         new_vertex_pos = mouse_pos
+         
+         for game_object in self.__game_objects_arr:
+                 if type(game_object) is GameObject and game_object.get_type() == ObjectType.STATIC:
+                     x0 = game_object.get_x()
+                     x1 = game_object.get_x() + game_object.get_width()
+                     
+                     y0 = game_object.get_y()
+                     y1 = game_object.get_y() + game_object.get_height()
+         
+                     #jeżeli różnica między pozycją kursora myszki, a
+                     #wierzchołkiem istniejącej platformy jest mniejsza niż
+                     #ustalona
+                     #wartość to nowy wierzchołek jest "przyczepiany" do już
+                     #istniejącego
+                     if abs(mouse_pos[0] - x0) < self.__snap_distance and abs(mouse_pos[1] - y0) < self.__snap_distance:
+                         new_vertex_pos = (x0, y0)
+                     elif abs(mouse_pos[0] - x1) < self.__snap_distance and abs(mouse_pos[1] - y0) < self.__snap_distance:
+                         new_vertex_pos = (x1, y0)
+                     elif abs(mouse_pos[0] - x0) < self.__snap_distance and abs(mouse_pos[1] - y1) < self.__snap_distance:
+                         new_vertex_pos = (x0, y1)
+                     elif abs(mouse_pos[0] - x1) < self.__snap_distance and abs(mouse_pos[1] - y1) < self.__snap_distance:
+                         new_vertex_pos = (x1, y1)
+         
+         if self.__new_platform_vertex_number == 1:
+             self.__something_coords = (new_vertex_pos[0], new_vertex_pos[1], -1, -1)
+         else:
+             self.__something_coords = (self.__something_coords[0], self.__something_coords[1], new_vertex_pos[0], new_vertex_pos[1])
+         
+         if self._command == Command.CLICKED_LMB:
+             if self.__new_platform_vertex_number == 1:
+                 self.__new_platform_vertex_number = 2
+             else:
+                 #dodanie nowej platformy
+                 x0 = min(self.__something_coords[0], self.__something_coords[2])
+                 x1 = max(self.__something_coords[0], self.__something_coords[2])
+         
+                 y0 = min(self.__something_coords[1], self.__something_coords[3])
+                 y1 = max(self.__something_coords[1], self.__something_coords[3])
+         
+                 new_object = GameObject(x0, y0, x1 - x0, y1 - y0, False, ObjectType.DYNAMIC, None)
+         
+                 self.__game_objects_arr.append(new_object)
+                 self.__all_sprites.add(new_object)
+         
+                 self.__something_coords = (-1, -1, -1, -1)
+                 self.__new_platform_vertex_number = 1
+         if self._command == Command.CLICKED_RMB:
+         
+             if self.__new_platform_vertex_number == 1:
+                 self.__something_coords = (-1, -1, -1, -1)
+                 self.__mode = EditingMode.NONE
+             else:
+                 self.__something_coords = (self.__something_coords[0], self.__something_coords[1], -1, -1)
+                 self.__new_platform_vertex_number = 1
+
+    def update_moving_platform_placement(self):
+
 
     def update_deletion(self):
         obj_to_del_index = -1

@@ -77,15 +77,20 @@ class ViewLevelEditor(View):
 
         self.add_button(Button("Zapisz", biggest_button_size, (0.855 * surface_size_x, 0.24 * surface_size_y), False, Command.SAVE))
         
-        #TODO - pozycja przycisków - zależna od przewijania - przesłanie + i - model view
+        
         #dodanie obiektu gracza
         self.add_image_button(ImageButton(define.get_player_sprite_path(), (0.81 * surface_size_x, 0.5 * surface_size_y), (image_button_size, image_button_size), False, Command.OBJECT_SELECTED, Command.PLACE_PLAYER))
         
         #dodanie obiektu platformy
         self.add_image_button(ImageButton(define.get_platform_middle_sprite_path(), (0.90 * surface_size_x, 0.5 * surface_size_y), (image_button_size, image_button_size), False, Command.OBJECT_SELECTED, Command.CREATE_PLATFORM))
         
-        self.add_image_button(ImageButton(define.get_platform_middle_sprite_path(), (0.90 * surface_size_x, 0.5 * surface_size_y), (image_button_size, image_button_size), False, Command.OBJECT_SELECTED, Command.CREATE_PLATFORM))
-        self.add_image_button(ImageButton(define.get_platform_middle_sprite_path(), (0.90 * surface_size_x, 0.5 * surface_size_y), (image_button_size, image_button_size), False, Command.OBJECT_SELECTED, Command.CREATE_PLATFORM))
+        #dodanie obiektu skrzyni
+        self.add_image_button(ImageButton(define.get_crate_sprite_path(), (0.90 * surface_size_x, 0.5 * surface_size_y), (image_button_size, image_button_size), False, Command.OBJECT_SELECTED, Command.PLACE_CRATE))
+        
+        #dodanie obiektu ruszającej się platformy
+        self.add_image_button(ImageButton(define.get_moving_platform_sprite_path(), (0.90 * surface_size_x, 0.5 * surface_size_y), (image_button_size, image_button_size), False, Command.OBJECT_SELECTED, Command.PLACE_MOVING_PLATFORM))
+
+        #żeby było więcej
         self.add_image_button(ImageButton(define.get_platform_middle_sprite_path(), (0.90 * surface_size_x, 0.5 * surface_size_y), (image_button_size, image_button_size), False, Command.OBJECT_SELECTED, Command.CREATE_PLATFORM))
         self.add_image_button(ImageButton(define.get_platform_middle_sprite_path(), (0.90 * surface_size_x, 0.5 * surface_size_y), (image_button_size, image_button_size), False, Command.OBJECT_SELECTED, Command.CREATE_PLATFORM))
         self.add_image_button(ImageButton(define.get_platform_middle_sprite_path(), (0.90 * surface_size_x, 0.5 * surface_size_y), (image_button_size, image_button_size), False, Command.OBJECT_SELECTED, Command.CREATE_PLATFORM))
@@ -122,7 +127,7 @@ class ViewLevelEditor(View):
             self._surface.blit(entity.surf, entity.rect)
 
         #rysowanie kształtu nowej platformy
-        if self.__mode == EditingMode.PLATFORM_CREATION and py.mouse.get_pos()[0] < self.__edit_surface_border * self._surface.get_size()[0]:
+        if (self.__mode == EditingMode.PLATFORM_CREATION or self.__mode == EditingMode.CRATE_PLACEMENT) and py.mouse.get_pos()[0] < self.__edit_surface_border * self._surface.get_size()[0]:
             #jeden wierzchołek
             if self.__coords[2] == -1:
                 py.draw.circle(self._surface, (174, 13, 24), (self.__coords[0], self.__coords[1]), 5)

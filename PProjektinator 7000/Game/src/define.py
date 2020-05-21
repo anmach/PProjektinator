@@ -10,6 +10,12 @@ def get_player_sprites_folder_path():
 def get_platform_middle_sprite_path():
     return '.\\res\\sprites\\platform tiles\\x3\\tile internal x3.png'
 
+def get_crate_sprite_path():
+    return '.\\res\\sprites\\crates\\crate.png'
+
+def get_moving_platform_sprite_path():
+    return '.\\res\\sprites\\moving\\moving platform.png'
+
 def get_raleway_font_path():
     return 'res/fonts/Raleway.ttf'
 
