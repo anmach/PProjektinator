@@ -25,9 +25,10 @@ class ModelLevelEditor(Model):
         #wyświetlany nr poziomu do edycji (zmieniany za pomocą przycisków)
         self.__level_to_edit = 0
 
-        #współrzędne punktów nowej platformy
-        self.__new_platform_first_vertex_pos = (-1, -1)
-        self.__new_platform_second_vertex_pos = (-1, -1)
+        #współrzędne czegoś
+        self.__something_coords = (-1, -1, -1, -1)
+
+        #liczba ustalonych wierzchołków nowej platformy
         self.__new_platform_vertex_number = 1
 
         #czy aktualnie jest przemieszczany obiekt
@@ -43,8 +44,6 @@ class ModelLevelEditor(Model):
         self.__snap_distance = 10
 
         self.__all_sprites = py.sprite.Group()
-
-        self.__object_to_delete_coords = (-1, -1, -1, -1)
 
         self.__is_player_placed = False
 
@@ -96,7 +95,8 @@ class ModelLevelEditor(Model):
             self.__new_platform_second_vertex_pos = (-1, -1)
             self.__new_platform_vertex_number = 1
 
-        #interpretacja akcji użytkownika na polu edycyjnym zależy od trybu w jakim znajduje się edytor
+        #interpretacja akcji użytkownika na polu edycyjnym zależy od trybu w
+        #jakim znajduje się edytor
             
         #tworzenie nowej platformy
         if self.__mode == EditingMode.PLATFORM_CREATION:
@@ -125,8 +125,11 @@ class ModelLevelEditor(Model):
                     y0 = game_object.get_y()
                     y1 = game_object.get_y() + game_object.get_height()
 
-                    #jeżeli różnica między pozycją kursora myszki, a wierzchołkiem istniejącej platformy jest mniejsza niż ustalona
-                    #wartość to nowy wierzchołek jest "przyczepiany" do już istniejącego
+                    #jeżeli różnica między pozycją kursora myszki, a
+                    #wierzchołkiem istniejącej platformy jest mniejsza niż
+                    #ustalona
+                    #wartość to nowy wierzchołek jest "przyczepiany" do już
+                    #istniejącego
                     if abs(mouse_pos[0] - x0) < self.__snap_distance and abs(mouse_pos[1] - y0) < self.__snap_distance:
                         new_vertex_pos = (x0, y0)
                     elif abs(mouse_pos[0] - x1) < self.__snap_distance and abs(mouse_pos[1] - y0) < self.__snap_distance:
@@ -137,39 +140,40 @@ class ModelLevelEditor(Model):
                         new_vertex_pos = (x1, y1)
 
         if self.__new_platform_vertex_number == 1:
-            self.__new_platform_first_vertex_pos = new_vertex_pos
+            self.__something_coords = (new_vertex_pos[0], new_vertex_pos[1], -1, -1)
         else:
-            self.__new_platform_second_vertex_pos = new_vertex_pos
+            self.__something_coords = (self.__something_coords[0], self.__something_coords[1], new_vertex_pos[0], new_vertex_pos[1])
 
         if self._command == Command.CLICKED_LMB:
             if self.__new_platform_vertex_number == 1:
                 self.__new_platform_vertex_number = 2
             else:
                 #dodanie nowej platformy
-                x0 = min(self.__new_platform_first_vertex_pos[0], self.__new_platform_second_vertex_pos[0])
-                x1 = max(self.__new_platform_first_vertex_pos[0], self.__new_platform_second_vertex_pos[0])
-                                                                  
-                y0 = min(self.__new_platform_first_vertex_pos[1], self.__new_platform_second_vertex_pos[1])
-                y1 = max(self.__new_platform_first_vertex_pos[1], self.__new_platform_second_vertex_pos[1])
+                x0 = min(self.__something_coords[0], self.__something_coords[2])
+                x1 = max(self.__something_coords[0], self.__something_coords[2])
+
+                y0 = min(self.__something_coords[1], self.__something_coords[3])
+                y1 = max(self.__something_coords[1], self.__something_coords[3])
 
                 new_object = GameObject(x0, y0, x1 - x0, y1 - y0, False, ObjectType.STATIC, None)
 
                 self.__game_objects_arr.append(new_object)
                 self.__all_sprites.add(new_object)
 
-                self.__new_platform_first_vertex_pos = self.__new_platform_second_vertex_pos = (-1, -1)
+                self.__something_coords = (-1, -1, -1, -1)
                 self.__new_platform_vertex_number = 1
         if self._command == Command.CLICKED_RMB:
 
             if self.__new_platform_vertex_number == 1:
-                self.__new_platform_first_vertex_pos = (-1, -1)
+                self.__something_coords = (-1, -1, -1, -1)
                 self.__mode = EditingMode.NONE
             else:
-                self.__new_platform_second_vertex_pos = (-1, -1)
+                self.__something_coords = (self.__something_coords[0], self.__something_coords[1], -1, -1)
                 self.__new_platform_vertex_number = 1
 
     def update_player_placement(self):
-        #sprawdzenie kolizji - TODO?? ulepszenie tego? żeby nie sprawdzać z każdym obiektem
+        #sprawdzenie kolizji - TODO??  ulepszenie tego?  żeby nie sprawdzać z
+        #każdym obiektem
         mouse_pos = py.mouse.get_pos()
         
         #nowa pozycja gracza - TODO - zmienić dla zmian rozdzielczości
@@ -178,6 +182,8 @@ class ModelLevelEditor(Model):
 
         y0 = mouse_pos[1] - int(0.5 * define.get_player_standard_size()[1])
         y1 = y0 + define.get_player_standard_size()[1]
+
+        self.__something_coords = (x0, y0, x1, y1)
 
         self.__can_object_be_placed = True
 
@@ -199,21 +205,24 @@ class ModelLevelEditor(Model):
             #zapamiętanie, że gracz już został dodany
             self.__is_player_placed = True
 
+            self.__something_coords = (-1, -1, -1, -1)
+
             #po dodaniu zmień tryb
             self.__mode = EditingMode.NONE
 
     def update_deletion(self):
         obj_to_del_index = -1
-        self.__object_to_delete_coords = (-1, -1, -1, -1)
+        self.__something_coords = (-1, -1, -1, -1)
 
         mouse_pos = py.mouse.get_pos()
 
-        #wyszukiwanie obietku nad którym znajduje się kursor myszy (potenjalny kandydat do usunięcia)
+        #wyszukiwanie obietku nad którym znajduje się kursor myszy (potenjalny
+        #kandydat do usunięcia)
         for object in self.__game_objects_arr:
             if object.get_x() <= mouse_pos[0] and object.get_x() + object.get_width() >= mouse_pos[0] and object.get_y() <= mouse_pos[1] and object.get_y() + object.get_height() >= mouse_pos[1]:
                 
-                #pobranie jego wymiarów (wsp. x, y oraz szerokość i wysokość)
-                self.__object_to_delete_coords = (object.get_x(), object.get_y(), object.get_width(), object.get_height())
+                #pobranie jego wymiarów (wsp.  x, y oraz szerokość i wysokość)
+                self.__something_coords = (object.get_x(), object.get_y(), object.get_x() + object.get_width(), object.get_y() + object.get_height())
                 
                 #zapamiętanie jego indeksu
                 obj_to_del_index = self.__game_objects_arr.index(object)
@@ -227,21 +236,22 @@ class ModelLevelEditor(Model):
             if isinstance(deleted_object, Player):
                 self.__is_player_placed = False
 
+            self.__something_coords = (-1, -1, -1, -1)
+
     def load_level_from_file(self):
         #odczyt wybranego przez użytkownika pliku
         
         #TODO
-        #wczytanie poziomu (najlepiej jakby tu było wywołanie jednej metody klasy odpowiedzialnej za przechowywanie poziomu, ale czy tak będzie....)
+        #wczytanie poziomu (najlepiej jakby tu było wywołanie jednej metody
+        #klasy odpowiedzialnej za przechowywanie poziomu, ale czy tak
+        #będzie....)
         pass
 
-    def is_colliding(self, first = (0, 0, 0, 0), second = (0, 0, 0, 0)):
+    def is_colliding(self, first=(0, 0, 0, 0), second=(0, 0, 0, 0)):
         """ funkcja zwraca True jeśli obiekty nachodzą na siebie (nawet dla "wspólnego" wierzchołka czu boku
         first oraz second zawierają współrzędne w kolejności: x_lewy, x_prawy, y_gorny, y_dolny"""
 
-        if first[0] >= second[0] and first[0] <= second[1] and first[2] >= second[2] and first[2] <= second[3] \
-        or first[1] >= second[0] and first[1] <= second[1] and first[2] >= second[2] and first[2] <= second[3] \
-        or first[0] >= second[0] and first[0] <= second[1] and first[3] >= second[2] and first[3] <= second[3] \
-        or first[1] >= second[0] and first[1] <= second[1] and first[3] >= second[2] and first[3] <= second[3]:
+        if first[0] >= second[0] and first[0] <= second[1] and first[2] >= second[2] and first[2] <= second[3] or first[1] >= second[0] and first[1] <= second[1] and first[2] >= second[2] and first[2] <= second[3] or first[0] >= second[0] and first[0] <= second[1] and first[3] >= second[2] and first[3] <= second[3] or first[1] >= second[0] and first[1] <= second[1] and first[3] >= second[2] and first[3] <= second[3]:
             return True
         return False
 
@@ -249,17 +259,11 @@ class ModelLevelEditor(Model):
     def get_level_to_edit_number(self):
         return self.__level_to_edit
 
-    def get_new_platform_first_vertex_pos(self):
-        return self.__new_platform_first_vertex_pos
-
-    def get_new_platform_second_vertex_pos(self):
-        return self.__new_platform_second_vertex_pos
-
     def get_mode(self):
         return self.__mode
 
     def get_all_sprites(self):
         return self.__all_sprites
 
-    def get_obj_to_del_coords(self):
-        return self.__object_to_delete_coords
+    def get_something_coords(self):
+        return self.__something_coords

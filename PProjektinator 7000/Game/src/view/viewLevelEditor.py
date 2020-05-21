@@ -8,6 +8,8 @@ from src.view.UI.button import Button
 from src.view.UI.imageButton import ImageButton
 from src.view.UI.imageButtonGroup import ImageButtonGroup
 
+from src.view.Game.player import Player
+
 import pygame as py
 
 import src.define as define
@@ -31,16 +33,13 @@ class ViewLevelEditor(View):
         #wyświetlany nr poziomu
         self.__levelToEdit = 0
 
-        #współrzędne punktów nowej platformy
-        self.__new_platform_first_vertex_pos = (-1, -1)
-        self.__new_platform_second_vertex_pos = (-1, -1)
-
         #aktualny tryb pracy modelu
         self.__mode = EditingMode.NONE
 
         self.__all_sprites = py.sprite.Group()
 
-        self.__object_to_delete_coords = (-1, -1, -1, -1)
+        #zależy od trybu - info z modelu (współrzędne nowej platformy, gracza, obiektu do usunięcia itp)
+        self.__coords = (-1, -1, -1, -1)
 
 
     def add_button(self, newButton):
@@ -125,25 +124,31 @@ class ViewLevelEditor(View):
         #rysowanie kształtu nowej platformy
         if self.__mode == EditingMode.PLATFORM_CREATION and py.mouse.get_pos()[0] < self.__edit_surface_border * self._surface.get_size()[0]:
             #jeden wierzchołek
-            if self.__new_platform_second_vertex_pos == (-1, -1):
-                py.draw.circle(self._surface, (174, 13, 24), self.__new_platform_first_vertex_pos, 5)
+            if self.__coords[2] == -1:
+                py.draw.circle(self._surface, (174, 13, 24), (self.__coords[0], self.__coords[1]), 5)
             #cały prostokąt
             else:
-                x0 = min(self.__new_platform_first_vertex_pos[0], self.__new_platform_second_vertex_pos[0])
-                x1 = max(self.__new_platform_first_vertex_pos[0], self.__new_platform_second_vertex_pos[0])
+                x0 = min(self.__coords[0], self.__coords[2])
+                x1 = max(self.__coords[0], self.__coords[2])
 
-                y0 = min(self.__new_platform_first_vertex_pos[1], self.__new_platform_second_vertex_pos[1])
-                y1 = max(self.__new_platform_first_vertex_pos[1], self.__new_platform_second_vertex_pos[1])
+                y0 = min(self.__coords[1], self.__coords[3])
+                y1 = max(self.__coords[1], self.__coords[3])
 
-                py.draw.circle(self._surface, (174, 13, 24), self.__new_platform_first_vertex_pos, 3)
-                py.draw.circle(self._surface, (174, 13, 24), self.__new_platform_second_vertex_pos, 3)
+                py.draw.circle(self._surface, (174, 13, 24), (self.__coords[0], self.__coords[1]), 3)
+                py.draw.circle(self._surface, (174, 13, 24), (self.__coords[2], self.__coords[3]), 3)
 
                 py.draw.rect(self._surface, (0, 0, 0), (x0, y0, x1 - x0, y1 - y0), 1)
 
         elif self.__mode == EditingMode.DELETION and py.mouse.get_pos()[0] < self.__edit_surface_border * self._surface.get_size()[0]:
-            if(self.__object_to_delete_coords[0] != -1):
-                py.draw.rect(self._surface, (123, 22, 66), (self.__object_to_delete_coords[0], self.__object_to_delete_coords[1], self.__object_to_delete_coords[2], self.__object_to_delete_coords[3]), 3)
+            if(self.__coords[0] != -1):
+                py.draw.rect(self._surface, (123, 22, 66), (self.__coords[0], self.__coords[1], self.__coords[2] - self.__coords[0], self.__coords[3] - self.__coords[1]), 3)
 
+        elif self.__mode == EditingMode.PLAYER_PLACEMENT and py.mouse.get_pos()[0] < self.__edit_surface_border * self._surface.get_size()[0]:
+             new_object = Player(define.get_player_sprites_folder_path())
+             new_object.set_pos(self.__coords[0], self.__coords[1])
+             new_object.set_frame_by_id(1)
+
+             self._surface.blit(new_object.surf, new_object.rect)
         #ukazanie nowej zawartości użytkownikowi
         py.display.update()
     
@@ -153,10 +158,8 @@ class ViewLevelEditor(View):
         return self.__image_buttons
 
     #v----SETTERY----v
-    def set_model(self, level_num, platform_first_coords, platform_second_coords, mode, all_sprites, object_to_delete_coords):
+    def set_model(self, level_num, mode, all_sprites, coords):
         self.__texts[0].set_text(str(level_num))
-        self.__new_platform_first_vertex_pos = platform_first_coords
-        self.__new_platform_second_vertex_pos = platform_second_coords
         self.__mode = mode
         self.__all_sprites = all_sprites
-        self.__object_to_delete_coords = object_to_delete_coords
+        self.__coords = coords
