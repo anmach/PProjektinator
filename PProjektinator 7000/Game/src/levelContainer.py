@@ -120,9 +120,7 @@ class levelContainer(object):
             if speed_x < 0 or speed_y < 0 or movment_max_x < 0 or movment_max_y < 0:
                 # Błąd - niepoprawne dane
                 return 0
-            self._moving_platforms.append(MovingPlatform(x,y, width, height, False, ObjectType.KINEMATIC, None, movment_max_x, movment_max_y))
-            self.__moving_platforms[-1].set_spd_x = speed_x
-            self.__moving_platforms[-1].set_spd_y = speed_y
+            self._moving_platforms.append(MovingPlatform(x,y, width, height, False, ObjectType.KINEMATIC, None, movment_max_x, movment_max_y, speed_x, speed_y))
         else:
             # Błąd - nieznany typ
             return 0
@@ -133,6 +131,18 @@ class levelContainer(object):
 
     def get_level_read_succes(self):
         return self._level_read_success
+
+    def get_all_level_objects(self):
+        objects = []
+
+        for item in self._platforms:
+            objects.append(item)
+
+        for item in self._crates(item):
+            objects.append(item)
+
+        for item in self._moving_platforms:
+            objects.append(item)
 
     def get_platforms(self):
         return self._platforms
