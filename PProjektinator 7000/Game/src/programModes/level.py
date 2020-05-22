@@ -9,7 +9,9 @@ class Level(ProgramMode):
     def __init__(self, display, level_number):
         self._model = ModelLevel(level_number)
         self._controller = ControllerLevel()
-        self._view = ViewLevel(display)
+        self._view = ViewLevel(display)     
+        
+        self._controller.set_blink(self._view)
 
     def change_mode(self): # <<-- TODO?
         pass

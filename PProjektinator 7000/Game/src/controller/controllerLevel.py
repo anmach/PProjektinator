@@ -23,6 +23,8 @@ class ControllerLevel(Controller):
         self._key_go_up = ord('w')
         self._key_pause = ord('p')
 
+        self._blink_enable = 0
+
         # strzelono - trzeba ponownie nacisnąć przycisk
 
         #odczytanie sterowania z pliku opcji
@@ -92,6 +94,10 @@ class ControllerLevel(Controller):
     def get_controls(self, view):
         self._controls = view.get_controls()
 
+    # ustawienie czy kwadraciki mają migać
+    def set_blink(self, view):
+        view.set_blink_enabled(self._blink_enable)
+
     def give_command(self, model):
         model.set_command(self._command)
         self._command &= ~Command.JUMP
@@ -118,5 +124,11 @@ class ControllerLevel(Controller):
                 self._key_attack = int(splitted_line[1])             
             elif int_optionKey == OptionKey.KEY_TELEKINESIS:
                 self._key_telekinesis = int(splitted_line[1])
+            elif int_optionKey == OptionKey.BLINKING_RECT:
+                blink = int(splitted_line[1])
+                if blink == 1:
+                    self._blink_enable = 1
+                else:
+                    self._blink_enable = 0
 
         file.close()

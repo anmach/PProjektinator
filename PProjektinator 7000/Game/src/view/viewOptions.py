@@ -187,7 +187,7 @@ class ViewOptions(View):
             iter += 1
 
     def update_options_from_buttonsBox(self):
-        #w buttonBox mamy tylko rozdzielczość, więc to sprawdzamy
+        # Rozdzielczość
 
         #zdobywamy aktualnie ustawione wartości rozdzielczości:
         width = 1000
@@ -203,6 +203,12 @@ class ViewOptions(View):
             width = 720
             height = 480
 
+        # Resolut
+        do_we_blink = 0
+        button_text = self._buttons_box_blink.get_button_chosen().get_text()
+        if button_text == "ON":
+            do_we_blink = 1
+
         #usuwamy stare i zapisujemy nowe opcje
         for option in self._options:
                 # czy klucz opcji zgadza się z kluczem przypisanym szerokości/wysokości ekranu
@@ -212,17 +218,22 @@ class ViewOptions(View):
                 elif option[0] == OptionKey.WINDOW_WIDTH:
                     # usuwam tuple, bo nie da się ich zmieniać
                     self._options.remove((option[0], option[1]))
+                elif option[0] == OptionKey.BLINKING_RECT:
+                    self._options.remove((option[0], option[1]))
         
         self._options.append((OptionKey.WINDOW_HEIGHT, str(height)))
         self._options.append((OptionKey.WINDOW_WIDTH, str(width)))
-
+        self._options.append((OptionKey.BLINKING_RECT, str(do_we_blink)))
 
     # gettery | settery
     def get_sliders(self):
         return self.__sliders
 
     def get_buttons_box(self):
-        return self._buttons_box_resolut
+        boxes = []
+        boxes.append(self._buttons_box_blink)
+        boxes.append(self._buttons_box_resolut)
+        return boxes
 
     def get_options(self):
         return self._options

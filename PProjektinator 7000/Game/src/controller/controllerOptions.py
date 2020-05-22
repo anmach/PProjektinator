@@ -42,7 +42,9 @@ class ControllerOptions(Controller):
                             self._command = control.get_command()
                             self._button_pressed_index = self._controls.index(control)
                             if self._command == Command.CHANGE_BUTTONS_BOX:
-                                self._buttons_box.set_button_chosen(control)
+                                for box in self._buttons_boxes:
+                                    if box.is_button_in_box(control) == 1:
+                                        box.set_button_chosen(control)
                             break
                     for slider in self._sliders:
                         #sprawdzenie czy nad sliderem jest kursor
@@ -82,7 +84,7 @@ class ControllerOptions(Controller):
     def get_controls(self, view):
         self._controls = view.get_controls()
         self._sliders = view.get_sliders()
-        self._buttons_box = view.get_buttons_box()
+        self._buttons_boxes = view.get_buttons_box()
 
     def give_command(self, model):
         model.set_command(self._command)

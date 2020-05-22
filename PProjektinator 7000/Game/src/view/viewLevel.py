@@ -13,7 +13,7 @@ class ViewLevel(View):
         self.__all_sprites = py.sprite.Group()
         self.__paused = False
         self.__text = Text("Spauzowano.", int(0.04 * self._surfaceSize[0]), (0.35 * self._surfaceSize[0], 0.05 * self._surfaceSize[1]))
-        self.__blink_enabled = true
+        self.__blink_enabled = 1
 
         self.__blinking_rects = []
         self.__blinking_rects.append(BlinkingRect(0.5, (0.01 * self._surfaceSize[0], 0.01 * self._surfaceSize[0]), (0.02 * self._surfaceSize[0], 0.02 * self._surfaceSize[0])))
@@ -25,7 +25,7 @@ class ViewLevel(View):
         else:
             for entity in self.__all_sprites:
                 self._surface.blit(entity.surf, entity.rect)
-            if self.__blink_enabled:
+            if self.__blink_enabled == 1:
                 for rect in self.__blinking_rects:
                     rect.update();
                     rect.draw(self._surface)

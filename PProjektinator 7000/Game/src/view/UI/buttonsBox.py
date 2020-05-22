@@ -64,6 +64,13 @@ class ButtonsBox(Control):
         for button in self._buttons:
             button.draw(surface)
 
+    def is_button_in_box(self, button):
+        for butt in self._buttons:
+            if butt == button:
+                return 1
+         
+        return 0
+
     def set_button_chosen(self, button):
         for butt in self._buttons:
             if butt == button:
