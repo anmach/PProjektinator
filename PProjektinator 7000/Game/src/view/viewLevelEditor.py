@@ -27,7 +27,8 @@ class ViewLevelEditor(View):
         self.__imageButtonGroup = None
         self.__texts = []
 
-        #tworzenie przycisków, tekstu i przypisanie każdego z nich do ogólnej tablicy kontrolek
+        #tworzenie przycisków, tekstu i przypisanie każdego z nich do ogólnej
+        #tablicy kontrolek
         self.add_all_controls()
 
         #wyświetlany nr poziomu
@@ -38,7 +39,8 @@ class ViewLevelEditor(View):
 
         self.__all_sprites = py.sprite.Group()
 
-        #zależy od trybu - info z modelu (współrzędne nowej platformy, gracza, obiektu do usunięcia itp)
+        #zależy od trybu - info z modelu (współrzędne nowej platformy, gracza,
+        #obiektu do usunięcia itp)
         self.__coords = (-1, -1, -1, -1)
 
 
@@ -106,7 +108,7 @@ class ViewLevelEditor(View):
 
     #metoda renderująca
     def render(self):
-        #zaktualizowanie stanu kontrolek (np. ich koloru)
+        #zaktualizowanie stanu kontrolek (np.  ich koloru)
         for control in self._controls:
             control.update()
 
@@ -126,34 +128,75 @@ class ViewLevelEditor(View):
         for entity in self.__all_sprites:
             self._surface.blit(entity.surf, entity.rect)
 
-        #rysowanie kształtu nowej platformy
-        if (self.__mode == EditingMode.PLATFORM_CREATION or self.__mode == EditingMode.CRATE_PLACEMENT) and py.mouse.get_pos()[0] < self.__edit_surface_border * self._surface.get_size()[0]:
-            #jeden wierzchołek
-            if self.__coords[2] == -1:
-                py.draw.circle(self._surface, (174, 13, 24), (self.__coords[0], self.__coords[1]), 5)
-            #cały prostokąt
-            else:
-                x0 = min(self.__coords[0], self.__coords[2])
-                x1 = max(self.__coords[0], self.__coords[2])
+        if py.mouse.get_pos()[0] < self.__edit_surface_border * self._surface.get_size()[0]:
+            #rysowanie kształtu nowej platformy lub nowej skrzyni
+            if self.__mode == EditingMode.PLATFORM_CREATION or self.__mode == EditingMode.CRATE_PLACEMENT:
+                #jeden wierzchołek
+                if self.__coords[2] == -1:
+                    py.draw.circle(self._surface, (174, 13, 24), (self.__coords[0], self.__coords[1]), 5)
+                #cały prostokąt
+                else:
+                    x0 = min(self.__coords[0], self.__coords[2])
+                    x1 = max(self.__coords[0], self.__coords[2])
 
-                y0 = min(self.__coords[1], self.__coords[3])
-                y1 = max(self.__coords[1], self.__coords[3])
+                    y0 = min(self.__coords[1], self.__coords[3])
+                    y1 = max(self.__coords[1], self.__coords[3])
 
-                py.draw.circle(self._surface, (174, 13, 24), (self.__coords[0], self.__coords[1]), 3)
-                py.draw.circle(self._surface, (174, 13, 24), (self.__coords[2], self.__coords[3]), 3)
+                    py.draw.circle(self._surface, (174, 13, 24), (self.__coords[0], self.__coords[1]), 3)
+                    py.draw.circle(self._surface, (174, 13, 24), (self.__coords[2], self.__coords[3]), 3)
 
-                py.draw.rect(self._surface, (0, 0, 0), (x0, y0, x1 - x0, y1 - y0), 1)
+                    py.draw.rect(self._surface, (0, 0, 0), (x0, y0, x1 - x0, y1 - y0), 1)
+            
+            #rysowanie obramowania obiektu do usunięcia
+            elif self.__mode == EditingMode.DELETION:
+                if(self.__coords[0] != -1):
+                    py.draw.rect(self._surface, (123, 22, 66), (self.__coords[0], self.__coords[1], self.__coords[2] - self.__coords[0], self.__coords[3] - self.__coords[1]), 3)
 
-        elif self.__mode == EditingMode.DELETION and py.mouse.get_pos()[0] < self.__edit_surface_border * self._surface.get_size()[0]:
-            if(self.__coords[0] != -1):
-                py.draw.rect(self._surface, (123, 22, 66), (self.__coords[0], self.__coords[1], self.__coords[2] - self.__coords[0], self.__coords[3] - self.__coords[1]), 3)
+            #rysowanie gracza na (potencjalnej) nowej pozycji
+            elif self.__mode == EditingMode.PLAYER_PLACEMENT:
+                 new_object = Player(define.get_player_sprites_folder_path())
+                 new_object.set_pos(self.__coords[0], self.__coords[1])
+                 new_object.set_frame_by_id(1)
 
-        elif self.__mode == EditingMode.PLAYER_PLACEMENT and py.mouse.get_pos()[0] < self.__edit_surface_border * self._surface.get_size()[0]:
-             new_object = Player(define.get_player_sprites_folder_path())
-             new_object.set_pos(self.__coords[0], self.__coords[1])
-             new_object.set_frame_by_id(1)
+                 self._surface.blit(new_object.surf, new_object.rect)
+        
+            elif self.__mode == EditingMode.MOVING_PLATFORM_PLACEMENT:
+                #jeden wierzchołek
+                if self.__coords[2] == -1:
+                    py.draw.circle(self._surface, (174, 13, 24), (self.__coords[0], self.__coords[1]), 5)
+                #drugi wierzchołek
+                elif self.__coords[4] == -1:
+                    x0 = min(self.__coords[0], self.__coords[2])
+                    x1 = max(self.__coords[0], self.__coords[2])
 
-             self._surface.blit(new_object.surf, new_object.rect)
+                    y0 = min(self.__coords[1], self.__coords[3])
+                    y1 = max(self.__coords[1], self.__coords[3])
+
+                    py.draw.circle(self._surface, (174, 13, 24), (self.__coords[0], self.__coords[1]), 3)
+                    py.draw.circle(self._surface, (174, 13, 24), (self.__coords[2], self.__coords[3]), 3)
+
+                    py.draw.rect(self._surface, (0, 0, 0), (x0, y0, x1 - x0, y1 - y0), 1)
+                #pozycja końcowa
+                else:
+                    #poz. pocz.
+                    x0 = min(self.__coords[0], self.__coords[2])
+                    x1 = max(self.__coords[0], self.__coords[2])
+
+                    y0 = min(self.__coords[1], self.__coords[3])
+                    y1 = max(self.__coords[1], self.__coords[3])
+
+                    #poz. końc.
+                    x2 = x0 + self.__coords[4]
+                    x3 = x1 + self.__coords[4]
+
+                    y2 = y0 + self.__coords[5]
+                    y3 = y1 + self.__coords[5]
+
+                    #pocz.
+                    py.draw.rect(self._surface, (0, 0, 0), (x0, y0, x1 - x0, y1 - y0), 1)
+
+                    #końc.
+                    py.draw.rect(self._surface, (0, 0, 0), (x2, y2, x3 - x2, y3 - y2), 1)
         #ukazanie nowej zawartości użytkownikowi
         py.display.update()
     
