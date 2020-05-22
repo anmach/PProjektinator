@@ -3,6 +3,7 @@ from src.enum.command import Command
 from src.enum.editingMode import EditingMode
 from src.view.Game.gameObject import GameObject
 from src.view.Game.player import Player
+from src.view.Game.movingPlatform import MovingPlatform
 from src.enum.objectType import ObjectType
 import os
 import pygame as py
@@ -233,7 +234,7 @@ class ModelLevelEditor(Model):
          new_vertex_pos = mouse_pos
          
          for game_object in self.__game_objects_arr:
-                 if type(game_object) is GameObject and game_object.get_type() == ObjectType.STATIC:
+                 if type(game_object) is GameObject and game_object.get_type() == ObjectType.Dynamic:
                      x0 = game_object.get_x()
                      x1 = game_object.get_x() + game_object.get_width()
                      
@@ -287,7 +288,55 @@ class ModelLevelEditor(Model):
                  self.__new_platform_vertex_number = 1
 
     def update_moving_platform_placement(self):
+        return
+        mouse_pos = py.mouse.get_pos()
 
+        if self.__moving_platform_placement_mode == 1:
+            new_vertex_pos = mouse_pos
+
+            if self.__new_platform_vertex_number == 1:
+                self.__something_coords = (new_vertex_pos[0], new_vertex_pos[1], -1, -1, -1, -1)
+            else:
+                self.__something_coords = (self.__something_coords[0], self.__something_coords[1], new_vertex_pos[0], new_vertex_pos[1], -1, -1)
+            
+            if self._command == Command.CLICKED_LMB:
+                if self.__new_platform_vertex_number == 1:
+                    self.__new_platform_vertex_number = 2
+                else:
+                    self.____moving_platform_placement_mode = 2
+
+            elif self._command == Command.CLICKED_RMB:
+            
+                if self.__new_platform_vertex_number == 1:
+                    self.__something_coords = (-1, -1, -1, -1)
+                    self.__mode = EditingMode.NONE
+                else:
+                    self.__something_coords = (self.__something_coords[0], self.__something_coords[1], -1, -1, -1, -1)
+                    self.__new_platform_vertex_number = 1
+
+        elif self.__moving_platform_placement_mode == 2:
+            #TODO sprawdzanie kolizji
+
+            #współrzędne środka ustalonej już początkowej pozycji platofrmy
+            centre = (int(0.5 * (self.__something_coords[0] + self.__something_coords[2])),  int(0.5 * (self.__something_coords[1] + self.__something_coords[3])))
+            
+            #różnica pozycji (współrzędne środków)
+            pos_diffr = (mouse_pos[0] - centre[0], mouse_pos[1] - centre[1])
+
+            #współrzędne pozycji początkowej (x1, y1, x2, y2) oraz różnica pozycji (dx, dy)
+            self.__something_coords = (self.__something_coords[0], self.__something_coords[1], self.__something_coords[2], self.__something_coords[3], pos_diffr[0], pos_diffr[1])
+
+            if self._command == Command.CLICKED_LMB:
+               new_object = MovingPlatform(self.__something_coords[0], self.__something_coords[1], self.__something_coords[2] - self.__something_coords[0], self.__something_coords[3] - self.__something_coords[1], False, ObjectType.KINEMATIC, None, self.__something_coords[4], self.__something_coords[5], 2, 2)
+
+            elif self._command == Command.CLICKED_RMB:
+           
+               if self.__new_platform_vertex_number == 1:
+                   self.__something_coords = (-1, -1, -1, -1)
+                   self.__mode = EditingMode.NONE
+               else:
+                   self.__something_coords = (self.__something_coords[0], self.__something_coords[1], -1, -1, -1, -1)
+                   self.__new_platform_vertex_number = 1
 
     def update_deletion(self):
         obj_to_del_index = -1
