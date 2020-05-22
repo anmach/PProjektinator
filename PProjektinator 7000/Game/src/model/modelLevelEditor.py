@@ -2,6 +2,7 @@ from .model import Model
 from src.enum.command import Command
 from src.enum.editingMode import EditingMode
 from src.view.Game.gameObject import GameObject
+from src.view.Game.dynamicObject import dynamicObject
 from src.view.Game.player import Player
 from src.view.Game.movingPlatform import MovingPlatform
 from src.enum.objectType import ObjectType
@@ -173,7 +174,7 @@ class ModelLevelEditor(Model):
                 y0 = min(self.__something_coords[1], self.__something_coords[3])
                 y1 = max(self.__something_coords[1], self.__something_coords[3])
 
-                new_object = GameObject(x0, y0, x1 - x0, y1 - y0, False, ObjectType.STATIC, None)
+                new_object = GameObject(x0, y0, x1 - x0, y1 - y0, ObjectType.STATIC, None)
 
                 self.__game_objects_arr.append(new_object)
                 self.__all_sprites.add(new_object)
@@ -228,32 +229,9 @@ class ModelLevelEditor(Model):
             #po dodaniu zmień tryb
             self.__mode = EditingMode.NONE
 
-    #TODO - to jest (prawie) to samo co platforma
     def update_crate_placement(self):
          mouse_pos = py.mouse.get_pos()
          new_vertex_pos = mouse_pos
-         
-         for game_object in self.__game_objects_arr:
-                 if type(game_object) is GameObject and game_object.get_type() == ObjectType.Dynamic:
-                     x0 = game_object.get_x()
-                     x1 = game_object.get_x() + game_object.get_width()
-                     
-                     y0 = game_object.get_y()
-                     y1 = game_object.get_y() + game_object.get_height()
-         
-                     #jeżeli różnica między pozycją kursora myszki, a
-                     #wierzchołkiem istniejącej platformy jest mniejsza niż
-                     #ustalona
-                     #wartość to nowy wierzchołek jest "przyczepiany" do już
-                     #istniejącego
-                     if abs(mouse_pos[0] - x0) < self.__snap_distance and abs(mouse_pos[1] - y0) < self.__snap_distance:
-                         new_vertex_pos = (x0, y0)
-                     elif abs(mouse_pos[0] - x1) < self.__snap_distance and abs(mouse_pos[1] - y0) < self.__snap_distance:
-                         new_vertex_pos = (x1, y0)
-                     elif abs(mouse_pos[0] - x0) < self.__snap_distance and abs(mouse_pos[1] - y1) < self.__snap_distance:
-                         new_vertex_pos = (x0, y1)
-                     elif abs(mouse_pos[0] - x1) < self.__snap_distance and abs(mouse_pos[1] - y1) < self.__snap_distance:
-                         new_vertex_pos = (x1, y1)
          
          if self.__new_platform_vertex_number == 1:
              self.__something_coords = (new_vertex_pos[0], new_vertex_pos[1], -1, -1)
@@ -271,14 +249,14 @@ class ModelLevelEditor(Model):
                  y0 = min(self.__something_coords[1], self.__something_coords[3])
                  y1 = max(self.__something_coords[1], self.__something_coords[3])
          
-                 new_object = GameObject(x0, y0, x1 - x0, y1 - y0, False, ObjectType.DYNAMIC, None)
+                 new_object = dynamicObject(x0, y0, x1 - x0, y1 - y0, True, ObjectType.DYNAMIC, None)
          
                  self.__game_objects_arr.append(new_object)
                  self.__all_sprites.add(new_object)
          
                  self.__something_coords = (-1, -1, -1, -1)
                  self.__new_platform_vertex_number = 1
-         if self._command == Command.CLICKED_RMB:
+         elif self._command == Command.CLICKED_RMB:
          
              if self.__new_platform_vertex_number == 1:
                  self.__something_coords = (-1, -1, -1, -1)
