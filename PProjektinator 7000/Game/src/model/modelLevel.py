@@ -1,5 +1,6 @@
 from .model import Model
 from src.view.Game.gameObject import GameObject
+from src.view.Game.dynamicObject import dynamicObject
 from src.view.Game.movingPlatform import MovingPlatform
 from src.view.Game.player import Player
 from src.enum.command import Command
@@ -18,10 +19,10 @@ class ModelLevel(Model):
 
         # czytanie levelu z pliku ale jeszcze nie teraz
         # stworzenie sztywnego poziomu
-        platform1 = GameObject(500, 500, 400, 200, False, ObjectType.STATIC, None)
-        platform2 = GameObject(200, 300, 200, 400, False, ObjectType.STATIC, None)
-        crate1 = GameObject(450, 100, 100, 100, True, ObjectType.DYNAMIC, None)
-        crate2 = GameObject(450, 0, 50, 50, True, ObjectType.DYNAMIC, None)
+        platform1 = GameObject(500, 500, 400, 200, ObjectType.STATIC, None)
+        platform2 = GameObject(200, 300, 200, 400, ObjectType.STATIC, None)
+        crate1 = dynamicObject(450, 100, 100, 100, True, ObjectType.DYNAMIC, None)
+        crate2 = dynamicObject(450, 0, 50, 50, True, ObjectType.DYNAMIC, None)
         movPlat = MovingPlatform(600, 200, 100, 30, False, ObjectType.KINEMATIC, None, 0, 200, 0, 2)
         movPlat2 = MovingPlatform(700, 200, 100, 30, False, ObjectType.KINEMATIC, None, 200, 0, 2, 0)
 
@@ -68,7 +69,7 @@ class ModelLevel(Model):
             self.__player.set_spd_x(spd_x)  
             if self._command & Command.ATTACK & ~0x80:      # tu się strzela
                 py.mixer.Sound.play(self._shot_sound)
-                bullet = GameObject(self.__player.get_x(), self.__player.get_y() + 50, 80, 40, False, ObjectType.BULLET ^ ObjectType.DYNAMIC, define.get_shot_sprite_folder_path())
+                bullet = dynamicObject(self.__player.get_x(), self.__player.get_y() + 50, 80, 40, False, ObjectType.BULLET, define.get_shot_sprite_folder_path())
                 bull_spd = -10 if self.__player.direction else 10
                 bullet.set_spd_x(bull_spd)
                 self.__all_sprites.add(bullet)
@@ -83,7 +84,7 @@ class ModelLevel(Model):
                  self.__player.uncrouch()
 
         for entity in self.__all_sprites:
-            if entity.type == ObjectType.DYNAMIC:
+            if entity.type == ObjectType.DYNAMIC or entity.type == ObjectType.PLAYER:
                 entity.spd_y += 1 if entity.does_gravity else\
                                 0
 
@@ -91,21 +92,21 @@ class ModelLevel(Model):
     def collisions(self):
         for entity in self.__all_sprites:
             for dynamic in self.__all_sprites:
-                if (dynamic.type & ObjectType.DYNAMIC) and dynamic != entity:
-                    if entity.type & ObjectType.STATIC or entity.type & ObjectType.DYNAMIC:
+                if ((dynamic.type == ObjectType.DYNAMIC) or (dynamic.type == ObjectType.BULLET) or (dynamic.type == ObjectType.PLAYER)) and dynamic != entity:
+                    if entity.type == ObjectType.STATIC or entity.type == ObjectType.DYNAMIC:
                         if dynamic.check_collision_ip(entity, 0, dynamic.spd_y):
                             if dynamic == self.__player:
                                 self.no_jumps = 2
                             dynamic.spd_y = 0
 
                         if dynamic.check_collision_ip(entity, dynamic.spd_x, 0):
-                           if not (entity.type & ObjectType.BULLET or dynamic.type & ObjectType.BULLET):
+                           if not (entity.type == ObjectType.BULLET or dynamic.type == ObjectType.BULLET):
                                dynamic.spd_x = 0
                            if dynamic.type & ObjectType.BULLET and entity != self.__player:
                                self.__all_sprites.remove(dynamic)
                                del dynamic
 
-                    if entity.type & ObjectType.KINEMATIC:
+                    if entity.type == ObjectType.KINEMATIC:
                         if dynamic.check_collision_ip_below(entity, 0, dynamic.spd_y + dynamic.spd_y_other):
                             if dynamic.spd_y >= 0:
                                 dynamic.spd_y = 0

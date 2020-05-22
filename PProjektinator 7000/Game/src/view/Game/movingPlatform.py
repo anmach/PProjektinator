@@ -1,6 +1,6 @@
-from .gameObject import GameObject
+from .dynamicObject import dynamicObject
 
-class MovingPlatform(GameObject):
+class MovingPlatform(dynamicObject):
     """description of class"""
 
     def __init__(self, x, y, width, height, gravity, type, image_source, path_max_x, path_max_y, spd_x, spd_y):

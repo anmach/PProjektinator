@@ -73,6 +73,9 @@
     <Compile Include="src\view\blinkingRect.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="src\view\Game\dynamicObject.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="src\view\Game\gameObject.py" />
     <Compile Include="src\model\model.py">
       <SubType>Code</SubType>

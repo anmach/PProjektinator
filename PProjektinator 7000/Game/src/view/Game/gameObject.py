@@ -4,17 +4,14 @@ from src.enum.objectType import ObjectType
 
 class GameObject(py.sprite.Sprite):
     """Bazowa klasa obiektów w modelu - platform, gracza i obiektów dynamicznych"""
-    def __init__(self, x, y, width, height, gravity, type, image_source, animation_start = 0):
+    def __init__(self, x, y, width, height, type, image_source, animation_start = 0):
         super().__init__()
         self.direction = False
         self.type = type
-        self.spd_x = 0
-        self.spd_x_other = 0
-        self.spd_y = 0
-        self.spd_y_other = 0
+        
         self.width = width
         self.height = height
-        self.does_gravity = gravity #bool decyduje czy na obiekt działa grawitacja
+
         self.surf = py.Surface((width, height))
         self.frame_id = 0 #Wskaźnik na obecną klatkę.
         self.animation_start = animation_start #Wskaźnik na klatkę od której zaczyna się animacja.
@@ -47,12 +44,6 @@ class GameObject(py.sprite.Sprite):
     def get_image(self):
         return self._image
 
-    def get_spd_x(self):
-        return self.spd_x
-
-    def get_spd_y(self):
-        return self.spd_y
-
     def get_type(self):
         return self.type
 
@@ -68,11 +59,6 @@ class GameObject(py.sprite.Sprite):
         self.rect.x = newX
         self.rect.y = newY
 
-    def set_spd_x(self, spd):
-        self.spd_x = spd
-
-    def set_spd_y(self, spd):
-        self.spd_y = spd
 
     def set_frame_by_id(self, frame_id):
         if frame_id >= len(self._frames):
@@ -97,29 +83,17 @@ class GameObject(py.sprite.Sprite):
 
 
     def update(self):
-        if self.spd_y > 20:
-            self.spd_y = 20
-        if self.spd_x > 0:
-            if self.direction == True:
-                self.surf = py.transform.flip(self.surf, True, False)
-                self.direction = False
-        if self.spd_x < 0:
-            if self.direction == False:
-                self.direction = True
-                self.surf = py.transform.flip(self.surf, True, False)
-        self.rect.move_ip(self.spd_x + self.spd_x_other, self.spd_y + self.spd_y_other)
-        self.spd_x_other = 0
-        self.spd_y_other = 0
+        pass
 
     #metoda służąca do zapisywania do pliku aktualnego stanu obiektu 
     def save_to_file(self, file):
         file.write('@<JAKIEŚ ID>')
         file.write('#direction\n' + str(self.direction) + '\n')
         file.write('#type\n' + str(self.type) + '\n')
-        file.write('#spd_x\n' + str(self.spd_x) + '\n')
-        file.write('#spd_x_other\n' + str(self.spd_x_other) + '\n')
-        file.write('#spd_y\n' + str(self.spd_y) + '\n')
-        file.write('#spd_y_other\n' + str(self.spd_y_other) + '\n')
+        #file.write('#spd_x\n' + str(self.spd_x) + '\n')
+        #file.write('#spd_x_other\n' + str(self.spd_x_other) + '\n')
+        #file.write('#spd_y\n' + str(self.spd_y) + '\n')
+        #file.write('#spd_y_other\n' + str(self.spd_y_other) + '\n')
         file.write('#width\n' + str(self.width) + '\n')
         file.write('#height\n' + str(self.height) + '\n')
         file.write('#does_gravity\n' + str(self.does_gravity) + '\n')

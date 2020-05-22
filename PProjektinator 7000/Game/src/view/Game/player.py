@@ -1,11 +1,11 @@
-from .gameObject import GameObject
+from .dynamicObject import dynamicObject
 from src.enum.objectType import ObjectType
 import pygame as py
 
-class Player(GameObject):
+class Player(dynamicObject):
     """Klasa opisująca gracza."""
     def __init__(self, image_source):
-        super().__init__(700, 20, 75, 150, True, ObjectType.DYNAMIC, image_source, 2)
+        super().__init__(700, 20, 75, 150, True, ObjectType.PLAYER, image_source, 2)
         self.is_walking = False
         self.is_crouching = False
         self.idle_frame = 1
