@@ -1,5 +1,5 @@
 def get_options_file_path():
-    return '.\\saves\\opszyns.txt'
+    return '.\\saves\\6f70737a796e73.dat'
 
 def get_player_sprite_path():
     return '.\\res\\sprites\\player\\player.png'
