@@ -4,8 +4,8 @@ import pygame as py
 
 class Player(dynamicObject):
     """Klasa opisująca gracza."""
-    def __init__(self, image_source):
-        super().__init__(700, 20, 75, 150, True, ObjectType.PLAYER, image_source, 2)
+    def __init__(self, x, y, height, width, gravity, type, image_source):
+        super().__init__(x, y, height, width, gravity, type, image_source, 2)
         self.is_walking = False
         self.is_crouching = False
         self.idle_frame = 1
@@ -36,7 +36,7 @@ class Player(dynamicObject):
         self.spd_x_other = 0
         self.spd_y_other = 0
 
-    #metoda zaczynająca "kucnięcie"
+    # metoda zaczynająca "kucnięcie"
     def crouch(self):
         self.is_crouching = True
         oldHeight = self.height
