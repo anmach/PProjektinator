@@ -34,7 +34,7 @@ class ModelLevel(Model):
 
         self.objs = py.sprite.Group()
         #self.__all_sprites = py.sprite.Group()
-        self.__player = Player(700, 20, 75, 150, True, ObjectType.PLAYER, define.get_player_sprites_folder_path())
+        self.__player = self._lvl_container.get_player() #= Player(700, 20, 75, 150, True, ObjectType.PLAYER, define.get_player_sprites_folder_path())
         self.telekinesis = False
         self.tele_idx = 0
         #self.tele_objs = [crate1, crate2]

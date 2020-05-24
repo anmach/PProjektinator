@@ -4,6 +4,7 @@ from src.view.Game.gameObject import GameObject
 from src.view.Game.movingPlatform import MovingPlatform
 from src.view.Game.dynamicObject import dynamicObject
 from src.view.Game.player import Player
+import src.define as define
 
 class LevelContainer(object):
     """Klasa przechowująca informacje o obiektach znajdujących się w grze"""
@@ -15,6 +16,7 @@ class LevelContainer(object):
         self._platforms = []
         self._moving_platforms = []
         self._crates = []
+        self._player = None
 
         self._level_read_success = self.try_load_level_from_file()
 
@@ -109,8 +111,12 @@ class LevelContainer(object):
 
         file.close()
 
-        # Udało się odczytać plik poprawnie (chyba)
-        return 1
+        if self._player:
+            # Udało się odczytać plik poprawnie (chyba)
+            return 1
+        else:
+            # Nie ma gracza
+            return 0
 
     def try_add_new_object(self, id, x, y, width, height, type, speed_x = -1, speed_y = -1, movement_max_x = -1, movement_max_y = -1):
         if id < 0 or x < 0 or y < 0 or width <= 0 or height <= 0:
@@ -126,8 +132,8 @@ class LevelContainer(object):
                 # Błąd - niepoprawne dane
                 return 0
             self._moving_platforms.append(MovingPlatform(x,y, width, height, False, ObjectType.KINEMATIC, None, movement_max_x, movement_max_y, speed_x, speed_y))
-#        elif id == ObjectType.PLAYER:
-#            self.__player = Player(define.get_player_sprites_folder_path())
+        elif id == ObjectType.PLAYER:
+            self._player = Player(x, y, width, height, True, ObjectType.PLAYER, define.get_player_sprites_folder_path())
         else:
             # Błąd - nieznany typ
             return 0
@@ -162,6 +168,9 @@ class LevelContainer(object):
     def get_moving_platforms(self):
         return self._moving_platforms
 
+    def get_player(self):
+        return self._player
+
     def get_sprite_group(self):
         group = py.sprite.Group()
 
@@ -173,5 +182,7 @@ class LevelContainer(object):
 
         for item in self._moving_platforms:
             group.add(item)
+
+        group.add(self._player)
 
         return group
