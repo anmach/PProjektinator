@@ -38,22 +38,25 @@ class Command(IntEnum):
     CLICKED_LMB = 0x91,
 
     #polecenie do wykonanie odpowiedniej akcji na polu edycyjnym przeypisanej do PPM
-    CLICKED_RMB = 0x92,
+    CLICKED_MMB = 0x92,
+
+    #polecenie do wykonanie odpowiedniej akcji na polu edycyjnym przeypisanej do PPM
+    CLICKED_RMB = 0x93,
 
     #polecenie do wybrania nowego obiektu w edytorze
-    OBJECT_SELECTED = 0x93,
+    OBJECT_SELECTED = 0x94,
 
     #polecenie do przejścia w tryb przenoszenia obiektóws
-    RELOCATE_OBJECT = 0x94,
+    RELOCATE_OBJECT = 0x95,
 
     #polecenie do przejścia w tryb usuwania obiektów
-    DELETE_OBJECT = 0x95,
+    DELETE_OBJECT = 0x96,
 
     #polecenie do przejścia do przodu w liście obiektów
-    NEXT_OBJECTS = 0x96,
+    NEXT_OBJECTS = 0x97,
 
     #polecenie do przejścia do tyłu w liście obiektów
-    PREV_OBJECTS = 0x97,
+    PREV_OBJECTS = 0x98,
 
     #polecenia dodatkowe dla edytora (identyfikowanie konkretnych typów obiektów)
     OBJECT_NONE = 0x1000
