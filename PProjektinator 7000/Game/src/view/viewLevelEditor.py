@@ -2,6 +2,7 @@ from .view import View
 
 from src.enum.editingMode import EditingMode
 from src.enum.command import Command
+from src.enum.objectType import ObjectType
 
 from src.view.UI.text import Text
 from src.view.UI.button import Button
@@ -43,6 +44,7 @@ class ViewLevelEditor(View):
         #obiektu do usunięcia itp)
         self.__coords = (-1, -1, -1, -1)
 
+        self.__translation = (0, 0)
 
     def add_button(self, newButton):
         self.__buttons.append(newButton)
@@ -115,13 +117,6 @@ class ViewLevelEditor(View):
         #wypełnienie ekranu kolorem jasno-niebieskim
         self._surface.fill((200, 220, 250))
 
-        #wyrysowanie wszystkich przycisków na ekran
-        for butt in self._controls:
-            butt.draw(self._surface)
-
-        #linia oddzielająca
-        py.draw.line(self._surface, (0,0,0), (self.__edit_surface_border * self._surface.get_size()[0], 0.0), (self.__edit_surface_border * self._surface.get_size()[0], self._surface.get_size()[1]), 5)
-        
         #pole edycyjne
         py.draw.rect(self._surface, (240, 240, 240), (0, 0, self.__edit_surface_border * self._surface.get_size()[0], self._surface.get_size()[1]))
         
@@ -154,11 +149,13 @@ class ViewLevelEditor(View):
 
             #rysowanie gracza na (potencjalnej) nowej pozycji
             elif self.__mode == EditingMode.PLAYER_PLACEMENT:
-                 new_object = Player(define.get_player_sprites_folder_path())
-                 new_object.set_pos(self.__coords[0], self.__coords[1])
-                 new_object.set_frame_by_id(1)
+                
+                new_object = Player(self.__coords[0], self.__coords[1], define.get_player_standard_size()[0], define.get_player_standard_size()[1], True, ObjectType.PLAYER, define.get_player_sprites_folder_path())
+                
+                
+                new_object.set_frame_by_id(1)
 
-                 self._surface.blit(new_object.surf, new_object.rect)
+                self._surface.blit(new_object.surf, new_object.rect)
         
             elif self.__mode == EditingMode.MOVING_PLATFORM_PLACEMENT:
                 #jeden wierzchołek
@@ -197,6 +194,18 @@ class ViewLevelEditor(View):
 
                     #końc.
                     py.draw.rect(self._surface, (0, 0, 0), (x2, y2, x3 - x2, y3 - y2), 1)
+        
+        
+        #pole nieedycyjne
+        py.draw.rect(self._surface, (200, 220, 250), (self.__edit_surface_border * self._surface.get_size()[0], 0, self._surface.get_size()[0], self._surface.get_size()[1]))
+                    
+        #wyrysowanie wszystkich przycisków na ekran
+        for butt in self._controls:
+            butt.draw(self._surface)
+
+        #linia oddzielająca
+        py.draw.line(self._surface, (0,0,0), (self.__edit_surface_border * self._surface.get_size()[0], 0.0), (self.__edit_surface_border * self._surface.get_size()[0], self._surface.get_size()[1]), 5)
+        
         #ukazanie nowej zawartości użytkownikowi
         py.display.update()
     
@@ -206,8 +215,10 @@ class ViewLevelEditor(View):
         return self.__image_buttons
 
     #v----SETTERY----v
-    def set_model(self, level_num, mode, all_sprites, coords):
+    def set_model(self, level_num, mode, all_sprites, coords, translation):
         self.__texts[0].set_text(str(level_num))
         self.__mode = mode
         self.__all_sprites = all_sprites
         self.__coords = coords
+        self.__translation = translation
+

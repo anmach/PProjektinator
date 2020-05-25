@@ -6,6 +6,7 @@ from src.view.Game.dynamicObject import dynamicObject
 from src.view.Game.player import Player
 from src.view.Game.movingPlatform import MovingPlatform
 from src.enum.objectType import ObjectType
+from src.levelContainer import LevelContainer
 import os
 import pygame as py
 import src.define as define
@@ -42,7 +43,8 @@ class ModelLevelEditor(Model):
         self.__mode = EditingMode.NONE
 
         #tabela dla obiektów w grze
-        self.__game_objects_arr = []
+        self.__level = LevelContainer(define.get_levels_folder_path() + "\\001_Tut1.txt", 1)
+        self.__level.get_player().set_frame_by_id(1)
 
         #maksymalna odległość dla przyciągania wierzchołków
         self.__snap_distance = 10
@@ -52,6 +54,11 @@ class ModelLevelEditor(Model):
         self.__is_player_placed = False
 
         self.__can_object_be_placed = True
+
+        #przesuwanie poziomu
+        self.__is_level_being_moved = False
+        self.__prev_position = (0, 0)
+        self.__translation = (0, 0)
 
     #metoda aktualizująca stan wewnętrzego modelu programu
     def update(self):
@@ -77,6 +84,20 @@ class ModelLevelEditor(Model):
         elif self._command == Command.SAVE and self.__chosen_level != -1:
             #zapisanie aktualnie modyfikowanego poziomu
             pass
+
+        elif self._command == Command.CLICKED_MMB:
+            #przesuwanie "kamery"
+            if not self.__is_level_being_moved:
+                self.__is_level_being_moved = True
+                self.__prev_position = py.mouse.get_pos()
+            else:
+                new_position = py.mouse.get_pos()
+                self.__translation = (new_position[0] - self.__prev_position[0], new_position[1] - self.__prev_position[1])
+                self.__prev_position = new_position
+                
+            #przesunięcie wszystkich obiektów
+            for game_object in self.__level.get_all_level_objects():
+                game_object.set_pos(game_object.get_x() + self.__translation[0], game_object.get_y() + self.__translation[1])
 
         elif self._command == Command.DELETE_OBJECT:
             self.__mode = EditingMode.DELETION
@@ -108,6 +129,8 @@ class ModelLevelEditor(Model):
             self.__something_coords = (-1, -1, -1, -1)
             self.__new_platform_vertex_number = 1
 
+        if self._command != Command.CLICKED_MMB:
+            self.__is_level_being_moved = False
         #interpretacja akcji użytkownika na polu edycyjnym zależy od trybu w
         #jakim znajduje się edytor
             
@@ -136,7 +159,8 @@ class ModelLevelEditor(Model):
         mouse_pos = py.mouse.get_pos()
         new_vertex_pos = mouse_pos
 
-        for game_object in self.__game_objects_arr:
+        #snap
+        for game_object in self.__level.get_all_level_objects():
                 if type(game_object) is GameObject and game_object.get_type() == ObjectType.STATIC:
                     x0 = game_object.get_x()
                     x1 = game_object.get_x() + game_object.get_width()
@@ -174,13 +198,13 @@ class ModelLevelEditor(Model):
                 y0 = min(self.__something_coords[1], self.__something_coords[3])
                 y1 = max(self.__something_coords[1], self.__something_coords[3])
 
-                new_object = GameObject(x0, y0, x1 - x0, y1 - y0, ObjectType.STATIC, None)
+                #new_object = GameObject(x0, y0, x1 - x0, y1 - y0, ObjectType.STATIC, None)
 
-                self.__game_objects_arr.append(new_object)
-                self.__all_sprites.add(new_object)
+                self.__level.try_add_new_object(ObjectType.STATIC, x0, y0, x1 - x0, y1 - y0, ObjectType.STATIC)
 
                 self.__something_coords = (-1, -1, -1, -1)
                 self.__new_platform_vertex_number = 1
+
         if self._command == Command.CLICKED_RMB:
 
             if self.__new_platform_vertex_number == 1:
@@ -206,20 +230,22 @@ class ModelLevelEditor(Model):
 
         self.__can_object_be_placed = True
 
-        for obj in self.__game_objects_arr:
+        for obj in self.__level.get_all_level_objects():
             if self.is_colliding((obj.get_x(), obj.get_x() + obj.get_width(), obj.get_y(), obj.get_y() + obj.get_height()), (x0, x1, y0, y1)):
                 self.__can_object_be_placed = False
                 break
 
         if self._command == Command.CLICKED_LMB and not self.__is_player_placed and self.__can_object_be_placed:
             #stworzenie gracza
-            new_object = Player(define.get_player_sprites_folder_path())
-            new_object.set_pos(x0, y0)
-            new_object.set_frame_by_id(1)
+            #new_object = Player(define.get_player_sprites_folder_path())
+            #new_object.set_pos(x0, y0)
+            #new_object.set_frame_by_id(1)
 
+            self.__level.try_add_new_object(ObjectType.PLAYER, x0, y0, define.get_player_standard_size()[0], define.get_player_standard_size()[1], ObjectType.PLAYER)
+            self.__level.get_player().set_frame_by_id(1)
             #dodanie go do tablicy obiektów i sprajtów
-            self.__game_objects_arr.append(new_object)
-            self.__all_sprites.add(new_object)
+            #self.__game_objects_arr.append(new_object)
+            #self.__all_sprites.add(new_object)
 
             #zapamiętanie, że gracz już został dodany
             self.__is_player_placed = True
@@ -249,13 +275,16 @@ class ModelLevelEditor(Model):
                  y0 = min(self.__something_coords[1], self.__something_coords[3])
                  y1 = max(self.__something_coords[1], self.__something_coords[3])
          
-                 new_object = dynamicObject(x0, y0, x1 - x0, y1 - y0, True, ObjectType.DYNAMIC, None)
+                 #new_object = dynamicObject(x0, y0, x1 - x0, y1 - y0, True, ObjectType.DYNAMIC, None)
          
-                 self.__game_objects_arr.append(new_object)
-                 self.__all_sprites.add(new_object)
-         
+                 #self.__game_objects_arr.append(new_object)
+                 #self.__all_sprites.add(new_object)
+            
+                 self.__level.try_add_new_object(ObjectType.DYNAMIC, x0, y0, x1 - x0, y1 - y0, ObjectType.DYNAMIC)
+
                  self.__something_coords = (-1, -1, -1, -1)
                  self.__new_platform_vertex_number = 1
+
          elif self._command == Command.CLICKED_RMB:
          
              if self.__new_platform_vertex_number == 1:
@@ -311,9 +340,11 @@ class ModelLevelEditor(Model):
                 y0 = min(self.__something_coords[1], self.__something_coords[3])
                 y1 = max(self.__something_coords[1], self.__something_coords[3])
 
-                new_object = MovingPlatform(x0, y0, x1 - x0, y1 - y0, False, ObjectType.KINEMATIC, None, self.__something_coords[4], self.__something_coords[5], 2, 2)
-                self.__game_objects_arr.append(new_object)
-                self.__all_sprites.add(new_object)
+                #new_object = MovingPlatform(x0, y0, x1 - x0, y1 - y0, False, ObjectType.KINEMATIC, None, self.__something_coords[4], self.__something_coords[5], 2, 2)
+                #self.__game_objects_arr.append(new_object)
+                #self.__all_sprites.add(new_object)
+
+                self.__level.try_add_new_object(ObjectType.KINEMATIC, x0, y0, x1 - x0, y1 - y0, ObjectType.KINEMATIC, 2, 2, self.__something_coords[4], self.__something_coords[5])
 
                 self.__new_platform_vertex_number = 1
                 self.__moving_platform_placement_mode = 1
@@ -325,29 +356,30 @@ class ModelLevelEditor(Model):
                 self.__moving_platform_placement_mode = 1
 
     def update_deletion(self):
-        obj_to_del_index = -1
+        obj_to_del = None
         self.__something_coords = (-1, -1, -1, -1)
 
         mouse_pos = py.mouse.get_pos()
 
         #wyszukiwanie obietku nad którym znajduje się kursor myszy (potenjalny
         #kandydat do usunięcia)
-        for object in self.__game_objects_arr:
+        for object in self.__level.get_all_level_objects():
             if object.get_x() <= mouse_pos[0] and object.get_x() + object.get_width() >= mouse_pos[0] and object.get_y() <= mouse_pos[1] and object.get_y() + object.get_height() >= mouse_pos[1]:
                 
                 #pobranie jego wymiarów (wsp.  x, y oraz szerokość i wysokość)
                 self.__something_coords = (object.get_x(), object.get_y(), object.get_x() + object.get_width(), object.get_y() + object.get_height())
                 
                 #zapamiętanie jego indeksu
-                obj_to_del_index = self.__game_objects_arr.index(object)
+                obj_to_del = object
                 break
 
-        if self._command == Command.CLICKED_LMB and len(self.__game_objects_arr) > 0 and obj_to_del_index != -1:
-            deleted_object = self.__game_objects_arr.pop(obj_to_del_index)
-            self.__all_sprites.remove(deleted_object)
+        if self._command == Command.CLICKED_LMB and len(self.__level.get_all_level_objects()) > 0 and obj_to_del_index != -1:
+            #deleted_object = self.__level.get_all_level_objects().pop(obj_to_del_index)
+            #self.__level.get_sprite_group().remove(deleted_object)
+            self.__level.try_delete_object(object)
 
             #jeśli był to gracz to zapamiętaj, że już go nie
-            if isinstance(deleted_object, Player):
+            if isinstance(object, Player):
                 self.__is_player_placed = False
 
             self.__something_coords = (-1, -1, -1, -1)
@@ -377,7 +409,13 @@ class ModelLevelEditor(Model):
         return self.__mode
 
     def get_all_sprites(self):
-        return self.__all_sprites
+        return self.__level.get_sprite_group()
+
+    def get_level(self):
+        return self.__level
 
     def get_something_coords(self):
         return self.__something_coords
+
+    def get_translation(self):
+        return self.__translation

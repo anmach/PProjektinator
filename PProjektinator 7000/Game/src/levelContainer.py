@@ -128,7 +128,7 @@ class LevelContainer(object):
         elif id == ObjectType.DYNAMIC:
             self._crates.append(dynamicObject(x,y, width, height, True, ObjectType.DYNAMIC, None))
         elif id == ObjectType.KINEMATIC:
-            if speed_x < 0 or speed_y < 0 or movement_max_x < 0 or movement_max_y < 0:
+            if speed_x < 0 or speed_y < 0:# or movement_max_x < 0 or movement_max_y < 0:
                 # Błąd - niepoprawne dane
                 return 0
             self._moving_platforms.append(MovingPlatform(x,y, width, height, False, ObjectType.KINEMATIC, None, movement_max_x, movement_max_y, speed_x, speed_y))
@@ -137,6 +137,34 @@ class LevelContainer(object):
         else:
             # Błąd - nieznany typ
             return 0
+
+    def try_delete_object(self, object):
+        index = 0
+        for item in self._platforms:
+            if item == object:
+                self._platforms.pop(index)
+                return
+            else:
+                index += 1
+
+        index = 0
+        for item in self._crates:
+            if item == object:
+                self._crates.pop(index)
+                return
+            else:
+                index += 1
+
+        index = 0
+        for item in self._moving_platforms:
+            if item == object:
+                self._moving_platforms.pop(index)
+                return
+            else:
+                index += 1
+
+        if object == self._player:
+            self._player = None
 
     #Gettery i settery
     def get_level_file_name(self):
@@ -157,8 +185,8 @@ class LevelContainer(object):
         for item in self._moving_platforms:
             objects.append(item)
 
-            
-        objects.append(self._player)
+        if self._player != None:
+            objects.append(self._player)
 
         return objects
 
@@ -186,6 +214,7 @@ class LevelContainer(object):
         for platform in self._platforms:
             group.add(platform)
 
-        group.add(self._player)
+        if self._player != None:
+            group.add(self._player)
 
         return group
