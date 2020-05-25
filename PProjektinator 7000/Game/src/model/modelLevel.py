@@ -23,37 +23,23 @@ class ModelLevel(Model):
         # czytanie levelu z pliku ale jeszcze nie teraz
         # TU DODAŁAM
         self._lvl_container = LevelContainer(define.get_levels_folder_path() + "\\001_Tut1.txt", self.level_number)
-        # stworzenie sztywnego poziomu
-        '''platform1 = GameObject(500, 500, 400, 200, ObjectType.STATIC, None)
-        platform2 = GameObject(200, 300, 200, 400, ObjectType.STATIC, None)
-        crate1 = dynamicObject(450, 100, 100, 100, True, ObjectType.DYNAMIC, None)
-        crate2 = dynamicObject(450, 0, 50, 50, True, ObjectType.DYNAMIC, None)
-        movPlat = MovingPlatform(600, 200, 100, 30, False, ObjectType.KINEMATIC, None, 0, 200, 0, 2)
-        movPlat2 = MovingPlatform(700, 200, 100, 30, False, ObjectType.KINEMATIC, None, 200, 0, 2, 0)'''
-        
+        self._error = self._lvl_container.get_level_read_succes()
 
-        self.objs = py.sprite.Group()
-        #self.__all_sprites = py.sprite.Group()
-        self.__player = self._lvl_container.get_player() #= Player(700, 20, 75, 150, True, ObjectType.PLAYER, define.get_player_sprites_folder_path())
-        self.telekinesis = False
-        self.tele_idx = 0
-        #self.tele_objs = [crate1, crate2]
-        self.tele_objs = self._lvl_container.get_crates()
-        self.no_jumps = 0
+        if self._error != 0:
+            self.objs = py.sprite.Group()
+            self.__player = self._lvl_container.get_player() #= Player(700, 20, 75, 150, True, ObjectType.PLAYER, define.get_player_sprites_folder_path())
+            self.telekinesis = False
+            self.tele_idx = 0
+            self.tele_objs = self._lvl_container.get_crates()
+            self.no_jumps = 0
 
-        # TU DODAŁAM
-        self.__all_sprites = self._lvl_container.get_sprite_group()
-        self.__all_sprites.add(self.__player) 
+            # TU DODAŁAM
+            self.__all_sprites = self._lvl_container.get_sprite_group()
+            self.__all_sprites.add(self.__player) 
 
         # debugowe elementy poziomu
         # platform1 = GameObject(200, 150, 50, 50, ObjectType.STATIC, None)
         # self.__all_sprites.add(platform1)
-        '''self.__all_sprites.add(crate1)
-        self.__all_sprites.add(crate2)
-        self.__all_sprites.add(platform1)
-        self.__all_sprites.add(platform2)
-        self.__all_sprites.add(movPlat)
-        self.__all_sprites.add(movPlat2)'''
 
 
     def movement(self):
@@ -120,8 +106,8 @@ class ModelLevel(Model):
                             if dynamic.check_collision_ip_below(entity, 0, dynamic.spd_y + dynamic.spd_y_other):
                                 if dynamic.spd_y >= 0:
                                     dynamic.spd_y = 0
-                                dynamic.spd_y_other = entity.spd_y
-                                dynamic.spd_x_other = entity.spd_x
+                                    dynamic.spd_x_other = entity.spd_x
+                                    dynamic.spd_y_other = entity.rect.y - (dynamic.rect.y + dynamic.rect.height)
                                 if dynamic == self.__player:
                                     self.no_jumps = 2
 
@@ -135,6 +121,10 @@ class ModelLevel(Model):
 
         if self._command == Command.EXIT:                               # wyjście
             self._runMode = False
+
+        if self._error == 0:
+            self._runMode = False
+            return
 
         if self._command & Command.PAUSE & ~0x80:
             self.__paused = True if not self.__paused else False
