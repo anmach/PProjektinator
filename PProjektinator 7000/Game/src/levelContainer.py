@@ -151,7 +151,7 @@ class LevelContainer(object):
         for item in self._platforms:
             objects.append(item)
 
-        for item in self._crates(item):
+        for item in self._crates:
             objects.append(item)
 
         for item in self._moving_platforms:
