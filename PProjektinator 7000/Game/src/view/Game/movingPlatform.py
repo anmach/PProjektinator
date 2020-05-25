@@ -75,3 +75,9 @@ class MovingPlatform(dynamicObject):
         self.path_max_y = int(lines[11])
         self.path_cur_x = int(lines[12])
         self.path_cur_y = int(lines[13])
+
+    def get_path_max_x(self):
+        return self.path_max_x
+
+    def get_path_max_y(self):
+        return self.path_max_y

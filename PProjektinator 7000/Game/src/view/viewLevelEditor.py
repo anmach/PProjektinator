@@ -10,6 +10,7 @@ from src.view.UI.imageButton import ImageButton
 from src.view.UI.imageButtonGroup import ImageButtonGroup
 
 from src.view.Game.player import Player
+from src.view.Game.movingPlatform import MovingPlatform
 
 import pygame as py
 
@@ -38,7 +39,7 @@ class ViewLevelEditor(View):
         #aktualny tryb pracy modelu
         self.__mode = EditingMode.NONE
 
-        self.__all_sprites = py.sprite.Group()
+        self.__level = []
 
         #zależy od trybu - info z modelu (współrzędne nowej platformy, gracza,
         #obiektu do usunięcia itp)
@@ -120,7 +121,10 @@ class ViewLevelEditor(View):
         #pole edycyjne
         py.draw.rect(self._surface, (240, 240, 240), (0, 0, self.__edit_surface_border * self._surface.get_size()[0], self._surface.get_size()[1]))
         
-        for entity in self.__all_sprites:
+        for entity in self.__level.get_sprite_group():
+            if isinstance(entity, MovingPlatform):
+                py.draw.rect(self._surface, (0,0,0), (entity.get_x() + entity.get_path_max_x(), entity.get_y() + entity.get_path_max_y(), entity.get_width(), entity.get_height()), 1)
+                py.draw.line(self._surface, (0,0,0), (entity.get_x() + entity.get_width() // 2, entity.get_y() + entity.get_height() // 2), (entity.get_x() + entity.get_width() // 2 + entity.get_path_max_x(), entity.get_y() + entity.get_height() // 2 + entity.get_path_max_y()), 1)
             self._surface.blit(entity.surf, entity.rect)
 
         if py.mouse.get_pos()[0] < self.__edit_surface_border * self._surface.get_size()[0]:
@@ -215,10 +219,9 @@ class ViewLevelEditor(View):
         return self.__image_buttons
 
     #v----SETTERY----v
-    def set_model(self, level_num, mode, all_sprites, coords, translation):
+    def set_model(self, level_num, mode, level, coords):
         self.__texts[0].set_text(str(level_num))
         self.__mode = mode
-        self.__all_sprites = all_sprites
+        self.__level = level
         self.__coords = coords
-        self.__translation = translation
 
