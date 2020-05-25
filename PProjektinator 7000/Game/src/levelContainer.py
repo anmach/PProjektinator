@@ -157,7 +157,8 @@ class LevelContainer(object):
         for item in self._moving_platforms:
             objects.append(item)
 
-            objects.append(self._player)
+            
+        objects.append(self._player)
 
         return objects
 
