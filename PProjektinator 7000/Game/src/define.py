@@ -29,7 +29,7 @@ def get_levels_folder_path():
     return '.\\saves\\levels'
 
 def get_player_standard_size():
-    return (75, 100)
+    return (75, 150)
 
 def get_standard_resolution():
     return (1280, 720)
