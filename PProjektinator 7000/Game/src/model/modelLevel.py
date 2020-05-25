@@ -37,9 +37,9 @@ class ModelLevel(Model):
             self.__all_sprites = self._lvl_container.get_sprite_group()
             self.__all_sprites.add(self.__player) 
 
-        # debugowe elementy poziomu
-        platform1 = GameObject(200, 150, 50, 49, ObjectType.STATIC, None)
-        self.__all_sprites.add(platform1)
+            # debugowe elementy poziomu
+            platform1 = GameObject(200, 150, 50, 49, ObjectType.STATIC, None)
+            self.__all_sprites.add(platform1)
 
 
     def movement(self):
@@ -97,16 +97,23 @@ class ModelLevel(Model):
                 if dynamic != entity:
                     if ((dynamic.type == ObjectType.DYNAMIC) or (dynamic.type == ObjectType.PLAYER)):
                         if ((entity.type == ObjectType.STATIC) or (entity.type == ObjectType.DYNAMIC) or (entity.type == ObjectType.PLAYER)):
-                            if dynamic.check_collision_ip(entity, 0, dynamic.spd_y):
+                            if dynamic.check_collision_ip(entity, 0, dynamic.spd_y + dynamic.spd_y_other):
                                 if dynamic == self.__player:
                                     self.no_jumps = 2
-                                if dynamic.spd_y > 0:
+                                if dynamic.spd_y + dynamic.spd_y_other > 0:
                                     dynamic.spd_y = entity.rect.y - (dynamic.rect.y + dynamic.rect.height)
-                                if dynamic.spd_y < 0:
+                                    dynamic.spd_y_other = 0
+                                if dynamic.spd_y + dynamic.spd_y_other < 0:
                                     dynamic.spd_y = entity.rect.y + entity.rect.height - dynamic.rect.y
+                                    dynamic.spd_y_other = 0
 
-                            if dynamic.check_collision_ip(entity, dynamic.spd_x, 0):
-                                dynamic.spd_x = 0
+                            if dynamic.check_collision_ip(entity, dynamic.spd_x + dynamic.spd_x_other, 0):
+                                if dynamic.spd_x + dynamic.spd_x_other > 0:
+                                    dynamic.spd_x = 0
+                                    dynamic.spd_x_other = entity.rect.x - (dynamic.rect.x + dynamic.rect.width)
+                                if dynamic.spd_x + dynamic.spd_x_other < 0:
+                                    dynamic.spd_x = 0
+                                    dynamic.spd_x_other = entity.rect.x + entity.rect.width - dynamic.rect.x
 
                         if entity.type == ObjectType.KINEMATIC:
                             if dynamic.check_collision_ip_below(entity, 0, dynamic.spd_y + dynamic.spd_y_other):
