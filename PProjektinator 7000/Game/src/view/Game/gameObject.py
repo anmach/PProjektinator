@@ -69,18 +69,6 @@ class GameObject(py.sprite.Sprite):
         self.surf = py.transform.smoothscale(self.surf, (self.width, self.height))
 
     #v----POZOSTAŁE----v
-    def check_collision_ip(self, target, x, y):
-        return ((target.rect.x < self.rect.x + x + self.rect.width) \
-           and (target.rect.x + target.rect.width > self.rect.x + x))\
-           and ((target.rect.y < self.rect.y + y + self.rect.height)\
-           and (target.rect.y + target.rect.height > self.rect.y + y))
-
-    def check_collision_ip_below(self, target, x, y):
-        return target.rect.y < self.rect.y + y + self.rect.height \
-           and target.rect.y + 15 > self.rect.y + self.rect.height \
-           and target.rect.x < self.rect.x + x + self.rect.width \
-           and target.rect.x + target.rect.width > self.rect.x + x
-
 
     def update(self):
         pass

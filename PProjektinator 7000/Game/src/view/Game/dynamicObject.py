@@ -48,6 +48,19 @@ class dynamicObject(GameObject):
         self.spd_y_other = 0
 
 
+    def check_collision_ip(self, target, x, y):
+        return ((target.rect.x < self.rect.x + x + self.rect.width) \
+           and (target.rect.x + target.rect.width > self.rect.x + x))\
+           and ((target.rect.y < self.rect.y + y + self.rect.height)\
+           and (target.rect.y + target.rect.height > self.rect.y + y))
+
+    def check_collision_ip_below(self, target, x, y):
+        return target.rect.y <= self.rect.y + y + self.rect.height\
+           and target.rect.y + 4 >= self.rect.y + self.rect.height \
+           and target.rect.x < self.rect.x + x + self.rect.width \
+           and target.rect.x + target.rect.width > self.rect.x + x
+
+
     def save_to_file(self, file):
         file.write('@<JAKIEŚ ID>')
         file.write('#direction\n' + str(self.direction) + '\n')

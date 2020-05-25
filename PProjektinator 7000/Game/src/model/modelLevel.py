@@ -38,14 +38,19 @@ class ModelLevel(Model):
             self.__all_sprites.add(self.__player) 
 
         # debugowe elementy poziomu
-        # platform1 = GameObject(200, 150, 50, 50, ObjectType.STATIC, None)
-        # self.__all_sprites.add(platform1)
+        platform1 = GameObject(200, 150, 50, 49, ObjectType.STATIC, None)
+        self.__all_sprites.add(platform1)
 
 
     def movement(self):
         spd_x = 5 if self._command & Command.GO_RIGHT & ~0x80 else \
                 -5 if self._command & Command.GO_LEFT & ~0x80 else \
                 0
+
+        for entity in self.__all_sprites:
+            if entity.type == ObjectType.DYNAMIC or entity.type == ObjectType.PLAYER:
+                entity.spd_y += 1 if entity.does_gravity else\
+                                0
         
         if self._command & Command.TELEKINESIS & ~0x80 :                # przytrzymane 'R' - działa telekineza
             self.telekinesis = True                                     # w przeciwnym wypadku - sterowanie
@@ -71,21 +76,22 @@ class ModelLevel(Model):
                 self.__all_sprites.add(bullet)
             if self._command & Command.JUMP & ~0x80:
                 if self.no_jumps > 0:
+                    # *dźwięk skoku*
                     self.__player.spd_y = -20
                     self.no_jumps -= 1
             if self._command & Command.CROUCH & ~0x80:
                 if not self.__player.is_crouching:
                     self.__player.crouch()
             elif self.__player.is_crouching:
-                 self.__player.uncrouch()
+                self.__player.uncrouch()
+                for entity in self.__all_sprites:
+                    if entity.type == ObjectType.DYNAMIC or entity.type == ObjectType.STATIC:
+                        if self.__player.check_collision_ip(entity, 0, 0):
+                            self.__player.crouch()
+                            return           
 
-        for entity in self.__all_sprites:
-            if entity.type == ObjectType.DYNAMIC or entity.type == ObjectType.PLAYER:
-                entity.spd_y += 1 if entity.does_gravity else\
-                                0
 
-
-    def collisions(self):
+    def collisions(self):       # nested 'ifs' to hatch? xD
         for entity in self.__all_sprites:
             for dynamic in self.__all_sprites:
                 if dynamic != entity:
@@ -96,7 +102,7 @@ class ModelLevel(Model):
                                     self.no_jumps = 2
                                 if dynamic.spd_y > 0:
                                     dynamic.spd_y = entity.rect.y - (dynamic.rect.y + dynamic.rect.height)
-                                if dynamic.spd_y < 0:            
+                                if dynamic.spd_y < 0:
                                     dynamic.spd_y = entity.rect.y + entity.rect.height - dynamic.rect.y
 
                             if dynamic.check_collision_ip(entity, dynamic.spd_x, 0):
