@@ -33,3 +33,6 @@ def get_player_standard_size():
 
 def get_standard_resolution():
     return (1280, 720)
+
+def get_platform_tile_standard_size():
+    return (50, 50)

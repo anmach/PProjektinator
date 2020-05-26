@@ -158,34 +158,76 @@ class ModelLevelEditor(Model):
 
         mouse_pos = py.mouse.get_pos()
         new_vertex_pos = mouse_pos
-
-        #snap
-        for game_object in self.__level.get_all_level_objects():
-                if type(game_object) is GameObject and game_object.get_type() == ObjectType.STATIC:
-                    x0 = game_object.get_x()
-                    x1 = game_object.get_x() + game_object.get_width()
-                    
-                    y0 = game_object.get_y()
-                    y1 = game_object.get_y() + game_object.get_height()
-
-                    #jeżeli różnica między pozycją kursora myszki, a
-                    #wierzchołkiem istniejącej platformy jest mniejsza niż
-                    #ustalona
-                    #wartość to nowy wierzchołek jest "przyczepiany" do już
-                    #istniejącego
-                    if abs(mouse_pos[0] - x0) < self.__snap_distance and abs(mouse_pos[1] - y0) < self.__snap_distance:
-                        new_vertex_pos = (x0, y0)
-                    elif abs(mouse_pos[0] - x1) < self.__snap_distance and abs(mouse_pos[1] - y0) < self.__snap_distance:
-                        new_vertex_pos = (x1, y0)
-                    elif abs(mouse_pos[0] - x0) < self.__snap_distance and abs(mouse_pos[1] - y1) < self.__snap_distance:
-                        new_vertex_pos = (x0, y1)
-                    elif abs(mouse_pos[0] - x1) < self.__snap_distance and abs(mouse_pos[1] - y1) < self.__snap_distance:
-                        new_vertex_pos = (x1, y1)
-
         if self.__new_platform_vertex_number == 1:
+            #snap
+            for game_object in self.__level.get_all_level_objects():
+                    if game_object.get_type() == ObjectType.STATIC:
+                        x0 = game_object.get_x()
+                        x1 = game_object.get_x() + game_object.get_width()
+                        
+                        y0 = game_object.get_y()
+                        y1 = game_object.get_y() + game_object.get_height()
+
+                        #jeżeli różnica między pozycją kursora myszki, a
+                        #wierzchołkiem istniejącej platformy jest mniejsza niż
+                        #ustalona
+                        #wartość to nowy wierzchołek jest "przyczepiany" do już
+                        #istniejącego
+                        if abs(mouse_pos[0] - x0) < self.__snap_distance and abs(mouse_pos[1] - y0) < self.__snap_distance:
+                            new_vertex_pos = (x0, y0)
+                        elif abs(mouse_pos[0] - x1) < self.__snap_distance and abs(mouse_pos[1] - y0) < self.__snap_distance:
+                            new_vertex_pos = (x1, y0)
+                        elif abs(mouse_pos[0] - x0) < self.__snap_distance and abs(mouse_pos[1] - y1) < self.__snap_distance:
+                            new_vertex_pos = (x0, y1)
+                        elif abs(mouse_pos[0] - x1) < self.__snap_distance and abs(mouse_pos[1] - y1) < self.__snap_distance:
+                            new_vertex_pos = (x1, y1)
+
             self.__something_coords = (new_vertex_pos[0], new_vertex_pos[1], -1, -1)
+
         else:
-            self.__something_coords = (self.__something_coords[0], self.__something_coords[1], new_vertex_pos[0], new_vertex_pos[1])
+            current_width = new_vertex_pos[0] - self.__something_coords[0]
+            current_heigth = new_vertex_pos[1] - self.__something_coords[1]
+
+            w_sign = 1 if current_width >= 0 else -1
+            h_sign = 1 if current_heigth >= 0 else -1
+
+            current_width = abs(current_width)
+            current_heigth = abs(current_heigth)
+
+            tile_width = define.get_platform_tile_standard_size()[0]
+            tile_heigth = define.get_platform_tile_standard_size()[1]
+
+            #min. 3-krotność wymiaru tekstury
+            if current_width < 3 * tile_width + tile_width // 2:
+                current_width = 3 * tile_width
+            else:
+                current_width -= 3 * tile_width
+                sum = 3 * tile_width
+                while current_width > tile_width:
+                    current_width -= tile_width
+                    sum += tile_width
+                perc = float(current_width) / float(tile_width)
+                if perc < 0.5:
+                    current_width = sum
+                else:
+                    current_width = sum + tile_width
+
+            #min. 3-krotność wymiaru tekstury
+            if current_heigth < 3 * tile_heigth + tile_heigth // 2:
+                current_heigth = 3 * tile_heigth
+            else:
+                current_heigth -= 3 * tile_heigth
+                sum = 3 * tile_heigth
+                while current_heigth > tile_heigth:
+                    current_heigth -= tile_heigth
+                    sum += tile_heigth
+                perc = float(current_heigth) / float(tile_heigth)
+                if perc < 0.5:
+                    current_heigth = sum
+                else:
+                    current_heigth = sum + tile_heigth
+
+            self.__something_coords = (self.__something_coords[0], self.__something_coords[1], self.__something_coords[0] + current_width * w_sign, self.__something_coords[1] + current_heigth * h_sign)
 
         if self._command == Command.CLICKED_LMB:
             if self.__new_platform_vertex_number == 1:
@@ -253,6 +295,10 @@ class ModelLevelEditor(Model):
             self.__something_coords = (-1, -1, -1, -1)
 
             #po dodaniu zmień tryb
+            self.__mode = EditingMode.NONE
+
+        elif self._command == Command.CLICKED_RMB:
+            self.__something_coords = (-1, -1, -1, -1)
             self.__mode = EditingMode.NONE
 
     def update_crate_placement(self):
