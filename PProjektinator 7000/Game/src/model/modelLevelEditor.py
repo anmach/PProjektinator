@@ -282,7 +282,7 @@ class ModelLevelEditor(Model):
             #new_object = Player(define.get_player_sprites_folder_path())
             #new_object.set_pos(x0, y0)
             #new_object.set_frame_by_id(1)
-
+            print(self.__can_object_be_placed)
             self.__level.try_add_new_object(ObjectType.PLAYER, x0, y0, define.get_player_standard_size()[0], define.get_player_standard_size()[1], ObjectType.PLAYER)
             self.__level.get_player().set_frame_by_id(1)
             #dodanie go do tablicy obiektów i sprajtów
@@ -443,7 +443,13 @@ class ModelLevelEditor(Model):
         """ funkcja zwraca True jeśli obiekty nachodzą na siebie (nawet dla "wspólnego" wierzchołka czu boku
         first oraz second zawierają współrzędne w kolejności: x_lewy, x_prawy, y_gorny, y_dolny"""
 
-        if first[0] >= second[0] and first[0] <= second[1] and first[2] >= second[2] and first[2] <= second[3] or first[1] >= second[0] and first[1] <= second[1] and first[2] >= second[2] and first[2] <= second[3] or first[0] >= second[0] and first[0] <= second[1] and first[3] >= second[2] and first[3] <= second[3] or first[1] >= second[0] and first[1] <= second[1] and first[3] >= second[2] and first[3] <= second[3]:
+        first_size_from_centre = ((first[1] - first[0]) / 2.0, (first[3] - first[2]) / 2.0)
+        second_size_from_centre = ((second[1] - second[0]) / 2.0, (second[3] - second[2]) / 2.0)
+
+        first_centre = (first[1] - first_size_from_centre[0], first[3] - first_size_from_centre[1])
+        second_centre = (second[1] - second_size_from_centre[0], second[3] - second_size_from_centre[1])
+        
+        if abs(second_centre[0] - first_centre[0]) <= first_size_from_centre[0] + second_size_from_centre[0]  and abs(second_centre[1] - first_centre[1]) <= first_size_from_centre[1] + second_size_from_centre[1]:
             return True
         return False
 
@@ -465,3 +471,6 @@ class ModelLevelEditor(Model):
 
     def get_translation(self):
         return self.__translation
+
+    def get_can_object_be_placed(self):
+        return self.__can_object_be_placed

@@ -47,6 +47,8 @@ class ViewLevelEditor(View):
 
         self.__translation = (0, 0)
 
+        self.__can_be_placed = True
+
     def add_button(self, newButton):
         self.__buttons.append(newButton)
         self._controls.append(newButton)
@@ -155,11 +157,13 @@ class ViewLevelEditor(View):
             elif self.__mode == EditingMode.PLAYER_PLACEMENT:
                 
                 new_object = Player(self.__coords[0], self.__coords[1], define.get_player_standard_size()[0], define.get_player_standard_size()[1], True, ObjectType.PLAYER, define.get_player_sprites_folder_path())
-                
-                
                 new_object.set_frame_by_id(1)
 
                 self._surface.blit(new_object.surf, new_object.rect)
+                if not self.__can_be_placed:
+                    py.draw.rect(self._surface, (237, 28, 36), (new_object.get_x(), new_object.get_y(), new_object.get_width(),new_object.get_height()), 3)
+                    py.draw.line(self._surface, (237, 28, 36), (new_object.get_x(), new_object.get_y()), (new_object.get_x() + new_object.get_width(), new_object.get_y() + new_object.get_height()), 3)
+                    py.draw.line(self._surface, (237, 28, 36), (new_object.get_x() + new_object.get_width(), new_object.get_y()), (new_object.get_x(), new_object.get_y() + new_object.get_height()), 3)
         
             elif self.__mode == EditingMode.MOVING_PLATFORM_PLACEMENT:
                 #jeden wierzchołek
@@ -179,14 +183,14 @@ class ViewLevelEditor(View):
                     py.draw.rect(self._surface, (0, 0, 0), (x0, y0, x1 - x0, y1 - y0), 1)
                 #pozycja końcowa
                 else:
-                    #poz. pocz.
+                    #poz.  pocz.
                     x0 = min(self.__coords[0], self.__coords[2])
                     x1 = max(self.__coords[0], self.__coords[2])
 
                     y0 = min(self.__coords[1], self.__coords[3])
                     y1 = max(self.__coords[1], self.__coords[3])
 
-                    #poz. końc.
+                    #poz.  końc.
                     x2 = x0 + self.__coords[4]
                     x3 = x1 + self.__coords[4]
 
@@ -219,9 +223,10 @@ class ViewLevelEditor(View):
         return self.__image_buttons
 
     #v----SETTERY----v
-    def set_model(self, level_num, mode, level, coords):
+    def set_model(self, level_num, mode, level, coords, can_be_placed):
         self.__texts[0].set_text(str(level_num))
         self.__mode = mode
         self.__level = level
         self.__coords = coords
+        self.__can_be_placed = can_be_placed
 
