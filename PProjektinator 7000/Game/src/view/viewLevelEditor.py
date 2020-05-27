@@ -165,6 +165,7 @@ class ViewLevelEditor(View):
                     py.draw.line(self._surface, (237, 28, 36), (new_object.get_x(), new_object.get_y()), (new_object.get_x() + new_object.get_width(), new_object.get_y() + new_object.get_height()), 3)
                     py.draw.line(self._surface, (237, 28, 36), (new_object.get_x() + new_object.get_width(), new_object.get_y()), (new_object.get_x(), new_object.get_y() + new_object.get_height()), 3)
         
+            #rysowanie poruszającej się platformy
             elif self.__mode == EditingMode.MOVING_PLATFORM_PLACEMENT:
                 #jeden wierzchołek
                 if self.__coords[2] == -1:

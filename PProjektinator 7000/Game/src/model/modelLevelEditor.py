@@ -49,9 +49,7 @@ class ModelLevelEditor(Model):
         #maksymalna odległość dla przyciągania wierzchołków
         self.__snap_distance = 10
 
-        self.__all_sprites = py.sprite.Group()
-
-        self.__is_player_placed = False
+        self.__is_player_placed = True
 
         self.__can_object_be_placed = True
 
@@ -272,6 +270,7 @@ class ModelLevelEditor(Model):
 
         self.__can_object_be_placed = True
 
+        #sprawdzenie "kolizji"
         for obj in self.__level.get_all_level_objects():
             if self.is_colliding((obj.get_x(), obj.get_x() + obj.get_width(), obj.get_y(), obj.get_y() + obj.get_height()), (x0, x1, y0, y1)):
                 self.__can_object_be_placed = False
@@ -279,16 +278,9 @@ class ModelLevelEditor(Model):
 
         if self._command == Command.CLICKED_LMB and not self.__is_player_placed and self.__can_object_be_placed:
             #stworzenie gracza
-            #new_object = Player(define.get_player_sprites_folder_path())
-            #new_object.set_pos(x0, y0)
-            #new_object.set_frame_by_id(1)
-            print(self.__can_object_be_placed)
             self.__level.try_add_new_object(ObjectType.PLAYER, x0, y0, define.get_player_standard_size()[0], define.get_player_standard_size()[1], ObjectType.PLAYER)
             self.__level.get_player().set_frame_by_id(1)
-            #dodanie go do tablicy obiektów i sprajtów
-            #self.__game_objects_arr.append(new_object)
-            #self.__all_sprites.add(new_object)
-
+            
             #zapamiętanie, że gracz już został dodany
             self.__is_player_placed = True
 
@@ -439,8 +431,8 @@ class ModelLevelEditor(Model):
         #będzie....)
         pass
 
-    def is_colliding(self, first=(0, 0, 0, 0), second=(0, 0, 0, 0)):
-        """ funkcja zwraca True jeśli obiekty nachodzą na siebie (nawet dla "wspólnego" wierzchołka czu boku
+    def is_colliding(self, first = (0, 0, 0, 0), second = (0, 0, 0, 0)):
+        """ funkcja zwraca True jeśli obiekty nachodzą na siebie
         first oraz second zawierają współrzędne w kolejności: x_lewy, x_prawy, y_gorny, y_dolny"""
 
         first_size_from_centre = ((first[1] - first[0]) / 2.0, (first[3] - first[2]) / 2.0)
