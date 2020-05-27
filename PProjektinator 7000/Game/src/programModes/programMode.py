@@ -2,7 +2,9 @@ from abc import ABC, abstractmethod
 from src.model.model import Model
 from src.view.view import View
 from src.controller.controller import Controller
+from src.enum.optionKey import OptionKey
 import pygame as py
+import src.define as define
 
 
 class ProgramMode(ABC):
@@ -57,3 +59,19 @@ class ProgramMode(ABC):
     def render(self):
         self._controller.communicateMV(self._model, self._view)
         self._view.render()
+
+    def set_volume_from_file(self):
+        file = open(define.get_options_file_path(), 'r')
+        volume = 0
+        
+        # odczyt kolejnych linii
+        for line in file:
+            splitted_line = line.strip().split()
+            int_optionKey = int(splitted_line[0])
+            # dodanie informacji do tablicy opcji
+
+            if int_optionKey == OptionKey.VOLUME:
+                volume = int(splitted_line[1])    
+                
+        py.mixer_music.set_volume(volume/100)
+        file.close()

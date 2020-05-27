@@ -18,6 +18,7 @@ def main():
         py.mixer.music.play(-1)
             
         menu = Menu()
+        menu.set_volume_from_file()
         menu.run()
     else:
         print("Liczba błędów: %i" %(result[1]))
