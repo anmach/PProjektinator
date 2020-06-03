@@ -17,7 +17,8 @@ class LevelContainer(object):
         self._moving_platforms = []
         self._crates = []
         self._player = None
-
+        
+        self._level_read_without_player = 0
         self._level_read_success = self.try_load_level_from_file()
 
     def try_load_level_from_file(self):  
@@ -116,6 +117,7 @@ class LevelContainer(object):
             return 1
         else:
             # Nie ma gracza
+            self._level_read_without_player = 1
             return 0
 
     def try_add_new_object(self, id, x, y, width, height, type, speed_x = -1, speed_y = -1, movement_max_x = -1, movement_max_y = -1):
@@ -166,12 +168,88 @@ class LevelContainer(object):
         if object == self._player:
             self._player = None
 
-    #Gettery i settery
+    def save_level_to_file(self):        
+        file = open(self.__options_file_name, 'w')
+        file.truncate(0)
+
+        if self._player != None:            
+            file.write('@')        
+            file.write(str(ObjectType.PLAYER)) #id
+            file.write('\n')          
+            file.write(str(self._player.get_x())) # x
+            file.write('\n')        
+            file.write(str(self._player.get_y())) # y
+            file.write('\n')          
+            file.write(str(self._player.get_width())) # szerokość
+            file.write('\n')          
+            file.write(str(self._player.get_height())) # wysokość
+            file.write('\n')  
+
+        for platform in self._platforms:        
+            file.write('@')        
+            file.write(str(ObjectType.STATIC)) # id
+            file.write('\n')          
+            file.write(str(platform.get_x())) # x
+            file.write('\n')        
+            file.write(str(platform.get_y())) # y
+            file.write('\n')          
+            file.write(str(platform.get_width())) # szerokość
+            file.write('\n')          
+            file.write(str(platform.get_height())) # wysokość
+            file.write('\n')  
+
+        for crate in self._crates:        
+            file.write('@')        
+            file.write(str(ObjectType.DYNAMIC)) # id
+            file.write('\n')          
+            file.write(str(crate.get_x())) # x
+            file.write('\n')        
+            file.write(str(crate.get_y())) # y
+            file.write('\n')          
+            file.write(str(crate.get_width())) # szerokość
+            file.write('\n')          
+            file.write(str(crate.get_height())) # wysokość
+            file.write('\n')  
+
+        for mov_plat in self._moving_platforms:        
+            file.write('@')        
+            file.write(str(ObjectType.KINEMATIC)) # id
+            file.write('\n')          
+            file.write(str(mov_plat.get_x())) # x
+            file.write('\n')        
+            file.write(str(mov_plat.get_y())) # y
+            file.write('\n')          
+            file.write(str(mov_plat.get_width())) # szerokość
+            file.write('\n')          
+            file.write(str(mov_plat.get_height())) # wysokość
+            file.write('\n')          
+            file.write(str(mov_plat.get_path_max_x())) # max x
+            file.write('\n')          
+            file.write(str(mov_plat.get_path_max_y())) # max y
+            file.write('\n')          
+            file.write(str(mov_plat.get_spd_x())) # speed x
+            file.write('\n')          
+            file.write(str(mov_plat.get_spd_y())) # speed y
+            file.write('\n')
+            
+        file.write('$')
+        file.close()
+
+    def delete_all_objects(self):
+        self._player = None
+        self._crates.clear()
+        self._platforms.clear()
+        self._moving_platforms.clear()
+
+    # Gettery
     def get_level_file_name(self):
         return self._level_file_name
 
     def get_level_read_succes(self):
         return self._level_read_success
+
+    def get_level_read_without_player(self):
+        return self._read_level_without_player
 
     def get_all_level_objects(self):
         objects = []
@@ -218,3 +296,16 @@ class LevelContainer(object):
             group.add(self._player)
 
         return group
+
+    # Add
+    def add_player(self, player):
+        self._player = player
+
+    def add_crate(self, crate):
+        self._crates.append(crate)
+
+    def add_moving_platform(self, moving_platform):
+        self._moving_platforms.append(moving_platform)
+
+    def add_platform(self, platform):
+        self._platforms.append(platform)
