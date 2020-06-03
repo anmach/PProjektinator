@@ -18,7 +18,7 @@ class LevelContainer(object):
         self._crates = []
         self._player = None
         
-        self._level_read_without_player = 0
+        self._level_read_without_errors = 0
         self._level_read_success = self.try_load_level_from_file()
 
     def try_load_level_from_file(self):  
@@ -111,13 +111,14 @@ class LevelContainer(object):
                 return 0
 
         file.close()
+        
+        self._level_read_without_errors = 1
 
         if self._player:
             # Udało się odczytać plik poprawnie (chyba)
             return 1
         else:
             # Nie ma gracza
-            self._level_read_without_player = 1
             return 0
 
     def try_add_new_object(self, id, x, y, width, height, type, speed_x = -1, speed_y = -1, movement_max_x = -1, movement_max_y = -1):
@@ -248,8 +249,8 @@ class LevelContainer(object):
     def get_level_read_succes(self):
         return self._level_read_success
 
-    def get_level_read_without_player(self):
-        return self._read_level_without_player
+    def get_level_read_without_errors(self):
+        return self._read_level_without_errors
 
     def get_all_level_objects(self):
         objects = []
