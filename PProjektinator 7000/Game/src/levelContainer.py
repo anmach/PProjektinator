@@ -170,7 +170,7 @@ class LevelContainer(object):
             self._player = None
 
     def save_level_to_file(self):        
-        file = open(self.__options_file_name, 'w')
+        file = open(self._level_file_name, 'w')
         file.truncate(0)
 
         if self._player != None:            

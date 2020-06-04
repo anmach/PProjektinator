@@ -21,9 +21,9 @@ class ModelLevelEditor(Model):
         #       v-----inaczej nie działa-----v
         for (_, _, file_list) in os.walk(define.get_levels_folder_path()):
             self.__level_list = file_list
-        
+
         #nr aktualnie wybranego, edytowanego poziomu
-        self.__chosen_level = -1
+        self.__chosen_level = 0
 
         #wyświetlany nr poziomu do edycji (zmieniany za pomocą przycisków)
         self.__level_to_edit = 0
@@ -43,7 +43,7 @@ class ModelLevelEditor(Model):
         self.__mode = EditingMode.NONE
 
         #tabela dla obiektów w grze
-        self.__level = LevelContainer(define.get_levels_folder_path() + "\\001_Tut1.txt", 1)
+        self.__level = LevelContainer(define.get_levels_folder_path() + '\\' + self.__level_list[0], 0)
         self.__level.get_player().set_frame_by_id(1)
 
         #maksymalna odległość dla przyciągania wierzchołków
@@ -74,6 +74,9 @@ class ModelLevelEditor(Model):
             self.__chosen_level = self.__level_to_edit
             #wczytanie nowego poziomu
             self.load_level_from_file()
+            self.__level = LevelContainer(define.get_levels_folder_path() + self.__level_list[self.__chosen_level], self.__chosen_level)
+            #self.__level.get_player().set_frame_by_id(1)
+
 
         elif self._command == Command.CREATE_NEW:
             #utworzenie nowego poziomu
@@ -81,6 +84,7 @@ class ModelLevelEditor(Model):
 
         elif self._command == Command.SAVE and self.__chosen_level != -1:
             #zapisanie aktualnie modyfikowanego poziomu
+            self.__level.save_level_to_file()
             pass
 
         elif self._command == Command.CLICKED_MMB:
