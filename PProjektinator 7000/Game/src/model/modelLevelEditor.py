@@ -80,8 +80,15 @@ class ModelLevelEditor(Model):
 
 
         elif self._command == Command.CREATE_NEW:
-            #utworzenie nowego poziomu
-            pass
+            file = open(define.get_levels_folder_path() + "\\" + str(len(self.__level_list) + 1) + ".txt", 'w')
+            file.close()
+            self.__level = LevelContainer(define.get_levels_folder_path() + "\\" + str(len(self.__level_list) + 1) + ".txt", len(self.__level_list))
+
+            for (_, _, file_list) in os.walk(define.get_levels_folder_path()):
+                self.__level_list = file_list
+
+            self.__level_to_edit = len(self.__level_list) - 1
+            self.__is_player_placed = False
 
         elif self._command == Command.SAVE and self.__chosen_level != -1:
             #zapisanie aktualnie modyfikowanego poziomu
