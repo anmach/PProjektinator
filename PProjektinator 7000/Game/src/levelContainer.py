@@ -176,7 +176,7 @@ class LevelContainer(object):
         if self._player != None:            
             file.write('@')        
             file.write('\n')      
-            file.write(str(ObjectType.PLAYER)) #id
+            file.write(str(int(ObjectType.PLAYER))) #id
             file.write('\n')          
             file.write(str(self._player.get_x())) # x
             file.write('\n')        
@@ -190,7 +190,7 @@ class LevelContainer(object):
         for platform in self._platforms:        
             file.write('@')   
             file.write('\n')           
-            file.write(str(ObjectType.STATIC)) # id
+            file.write(str(int(ObjectType.STATIC))) # id
             file.write('\n')          
             file.write(str(platform.get_x())) # x
             file.write('\n')        
@@ -204,7 +204,7 @@ class LevelContainer(object):
         for crate in self._crates:        
             file.write('@') 
             file.write('\n')             
-            file.write(str(ObjectType.DYNAMIC)) # id
+            file.write(str(int(ObjectType.DYNAMIC))) # id
             file.write('\n')          
             file.write(str(crate.get_x())) # x
             file.write('\n')        
@@ -218,7 +218,7 @@ class LevelContainer(object):
         for mov_plat in self._moving_platforms:        
             file.write('@')   
             file.write('\n')           
-            file.write(str(ObjectType.KINEMATIC)) # id
+            file.write(str(int(ObjectType.KINEMATIC))) # id
             file.write('\n')          
             file.write(str(mov_plat.get_x())) # x
             file.write('\n')        
