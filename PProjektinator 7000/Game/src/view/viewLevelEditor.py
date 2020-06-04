@@ -78,7 +78,7 @@ class ViewLevelEditor(View):
         self.add_button(Button("->", smallest_button_size, (0.96 * surface_size_x, 0.02 * surface_size_y), False, Command.NEXT_LEVEL))
         
         #trzy kolejne raczej wiadomo
-        self.add_button(Button("Otwórz", biggest_button_size, (0.85 * surface_size_x, 0.10 * surface_size_y), False, Command.OPEN))
+        self.add_button(Button("Otwórz", biggest_button_size, (0.85 * surface_size_x, 0.10 * surface_size_y), False, Command.EDIT))
 
         self.add_button(Button("Nowy", biggest_button_size, (0.86 * surface_size_x, 0.17 * surface_size_y), False, Command.CREATE_NEW))
 

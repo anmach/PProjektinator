@@ -74,8 +74,9 @@ class ModelLevelEditor(Model):
             self.__chosen_level = self.__level_to_edit
             #wczytanie nowego poziomu
             self.load_level_from_file()
-            self.__level = LevelContainer(define.get_levels_folder_path() + self.__level_list[self.__chosen_level], self.__chosen_level)
-            #self.__level.get_player().set_frame_by_id(1)
+            self.__level = LevelContainer(define.get_levels_folder_path() + '\\' + self.__level_list[self.__chosen_level], self.__chosen_level)
+            if self.__level.get_player() != None:
+                self.__level.get_player().set_frame_by_id(1)
 
 
         elif self._command == Command.CREATE_NEW:
@@ -418,7 +419,7 @@ class ModelLevelEditor(Model):
         if self._command == Command.CLICKED_LMB and len(self.__level.get_all_level_objects()) > 0:
             #deleted_object = self.__level.get_all_level_objects().pop(obj_to_del_index)
             #self.__level.get_sprite_group().remove(deleted_object)
-            self.__level.try_delete_object(object)
+            self.__level.try_delete_object(obj_to_del)
 
             #jeśli był to gracz to zapamiętaj, że już go nie
             if isinstance(object, Player):
