@@ -288,9 +288,6 @@ class LevelContainer(object):
     def get_sprite_group(self):
         group = py.sprite.Group()
 
-        for crate in self._crates:
-            group.add(crate)
-        
         for item in self._moving_platforms:
             group.add(item)
 
@@ -299,6 +296,9 @@ class LevelContainer(object):
 
         if self._player != None:
             group.add(self._player)
+
+        for crate in self._crates:
+            group.add(crate)
 
         return group
 

@@ -35,6 +35,8 @@ class dynamicObject(GameObject):
     def update(self):
         if self.spd_y > 20:
             self.spd_y = 20
+        if self.spd_y < -20:
+            self.spd_y = -20
         if self.spd_x > 0:
             if self.direction == True:
                 self.surf = py.transform.flip(self.surf, True, False)
@@ -47,6 +49,19 @@ class dynamicObject(GameObject):
         self.spd_x_other = 0
         self.spd_y_other = 0
 
+    def get_extended_rect(self):
+        ret = py.Rect(self.rect.x, self.rect.y, self.rect.width, self.rect.height)
+        if (self.spd_y + self.spd_y_other > 0):
+            ret.height += self.spd_y + self.spd_y_other
+        elif (self.spd_y + self.spd_y_other < 0):
+            ret.y += self.spd_y + self.spd_y_other
+            ret.height -= self.spd_y + self.spd_y_other
+        if (self.spd_x + self.spd_x_other > 0):
+            ret.width += self.spd_x + self.spd_x_other
+        elif (self.spd_x + self.spd_x_other < 0):
+            ret.x += self.spd_x + self.spd_x_other
+            ret.width -= self.spd_x + self.spd_x_other
+        return ret
 
     def check_collision_ip(self, target, x, y):
         return ((target.rect.x < self.rect.x + x + self.rect.width) \
@@ -60,6 +75,12 @@ class dynamicObject(GameObject):
            and target.rect.x < self.rect.x + x + self.rect.width \
            and target.rect.x + target.rect.width > self.rect.x + x
 
+    def check_collision_dynamic(self, target, x, y):
+        ext_rect = target.get_extended_rect()
+        return ((target.rect.x < self.rect.x + x + self.rect.width) \
+           and (target.rect.x + target.rect.width > self.rect.x + x))\
+           and ((ext_rect.y < self.rect.y + y + self.rect.height)\
+           and (ext_rect.y + ext_rect.height > self.rect.y + y))
 
     def save_to_file(self, file):
         file.write('@<JAKIEŚ ID>')
