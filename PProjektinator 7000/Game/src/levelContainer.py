@@ -17,11 +17,15 @@ class LevelContainer(object):
         self._moving_platforms = []
         self._crates = []
         self._player = None
-        
+
+        # poziom odczytany bez odkrytych błędów, ale może nie mieć playera 
         self._level_read_without_errors = 0
+
+        # poziom odczytany bez błędów, z graczem
         self._level_read_success = self.try_load_level_from_file()
 
-    def try_load_level_from_file(self):  
+    def try_load_level_from_file(self):          
+        self._level_read_without_errors = 0
         file = open(self._level_file_name, 'r')
 
         # Którą z kolei linię danych o obiekcie czytamy
