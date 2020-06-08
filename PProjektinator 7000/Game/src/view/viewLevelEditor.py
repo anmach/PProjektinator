@@ -49,6 +49,8 @@ class ViewLevelEditor(View):
 
         self.__can_be_placed = True
 
+        self.__is_player_placed = False
+
     def add_button(self, newButton):
         self.__buttons.append(newButton)
         self._controls.append(newButton)
@@ -210,6 +212,8 @@ class ViewLevelEditor(View):
                     
         #wyrysowanie wszystkich przycisków na ekran
         for butt in self._controls:
+            if isinstance(butt, Button) and butt.get_text() == "Zapisz" and not self.__is_player_placed:
+                continue
             butt.draw(self._surface)
 
         #linia oddzielająca
@@ -224,10 +228,11 @@ class ViewLevelEditor(View):
         return self.__image_buttons
 
     #v----SETTERY----v
-    def set_model(self, level_num, mode, level, coords, can_be_placed):
+    def set_model(self, level_num, mode, level, coords, can_be_placed, is_player_placed):
         self.__texts[0].set_text(str(level_num))
         self.__mode = mode
         self.__level = level
         self.__coords = coords
         self.__can_be_placed = can_be_placed
+        self.__is_player_placed = is_player_placed
 

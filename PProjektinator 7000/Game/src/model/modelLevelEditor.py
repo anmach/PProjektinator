@@ -72,11 +72,16 @@ class ModelLevelEditor(Model):
 
         elif self._command == Command.EDIT and len(self.__level_list) > 0:
             self.__chosen_level = self.__level_to_edit
+            
             #wczytanie nowego poziomu
             self.load_level_from_file()
             self.__level = LevelContainer(define.get_levels_folder_path() + '\\' + self.__level_list[self.__chosen_level], self.__chosen_level)
+            
             if self.__level.get_player() != None:
                 self.__level.get_player().set_frame_by_id(1)
+                self.__is_player_placed = True
+            else:
+                self.__is_player_placed = False
 
 
         elif self._command == Command.CREATE_NEW:
@@ -90,7 +95,7 @@ class ModelLevelEditor(Model):
             self.__level_to_edit = len(self.__level_list) - 1
             self.__is_player_placed = False
 
-        elif self._command == Command.SAVE and self.__chosen_level != -1:
+        elif self._command == Command.SAVE and self.__chosen_level != -1 and self.__is_player_placed:
             #zapisanie aktualnie modyfikowanego poziomu
             self.__level.save_level_to_file()
             pass
@@ -478,3 +483,6 @@ class ModelLevelEditor(Model):
 
     def get_can_object_be_placed(self):
         return self.__can_object_be_placed
+
+    def get_is_player_placed(self):
+        return self.__is_player_placed
