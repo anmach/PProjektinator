@@ -62,6 +62,11 @@ class LevelContainer(object):
                 speed_x = -1
                 speed_y = -1
 
+            elif splitted_line[0] == "$":
+                if self.try_add_new_object(id, x, y, width, height, type, speed_x, speed_y, movement_max_x, movement_max_y) == 0:
+                    # Nie udało się dodać obiektu
+                    return 0
+
             elif splitted_line[0] == "#":
                 pass
 
@@ -100,11 +105,6 @@ class LevelContainer(object):
             elif line_of_object_info == 8:
                 speed_y = int(splitted_line[0])
                 line_of_object_info += 1
-
-            elif splitted_line[0] == "$":
-                if self.try_add_new_object(id, x, y, width, height, type, speed_x, speed_y, movement_max_x, movement_max_y) == 0:
-                    # Nie udało się dodać obiektu
-                    return 0
 
             else:
                 # Błąd odczytu, za dużo linii
