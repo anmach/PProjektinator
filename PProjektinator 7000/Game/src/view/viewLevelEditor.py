@@ -10,7 +10,7 @@ from src.view.UI.imageButton import ImageButton
 from src.view.UI.imageButtonGroup import ImageButtonGroup
 
 from src.view.Game.player import Player
-from src.view.Game.movingPlatform import MovingPlatform
+from src.view.Game.movingObject import MovingObject
 
 import pygame as py
 
@@ -126,7 +126,7 @@ class ViewLevelEditor(View):
         py.draw.rect(self._surface, (240, 240, 240), (0, 0, self.__edit_surface_border * self._surface.get_size()[0], self._surface.get_size()[1]))
         
         for entity in self.__level.get_sprite_group():
-            if isinstance(entity, MovingPlatform):
+            if isinstance(entity, MovingObject):
                 py.draw.rect(self._surface, (0,0,0), (entity.get_x() + entity.get_path_max_x(), entity.get_y() + entity.get_path_max_y(), entity.get_width(), entity.get_height()), 1)
                 py.draw.line(self._surface, (0,0,0), (entity.get_x() + entity.get_width() // 2, entity.get_y() + entity.get_height() // 2), (entity.get_x() + entity.get_width() // 2 + entity.get_path_max_x(), entity.get_y() + entity.get_height() // 2 + entity.get_path_max_y()), 1)
             self._surface.blit(entity.surf, entity.rect)

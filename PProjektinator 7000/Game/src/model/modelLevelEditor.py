@@ -4,7 +4,7 @@ from src.enum.editingMode import EditingMode
 from src.view.Game.gameObject import GameObject
 from src.view.Game.dynamicObject import dynamicObject
 from src.view.Game.player import Player
-from src.view.Game.movingPlatform import MovingPlatform
+from src.view.Game.movingObject import MovingObject
 from src.enum.objectType import ObjectType
 from src.levelContainer import LevelContainer
 import os
@@ -395,7 +395,7 @@ class ModelLevelEditor(Model):
                 y0 = min(self.__something_coords[1], self.__something_coords[3])
                 y1 = max(self.__something_coords[1], self.__something_coords[3])
 
-                #new_object = MovingPlatform(x0, y0, x1 - x0, y1 - y0, False, ObjectType.KINEMATIC, None, self.__something_coords[4], self.__something_coords[5], 2, 2)
+                #new_object = MovingObject(x0, y0, x1 - x0, y1 - y0, False, ObjectType.KINEMATIC, None, self.__something_coords[4], self.__something_coords[5], 2, 2)
                 #self.__game_objects_arr.append(new_object)
                 #self.__all_sprites.add(new_object)
 

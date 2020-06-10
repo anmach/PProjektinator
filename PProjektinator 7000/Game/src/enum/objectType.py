@@ -12,4 +12,6 @@ class ObjectType(IntEnum):
     KINEMATIC = 4,
     # postać 
     PLAYER = 5
+    # wrogowie
+    ENEMY = 6
 

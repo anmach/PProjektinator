@@ -1,7 +1,7 @@
 from .model import Model
 from src.view.Game.gameObject import GameObject
 from src.view.Game.dynamicObject import dynamicObject
-from src.view.Game.movingPlatform import MovingPlatform
+from src.view.Game.movingObject import MovingObject
 from src.view.Game.player import Player
 from src.enum.command import Command
 from src.enum.objectType import ObjectType
@@ -40,7 +40,7 @@ class ModelLevel(Model):
             # debugowe elementy poziomu
             # platform1 = GameObject(200, 150, 50, 49, ObjectType.STATIC, None)
             # self.__all_sprites.add(platform1)
-            # self.__all_sprites.add(MovingPlatform(50, 400, 100, 20, False, ObjectType.KINEMATIC, None, 300, 0, 2, 0))
+            # self.__all_sprites.add(MovingObject(50, 400, 100, 20, False, ObjectType.KINEMATIC, None, 300, 0, 2, 0))
 
 
     def movement(self):

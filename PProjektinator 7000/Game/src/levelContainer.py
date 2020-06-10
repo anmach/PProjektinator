@@ -1,7 +1,7 @@
 import pygame as py
 from src.enum.objectType import ObjectType
 from src.view.Game.gameObject import GameObject
-from src.view.Game.movingPlatform import MovingPlatform
+from src.view.Game.movingObject import MovingObject
 from src.view.Game.dynamicObject import dynamicObject
 from src.view.Game.player import Player
 import src.define as define
@@ -16,6 +16,8 @@ class LevelContainer(object):
         self._platforms = []
         self._moving_platforms = []
         self._crates = []
+
+        self._enemies = []
         self._player = None
 
         # poziom odczytany bez odkrytych błędów, ale może nie mieć playera 
@@ -138,9 +140,14 @@ class LevelContainer(object):
             if speed_x < 0 or speed_y < 0:# or movement_max_x < 0 or movement_max_y < 0:
                 # Błąd - niepoprawne dane
                 return 0
-            self._moving_platforms.append(MovingPlatform(x,y, width, height, False, ObjectType.KINEMATIC, None, movement_max_x, movement_max_y, speed_x, speed_y))
+            self._moving_platforms.append(MovingObject(x,y, width, height, False, ObjectType.KINEMATIC, None, movement_max_x, movement_max_y, speed_x, speed_y))
         elif id == ObjectType.PLAYER:
             self._player = Player(x, y, width, height, True, ObjectType.PLAYER, define.get_player_sprites_folder_path())
+        elif id == ObjectType.ENEMY:
+            if speed_x < 0 or speed_y < 0:# or movement_max_x < 0 or movement_max_y < 0:
+                # Błąd - niepoprawne dane
+                return 0
+            self._enemies.append()(MovingObject(x,y, width, height, False, ObjectType.ENEMY, None, movement_max_x, movement_max_y, speed_x, speed_y))
         else:
             # Błąd - nieznany typ
             return 0
@@ -239,6 +246,28 @@ class LevelContainer(object):
             file.write(str(mov_plat.get_spd_x())) # speed x
             file.write('\n')          
             file.write(str(mov_plat.get_spd_y())) # speed y
+            file.write('\n')
+
+        for enemy in self._enemies:        
+            file.write('@')   
+            file.write('\n')           
+            file.write(str(int(ObjectType.ENEMY))) # id
+            file.write('\n')       
+            file.write(str(enemy.get_x())) # x
+            file.write('\n')        
+            file.write(str(enemy.get_y())) # y
+            file.write('\n')          
+            file.write(str(enemy.get_width())) # szerokość
+            file.write('\n')          
+            file.write(str(enemy.get_height())) # wysokość
+            file.write('\n')          
+            file.write(str(enemy.get_path_max_x())) # max x
+            file.write('\n')          
+            file.write(str(enemy.get_path_max_y())) # max y
+            file.write('\n')          
+            file.write(str(enemy.get_spd_x())) # speed x
+            file.write('\n')          
+            file.write(str(enemy.get_spd_y())) # speed y
             file.write('\n')
             
         file.write('$')
