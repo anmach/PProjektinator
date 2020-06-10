@@ -315,6 +315,9 @@ class LevelContainer(object):
     def get_moving_platforms(self):
         return self._moving_platforms
 
+    def get_enemies(self):
+        return self._enemies
+
     def get_player(self):
         return self._player
 
@@ -347,3 +350,6 @@ class LevelContainer(object):
 
     def add_platform(self, platform):
         self._platforms.append(platform)
+
+    def add_enemy(self, enemy):
+        self._enemies.append(enemy)
