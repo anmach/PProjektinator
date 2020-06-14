@@ -63,8 +63,8 @@ class ViewLevelEditor(View):
         self.__image_buttons.append(newImageButton)
 
     def add_all_controls(self):
-        surface_size_x = self._surface.get_size()[0]
-        surface_size_y = self._surface.get_size()[1]
+        self.__surface_size_x = surface_size_x = self._surface.get_size()[0]
+        self.__surface_size_y = surface_size_y = self._surface.get_size()[1]
 
         smallest_button_size = int(surface_size_x * 0.016)
         biggest_button_size = int(surface_size_x * 0.024)
@@ -212,8 +212,13 @@ class ViewLevelEditor(View):
                     
         #wyrysowanie wszystkich przycisków na ekran
         for butt in self._controls:
-            if isinstance(butt, Button) and butt.get_text() == "Zapisz" and not self.__is_player_placed:
-                continue
+            if isinstance(butt, Button):
+                if butt.get_text() == "Zapisz" and not self.__is_player_placed:
+                   butt.set_text("Brak gracza!")
+                   butt.set_pos((butt.get_pos()[0] * 0.972, butt.get_pos()[1]))
+                elif butt.get_text() == "Brak gracza!" and self.__is_player_placed:
+                    butt.set_text("Zapisz")
+                    butt.set_pos((0.855 * self.__surface_size_x, butt.get_pos()[1]))
             butt.draw(self._surface)
 
         #linia oddzielająca
