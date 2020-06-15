@@ -12,7 +12,12 @@ class ViewLevel(View):
         super().__init__(surface)
         self.__all_sprites = py.sprite.Group()
         self.__paused = False
-        self.__text = Text("Spauzowano.", int(0.04 * self._surfaceSize[0]), (0.35 * self._surfaceSize[0], 0.05 * self._surfaceSize[1]))
+        self.__gameover = False
+        self.__won = False
+        self.__camera = None
+        self.__pause_text = Text("Spauzowano.", int(0.04 * self._surfaceSize[0]), (0.35 * self._surfaceSize[0], 0.05 * self._surfaceSize[1]))
+        self.__won_text = Text("Gratulacje! Naciśnij Esc przy wybrać kolejny poziom.", int(0.04 * self._surfaceSize[0]), (0.05 * self._surfaceSize[0], 0.05 * self._surfaceSize[1]))
+        self.__lost_text = Text("YOU DIED. Naciśnij Esc by spróbować ponownie.", int(0.04 * self._surfaceSize[0]), (0.05 * self._surfaceSize[0], 0.05 * self._surfaceSize[1]))
         self.__blink_enabled = 1
 
         self.__blinking_rects = []
@@ -21,10 +26,14 @@ class ViewLevel(View):
     def render(self):
         self._surface.fill((200, 220, 250))
         if self.__paused == True:
-            self.__text.draw(self._surface)
+            self.__pause_text.draw(self._surface)
+        elif self.__gameover == True and self.__won == True:
+            self.__won_text.draw(self._surface)
+        elif self.__gameover == True and self.__won == False:
+            self.__lost_text.draw(self._surface)
         else:
             for entity in self.__all_sprites:
-                self._surface.blit(entity.surf, entity.rect)
+                self._surface.blit(entity.surf, (entity.get_x() - self.__camera.x, entity.get_y() - self.__camera.y))
             if self.__blink_enabled == 1:
                 for rect in self.__blinking_rects:
                     rect.update();
@@ -42,6 +51,15 @@ class ViewLevel(View):
 
     def set_paused(self, paused):
         self.__paused = paused
+
+    def set_gameover(self, gameover):
+        self.__gameover = gameover
+
+    def set_won(self, won):
+        self.__won = won
+
+    def set_camera(self, camera):
+        self.__camera = camera
 
     def set_blink_enabled(self, do_we_blink):
         self.__blink_enabled = do_we_blink

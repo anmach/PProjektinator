@@ -90,6 +90,9 @@ class ControllerLevel(Controller):
         view.set_player(model.get_player())
         view.set_all_sprites(model.get_all_sprites())
         view.set_paused(model.is_paused())
+        view.set_gameover(model.is_gamover())
+        view.set_won(model.is_won())
+        view.set_camera(model.get_camera())
 
     def get_controls(self, view):
         self._controls = view.get_controls()
