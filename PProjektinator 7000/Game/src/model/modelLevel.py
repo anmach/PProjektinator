@@ -201,3 +201,10 @@ class ModelLevel(Model):
 
     def is_paused(self):
         return self.__paused
+
+    def is_gamover(self):
+        return self.__gamover
+
+    def is_won(self):
+        return self.__won
+
