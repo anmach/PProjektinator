@@ -177,6 +177,14 @@ class LevelContainer(object):
             else:
                 index += 1
 
+        index = 0
+        for item in self._enemies:
+            if item == object:
+                self._enemies.pop(index)
+                return
+            else:
+                index += 1
+
         if object == self._player:
             self._player = None
 
@@ -300,6 +308,9 @@ class LevelContainer(object):
             objects.append(item)
 
         for item in self._moving_platforms:
+            objects.append(item)
+
+        for item in self._enemies:
             objects.append(item)
 
         if self._player != None:

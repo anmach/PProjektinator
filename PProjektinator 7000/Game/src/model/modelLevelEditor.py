@@ -482,8 +482,6 @@ class ModelLevelEditor(Model):
                 break
 
         if self._command == Command.CLICKED_LMB and len(self.__level.get_all_level_objects()) > 0:
-            #deleted_object = self.__level.get_all_level_objects().pop(obj_to_del_index)
-            #self.__level.get_sprite_group().remove(deleted_object)
             self.__level.try_delete_object(obj_to_del)
 
             #jeśli był to gracz to zapamiętaj, że już go nie
@@ -491,15 +489,6 @@ class ModelLevelEditor(Model):
                 self.__is_player_placed = False
 
             self.__something_coords = (-1, -1, -1, -1)
-
-    def load_level_from_file(self):
-        #odczyt wybranego przez użytkownika pliku
-        
-        #TODO
-        #wczytanie poziomu (najlepiej jakby tu było wywołanie jednej metody
-        #klasy odpowiedzialnej za przechowywanie poziomu, ale czy tak
-        #będzie....)
-        pass
 
     def is_colliding(self, first = (0, 0, 0, 0), second = (0, 0, 0, 0)):
         """ funkcja zwraca True jeśli obiekty nachodzą na siebie
