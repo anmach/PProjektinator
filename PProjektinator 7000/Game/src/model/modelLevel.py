@@ -16,8 +16,11 @@ class ModelLevel(Model):
         super().__init__()
         
         self.level_number = level_number
-
         self.__paused = False
+        self.__gamover = False
+        self.__won = False
+        self.__bottomless_pit = 1000
+
         self._shot_sound = py.mixer.Sound(define.get_shot_sound_path())
 
         # czytanie levelu z pliku ale jeszcze nie teraz
@@ -38,10 +41,8 @@ class ModelLevel(Model):
             self.__all_sprites.add(self.__player) 
 
             # debugowe elementy poziomu
-            # platform1 = GameObject(200, 150, 50, 49, ObjectType.STATIC, None)
-            # self.__all_sprites.add(platform1)
-            # self.__all_sprites.add(MovingObject(50, 400, 100, 20, False, ObjectType.KINEMATIC, None, 300, 0, 2, 0))
-
+            # self.__all_sprites.add(GameObject(1000, 200, 100, 100, ObjectType.FINISH_LINE, None))
+            # self.__all_sprites.add(MovingObject(1000, 400, 100, 100, False, ObjectType.ENEMY, None, 0, 30, 0, 2))
 
     def movement(self):
         spd_x = 5 if self._command & Command.GO_RIGHT & ~0x80 else \
@@ -154,12 +155,20 @@ class ModelLevel(Model):
                                 if dynamic.spd_x + dynamic.spd_x_other < 0:
                                     dynamic.spd_x = 0
                                     dynamic.spd_x_other = entity.rect.x + entity.rect.width - dynamic.rect.x
-
+                        if dynamic.type == ObjectType.PLAYER:
+                            if entity.type == ObjectType.FINISH_LINE:
+                                    if dynamic.check_collision_ip(entity, 0, 0):
+                                        self.__gamover = True
+                                        self.__won = True
+                            if entity.type == ObjectType.ENEMY:
+                                if dynamic.check_collision_ip(entity, 0, 0):
+                                        self.__gamover = True
                     if dynamic.type == ObjectType.BULLET and entity != self.__player:
                         if dynamic.check_collision_ip(entity, dynamic.spd_x, dynamic.spd_y):
                             self.__all_sprites.remove(dynamic)
                             del dynamic
-
+        if (self.__player.rect.y > self.__bottomless_pit):
+            self.__gamover = True
 
     def update(self):
 
@@ -173,9 +182,8 @@ class ModelLevel(Model):
         if self._command & Command.PAUSE & ~0x80:
             self.__paused = True if not self.__paused else False
 
-        if not self.__paused:
+        if not self.__paused and not self.__gamover:
             self.movement()
-            
         # kolizje
             self.collisions()
         # update obiektów (pozycji)

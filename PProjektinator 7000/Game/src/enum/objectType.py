@@ -13,5 +13,7 @@ class ObjectType(IntEnum):
     # postać 
     PLAYER = 5
     # wrogowie
-    ENEMY = 6
+    ENEMY = 6,
+    # zakończenie poziomu - meta
+    FINISH_LINE = 7
 
