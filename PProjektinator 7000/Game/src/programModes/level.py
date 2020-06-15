@@ -7,7 +7,7 @@ class Level(ProgramMode):
     """Gra na poziomie"""
 
     def __init__(self, display, level_number):
-        self._model = ModelLevel(level_number)
+        self._model = ModelLevel(level_number, display)
         self._controller = ControllerLevel()
         self._view = ViewLevel(display)     
         

@@ -12,7 +12,7 @@ import src.define as define
 class ModelLevel(Model):
     """Model poziomu"""
 
-    def __init__(self, level_number):
+    def __init__(self, level_number, display):
         super().__init__()
         
         self.level_number = level_number
@@ -20,10 +20,10 @@ class ModelLevel(Model):
         self.__gamover = False
         self.__won = False
         self.__bottomless_pit = 1000
+        self.__camera = py.Rect(0, 0, display.get_width(), display.get_height())
 
         self._shot_sound = py.mixer.Sound(define.get_shot_sound_path())
 
-        # czytanie levelu z pliku ale jeszcze nie teraz
         # TU DODAŁAM
         self._lvl_container = LevelContainer(define.get_levels_folder_path() + "\\001_Tut1.txt", self.level_number)
         self._error = self._lvl_container.get_level_read_succes()
@@ -31,6 +31,7 @@ class ModelLevel(Model):
         if self._error != 0:
             self.objs = py.sprite.Group()
             self.__player = self._lvl_container.get_player() #= Player(700, 20, 75, 150, True, ObjectType.PLAYER, define.get_player_sprites_folder_path())
+            self.update_camera()
             self.telekinesis = False
             self.tele_idx = 0
             self.tele_objs = self._lvl_container.get_crates()
@@ -42,6 +43,7 @@ class ModelLevel(Model):
 
             # debugowe elementy poziomu
             # self.__all_sprites.add(GameObject(1000, 200, 100, 100, ObjectType.FINISH_LINE, None))
+            self.__all_sprites.add(GameObject(700, 500, 1000, 100, ObjectType.STATIC, None))
             # self.__all_sprites.add(MovingObject(1000, 400, 100, 100, False, ObjectType.ENEMY, None, 0, 30, 0, 2))
 
     def movement(self):
@@ -100,77 +102,83 @@ class ModelLevel(Model):
 
     def collisions(self):       # nested 'ifs' to hatch? xD
         for entity in self.__all_sprites:
-            for dynamic in self.__all_sprites:
-                if dynamic != entity:
-                    if ((dynamic.type == ObjectType.DYNAMIC) or (dynamic.type == ObjectType.PLAYER)):
-                        if entity.type == ObjectType.KINEMATIC:
-                            if dynamic.check_collision_ip_below(entity, 0, dynamic.spd_y + dynamic.spd_y_other):
-                                if dynamic.spd_y >= 0:
-                                    dynamic.spd_y = 0
-                                    dynamic.spd_x_other = entity.spd_x
-                                    dynamic.spd_y_other = entity.rect.y - (dynamic.rect.y + dynamic.rect.height)
-                                if dynamic == self.__player:
-                                    self.no_jumps = 2
-
-                        if (entity.type == ObjectType.STATIC):
-                            if dynamic.check_collision_ip(entity, 0, dynamic.spd_y + dynamic.spd_y_other):
-                                if dynamic.spd_y + dynamic.spd_y_other > 0:
-                                    dynamic.spd_y = entity.rect.y - (dynamic.rect.y + dynamic.rect.height)
-                                    dynamic.spd_y_other = 0
-                                    if entity.type == ObjectType.DYNAMIC or entity.type == ObjectType.PLAYER:
-                                        dynamic.spd_x_other = entity.spd_x + entity.spd_x_other
+            if entity.rect.x + entity.rect.width > self.__camera.x and entity.rect.x < self.__camera.x + self.__camera.width:
+                for dynamic in self.__all_sprites:
+                    if dynamic != entity and (dynamic.rect.x + dynamic.rect.width > self.__camera.x and dynamic.rect.x < self.__camera.x + self.__camera.width):
+                        if ((dynamic.type == ObjectType.DYNAMIC) or (dynamic.type == ObjectType.PLAYER)):
+                            if entity.type == ObjectType.KINEMATIC:
+                                if dynamic.check_collision_ip_below(entity, 0, dynamic.spd_y + dynamic.spd_y_other):
+                                    if dynamic.spd_y >= 0:
+                                        dynamic.spd_y = 0
+                                        dynamic.spd_x_other = entity.spd_x
+                                        dynamic.spd_y_other = entity.rect.y - (dynamic.rect.y + dynamic.rect.height)
                                     if dynamic == self.__player:
                                         self.no_jumps = 2
-                                if dynamic.spd_y + dynamic.spd_y_other < 0:
-                                    dynamic.spd_y = entity.rect.y + entity.rect.height - dynamic.rect.y
-                                    dynamic.spd_y_other = 0
-                                    if entity.type == ObjectType.DYNAMIC or entity.type == ObjectType.PLAYER:
-                                        entity.spd_y = 0
-                                        entity.spd_y_other = 0
-                            if dynamic.check_collision_ip(entity, dynamic.spd_x + dynamic.spd_x_other, 0):
-                                if dynamic.spd_x + dynamic.spd_x_other > 0:
-                                    dynamic.spd_x = 0
-                                    dynamic.spd_x_other = entity.rect.x - (dynamic.rect.x + dynamic.rect.width)
-                                if dynamic.spd_x + dynamic.spd_x_other < 0:
-                                    dynamic.spd_x = 0
-                                    dynamic.spd_x_other = entity.rect.x + entity.rect.width - dynamic.rect.x
 
-                        if ((entity.type == ObjectType.DYNAMIC) or (entity.type == ObjectType.PLAYER)):
-                            if dynamic.check_collision_dynamic(entity, 0, dynamic.spd_y + dynamic.spd_y_other):
-                                if dynamic.spd_y + dynamic.spd_y_other > 0:
-                                    dynamic.spd_y = entity.get_extended_rect().y - (dynamic.rect.y + dynamic.rect.height) if entity.get_extended_rect().y > dynamic.rect.y + dynamic.rect.height else\
-                                                    0
-                                    dynamic.spd_y_other = 0
-                                    if dynamic == self.__player:
-                                        self.no_jumps = 2
-                                elif dynamic.spd_y + dynamic.spd_y_other < 0:
-                                    dynamic.spd_y = entity.get_extended_rect().y + entity.rect.height - dynamic.rect.y if entity.get_extended_rect().y + entity.rect.height < entity.rect.height else\
-                                                    0
-                                    dynamic.spd_y_other = 0
+                            if (entity.type == ObjectType.STATIC):
+                                if dynamic.check_collision_ip(entity, 0, dynamic.spd_y + dynamic.spd_y_other):
+                                    if dynamic.spd_y + dynamic.spd_y_other > 0:
+                                        dynamic.spd_y = entity.rect.y - (dynamic.rect.y + dynamic.rect.height)
+                                        dynamic.spd_y_other = 0
+                                        if entity.type == ObjectType.DYNAMIC or entity.type == ObjectType.PLAYER:
+                                            dynamic.spd_x_other = entity.spd_x + entity.spd_x_other
+                                        if dynamic == self.__player:
+                                            self.no_jumps = 2
+                                    if dynamic.spd_y + dynamic.spd_y_other < 0:
+                                        dynamic.spd_y = entity.rect.y + entity.rect.height - dynamic.rect.y
+                                        dynamic.spd_y_other = 0
+                                        if entity.type == ObjectType.DYNAMIC or entity.type == ObjectType.PLAYER:
+                                            entity.spd_y = 0
+                                            entity.spd_y_other = 0
+                                if dynamic.check_collision_ip(entity, dynamic.spd_x + dynamic.spd_x_other, 0):
+                                    if dynamic.spd_x + dynamic.spd_x_other > 0:
+                                        dynamic.spd_x = 0
+                                        dynamic.spd_x_other = entity.rect.x - (dynamic.rect.x + dynamic.rect.width)
+                                    if dynamic.spd_x + dynamic.spd_x_other < 0:
+                                        dynamic.spd_x = 0
+                                        dynamic.spd_x_other = entity.rect.x + entity.rect.width - dynamic.rect.x
 
-                            if dynamic.check_collision_ip(entity, dynamic.spd_x + dynamic.spd_x_other, 0):
-                                if dynamic.spd_x + dynamic.spd_x_other > 0:
-                                    dynamic.spd_x = 0
-                                    dynamic.spd_x_other = entity.rect.x - (dynamic.rect.x + dynamic.rect.width)
-                                if dynamic.spd_x + dynamic.spd_x_other < 0:
-                                    dynamic.spd_x = 0
-                                    dynamic.spd_x_other = entity.rect.x + entity.rect.width - dynamic.rect.x
-                        if dynamic.type == ObjectType.PLAYER:
-                            if entity.type == ObjectType.FINISH_LINE:
+                            if ((entity.type == ObjectType.DYNAMIC) or (entity.type == ObjectType.PLAYER)):
+                                if dynamic.check_collision_dynamic(entity, 0, dynamic.spd_y + dynamic.spd_y_other):
+                                    if dynamic.spd_y + dynamic.spd_y_other > 0:
+                                        dynamic.spd_y = entity.get_extended_rect().y - (dynamic.rect.y + dynamic.rect.height) if entity.get_extended_rect().y > dynamic.rect.y + dynamic.rect.height else\
+                                                        0
+                                        dynamic.spd_y_other = 0
+                                        if dynamic == self.__player:
+                                            self.no_jumps = 2
+                                    elif dynamic.spd_y + dynamic.spd_y_other < 0:
+                                        dynamic.spd_y = entity.get_extended_rect().y + entity.rect.height - dynamic.rect.y if entity.get_extended_rect().y + entity.rect.height < entity.rect.height else\
+                                                        0
+                                        dynamic.spd_y_other = 0
+
+                                if dynamic.check_collision_ip(entity, dynamic.spd_x + dynamic.spd_x_other, 0):
+                                    if dynamic.spd_x + dynamic.spd_x_other > 0:
+                                        dynamic.spd_x = 0
+                                        dynamic.spd_x_other = entity.rect.x - (dynamic.rect.x + dynamic.rect.width)
+                                    if dynamic.spd_x + dynamic.spd_x_other < 0:
+                                        dynamic.spd_x = 0
+                                        dynamic.spd_x_other = entity.rect.x + entity.rect.width - dynamic.rect.x
+                            if dynamic.type == ObjectType.PLAYER:
+                                if entity.type == ObjectType.FINISH_LINE:
+                                        if dynamic.check_collision_ip(entity, 0, 0):
+                                            self.__gamover = True
+                                            self.__won = True
+                                if entity.type == ObjectType.ENEMY:
                                     if dynamic.check_collision_ip(entity, 0, 0):
-                                        self.__gamover = True
-                                        self.__won = True
-                            if entity.type == ObjectType.ENEMY:
-                                if dynamic.check_collision_ip(entity, 0, 0):
-                                        self.__gamover = True
-                    if dynamic.type == ObjectType.BULLET and entity != self.__player:
-                        if dynamic.check_collision_ip(entity, dynamic.spd_x, dynamic.spd_y):
-                            self.__all_sprites.remove(dynamic)
-                            del dynamic
+                                            self.__gamover = True
+                        if dynamic.type == ObjectType.BULLET and entity != self.__player:
+                            if dynamic.check_collision_ip(entity, dynamic.spd_x, dynamic.spd_y):
+                                self.__all_sprites.remove(dynamic)
+                                del dynamic
         if (self.__player.rect.y > self.__bottomless_pit):
             self.__gamover = True
 
+    def update_camera(self):
+        self.__camera.x = self.__player.rect.x - (self.__camera.width /2)
+
     def update(self):
+
+        print(self.__camera.width + self.__camera.x - self.__player.rect.x)
 
         if self._command == Command.EXIT:                               # wyjście
             self._runMode = False
@@ -188,8 +196,9 @@ class ModelLevel(Model):
             self.collisions()
         # update obiektów (pozycji)
             for entity in self.__all_sprites:
-                entity.update()
-
+                if entity.rect.colliderect(self.__camera):
+                   entity.update()
+            self.update_camera()
 #------------END update-----------------------------
 
     #v----GETTERY----v
@@ -207,4 +216,7 @@ class ModelLevel(Model):
 
     def is_won(self):
         return self.__won
+
+    def get_camera(self):
+        return self.__camera
 
