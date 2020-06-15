@@ -278,7 +278,7 @@ class LevelContainer(object):
         self._crates.clear()
         self._platforms.clear()
         self._moving_platforms.clear()
-
+        self._enemies.clear();
 
     # Gettery
     def get_level_file_name(self):
@@ -339,6 +339,39 @@ class LevelContainer(object):
 
         for enemy in self._enemies:
             group.add(enemy)
+
+        return group
+
+    # Marna nazwa
+    # Zwraca grupę obiektów (bez gracza), które choć częściowo leżą w zadanym przedziale na osi x
+    def get_sprite_group_in_xx(self, x_start, x_end):
+        group = py.sprite.Group()
+
+        for item in self._moving_platforms:
+            if x_start < item.get_x() + item.get_width():
+                if x_end > item.get_x():
+                    group.add(item)
+            elif x_start < item.get_path_max_x() + item.get_width():
+                if x_end > item.get_path_max_x():
+                    group.add(item)
+
+        for platform in self._platforms:
+            if x_start < platform.get_x() + platform.get_width():
+                if x_end > platform.get_x():
+                    platform.add(platform)
+
+        for crate in self._crates:
+            if x_start < crate.get_x() + crate.get_width():
+                if x_end > crate.get_x():
+                    group.add(crate)
+
+        for enemy in self._enemies:
+            if x_start < enemy.get_x() + enemy.get_width():
+                if x_end > enemy.get_x():
+                    group.add(enemy)
+            elif x_start < enemy.get_path_max_x() + enemy.get_width():
+                if x_end > enemy.get_path_max_x():
+                    group.add(enemy)
 
         return group
 
