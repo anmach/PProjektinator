@@ -16,6 +16,9 @@ def get_crate_sprite_path():
 def get_moving_platform_sprite_path():
     return '.\\res\\sprites\\moving\\moving platform.png'
 
+def get_enemy_sprite_path():
+    return '.\\res\\sprites\\enemies\\sample.png'
+
 def get_raleway_font_path():
     return 'res/fonts/Raleway.ttf'
 

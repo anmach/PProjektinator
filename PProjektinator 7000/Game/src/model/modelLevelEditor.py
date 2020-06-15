@@ -83,7 +83,6 @@ class ModelLevelEditor(Model):
             else:
                 self.__is_player_placed = False
 
-
         elif self._command == Command.CREATE_NEW:
             file = open(define.get_levels_folder_path() + "\\" + str(len(self.__level_list) + 1) + ".txt", 'w')
             file.close()
@@ -144,6 +143,12 @@ class ModelLevelEditor(Model):
             self.__something_coords = (-1, -1, -1, -1)
             self.__new_platform_vertex_number = 1
 
+        elif self._command == Command.PLACE_ENEMY:
+            self.__mode = EditingMode.ENEMY_PLACEMENT
+
+            self.__something_coords = (-1, -1, -1, -1)
+            self.__new_platform_vertex_number = 1
+
         if self._command != Command.CLICKED_MMB:
             self.__is_level_being_moved = False
         #interpretacja akcji użytkownika na polu edycyjnym zależy od trybu w
@@ -166,6 +171,54 @@ class ModelLevelEditor(Model):
 
         elif self.__mode == EditingMode.MOVING_PLATFORM_PLACEMENT:
             self.update_moving_platform_placement()
+
+        elif self.__mode == EditingMode.ENEMY_PLACEMENT:
+            self.update_enemy_placement()
+
+    def update_enemy_placement(self):
+        mouse_pos = py.mouse.get_pos()
+
+        if self.__moving_platform_placement_mode == 1:
+            new_vertex_pos = mouse_pos
+            self.__something_coords = (new_vertex_pos[0] - 25, new_vertex_pos[1] - 25, new_vertex_pos[0] + 25, new_vertex_pos[1] + 25, -1, -1)
+            
+            if self._command == Command.CLICKED_LMB:
+                self.__moving_platform_placement_mode = 2
+
+            elif self._command == Command.CLICKED_RMB:
+                self.__something_coords = (-1, -1, -1, -1)
+                self.__mode = EditingMode.NONE
+
+        elif self.__moving_platform_placement_mode == 2:
+            #TODO sprawdzanie kolizji
+
+            #współrzędne środka ustalonej już początkowej pozycji platofrmy
+            centre = (int(0.5 * (self.__something_coords[0] + self.__something_coords[2])),  int(0.5 * (self.__something_coords[1] + self.__something_coords[3])))
+            
+            #różnica pozycji (współrzędne środków)
+            pos_diffr = (mouse_pos[0] - centre[0], mouse_pos[1] - centre[1])
+
+            #współrzędne pozycji początkowej (x1, y1, x2, y2) oraz różnica pozycji (dx, dy)
+            self.__something_coords = (self.__something_coords[0], self.__something_coords[1], self.__something_coords[2], self.__something_coords[3], pos_diffr[0], pos_diffr[1])
+
+            if self._command == Command.CLICKED_LMB:
+                #dodanie nowej poruszającej się platformy
+                x0 = min(self.__something_coords[0], self.__something_coords[2])
+                x1 = max(self.__something_coords[0], self.__something_coords[2])
+
+                y0 = min(self.__something_coords[1], self.__something_coords[3])
+                y1 = max(self.__something_coords[1], self.__something_coords[3])
+
+                self.__level.try_add_new_object(ObjectType.ENEMY, x0, y0, x1 - x0, y1 - y0, ObjectType.ENEMY, 2, 2, self.__something_coords[4], self.__something_coords[5])
+
+                self.__new_platform_vertex_number = 1
+                self.__moving_platform_placement_mode = 1
+                self.__something_coords = (-1, -1, -1, -1)
+                self.__mode = EditingMode.NONE
+
+
+            elif self._command == Command.CLICKED_RMB:
+                self.__moving_platform_placement_mode = 1
 
     def update_platform_creation(self):
         #TODO
@@ -434,7 +487,7 @@ class ModelLevelEditor(Model):
             self.__level.try_delete_object(obj_to_del)
 
             #jeśli był to gracz to zapamiętaj, że już go nie
-            if isinstance(object, Player):
+            if isinstance(obj_to_del, Player):
                 self.__is_player_placed = False
 
             self.__something_coords = (-1, -1, -1, -1)

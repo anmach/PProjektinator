@@ -99,10 +99,8 @@ class ViewLevelEditor(View):
         #dodanie obiektu ruszającej się platformy
         self.add_image_button(ImageButton(define.get_moving_platform_sprite_path(), (0.90 * surface_size_x, 0.5 * surface_size_y), (image_button_size, image_button_size), False, Command.OBJECT_SELECTED, Command.PLACE_MOVING_PLATFORM))
 
-        #żeby było więcej
-        self.add_image_button(ImageButton(define.get_platform_middle_sprite_path(), (0.90 * surface_size_x, 0.5 * surface_size_y), (image_button_size, image_button_size), False, Command.OBJECT_SELECTED, Command.CREATE_PLATFORM))
-        self.add_image_button(ImageButton(define.get_platform_middle_sprite_path(), (0.90 * surface_size_x, 0.5 * surface_size_y), (image_button_size, image_button_size), False, Command.OBJECT_SELECTED, Command.CREATE_PLATFORM))
-        self.add_image_button(ImageButton(define.get_platform_middle_sprite_path(), (0.90 * surface_size_x, 0.5 * surface_size_y), (image_button_size, image_button_size), False, Command.OBJECT_SELECTED, Command.CREATE_PLATFORM))
+        #dodanie obiektu przeciwnika
+        self.add_image_button(ImageButton(define.get_enemy_sprite_path(), (0.90 * surface_size_x, 0.5 * surface_size_y), (image_button_size, image_button_size), False, Command.OBJECT_SELECTED, Command.PLACE_ENEMY))
 
         self.__imageButtonGroup = ImageButtonGroup((0.825 * surface_size_x, 0.5 * surface_size_y), Command.OBJECT_SELECTED, (image_button_size, image_button_size), self.__image_buttons, (4, 3), 1)
         self._controls.append(self.__imageButtonGroup)
@@ -168,7 +166,7 @@ class ViewLevelEditor(View):
                     py.draw.line(self._surface, (237, 28, 36), (new_object.get_x() + new_object.get_width(), new_object.get_y()), (new_object.get_x(), new_object.get_y() + new_object.get_height()), 3)
         
             #rysowanie poruszającej się platformy
-            elif self.__mode == EditingMode.MOVING_PLATFORM_PLACEMENT:
+            elif self.__mode == EditingMode.MOVING_PLATFORM_PLACEMENT or self.__mode == EditingMode.ENEMY_PLACEMENT:
                 #jeden wierzchołek
                 if self.__coords[2] == -1:
                     py.draw.circle(self._surface, (174, 13, 24), (self.__coords[0], self.__coords[1]), 5)

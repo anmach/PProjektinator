@@ -69,6 +69,8 @@ class Command(IntEnum):
 
     PLACE_MOVING_PLATFORM = 0x1004,
 
+    PLACE_ENEMY = 0x1005,
+
     #polecenie do przejścia do menu opcji
     OPTIONS = 0x100,
 

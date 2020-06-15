@@ -147,7 +147,7 @@ class LevelContainer(object):
             if speed_x < 0 or speed_y < 0:# or movement_max_x < 0 or movement_max_y < 0:
                 # Błąd - niepoprawne dane
                 return 0
-            self._enemies.append()(MovingObject(x,y, width, height, False, ObjectType.ENEMY, None, movement_max_x, movement_max_y, speed_x, speed_y))
+            self._enemies.append(MovingObject(x,y, width, height, False, ObjectType.ENEMY, None, movement_max_x, movement_max_y, speed_x, speed_y))
         else:
             # Błąd - nieznany typ
             return 0
@@ -279,6 +279,7 @@ class LevelContainer(object):
         self._platforms.clear()
         self._moving_platforms.clear()
 
+
     # Gettery
     def get_level_file_name(self):
         return self._level_file_name
@@ -335,6 +336,9 @@ class LevelContainer(object):
 
         for crate in self._crates:
             group.add(crate)
+
+        for enemy in self._enemies:
+            group.add(enemy)
 
         return group
 

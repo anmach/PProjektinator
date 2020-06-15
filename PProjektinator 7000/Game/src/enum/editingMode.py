@@ -19,6 +19,9 @@ class EditingMode(IntEnum):
     #wstawianie ruchomej platformy
     MOVING_PLATFORM_PLACEMENT = 4,
 
+    #wstawianie przeciwnika
+    ENEMY_PLACEMENT = 5,
+
     #przenoszenie obiektów
     OBJECT_RELOCATION = 30,
 
