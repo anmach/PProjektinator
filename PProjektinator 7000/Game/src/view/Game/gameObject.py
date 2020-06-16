@@ -59,6 +59,11 @@ class GameObject(py.sprite.Sprite):
         self.rect.x = newX
         self.rect.y = newY
 
+    def set_width(self, newWidth):
+        self.width = newWidth
+
+    def set_heigth(self, newheigth):
+        self.height = newheigth
 
     def set_frame_by_id(self, frame_id):
         if frame_id >= len(self._frames):

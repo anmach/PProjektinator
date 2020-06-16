@@ -13,6 +13,13 @@ class LevelContainer(object):
         self._level_file_name = level_file_name
         self._level_number = level_number
 
+        # Aktualne rozmiary okna
+        self._surface_width = -1
+        self._surface_height = -1
+        # Rozmiary okna według obiektów w kontenerze
+        self._objects_base_width = -1
+        self._objects_base_height = -1
+
         self._platforms = []
         self._moving_platforms = []
         self._crates = []
@@ -72,6 +79,10 @@ class LevelContainer(object):
                 if self.try_add_new_object(id, x, y, width, height, type, speed_x, speed_y, movement_max_x, movement_max_y) == 0:
                     # Nie udało się dodać obiektu
                     return 0
+
+            elif splitted_line[0] == "%":
+                self._objects_base_width = int(splitted_line[1])
+                self._objects_base_height = int(splitted_line[2])
 
             elif splitted_line[0] == "#":
                 pass
@@ -288,6 +299,28 @@ class LevelContainer(object):
         self._moving_platforms.clear()
         self._enemies.clear();
 
+    def resize_objects_for_surface_size(self):
+        if self._objects_base_height != -1 and self._objects_base_width != -1 and self._surface_height != -1 and self._surface_width != 1:
+            for mov_pla in self._moving_platforms:
+                mov_pla.set_heigth(int(self._surface_height * mov_pla.get_height() / self._objects_base_height))
+                mov_pla.set_pos(mov_pla.get_x(), int(self._surface_height * mov_pla.get_y() / self._objects_base_height))
+
+            for platform in self._platforms:
+                platform.set_heigth(int(self._surface_height * platform.get_height() / self._objects_base_height))
+                platform.set_pos(platform.get_x(), int(self._surface_height * platform.get_y() / self._objects_base_height))
+
+            if self._player != None:
+                self._player.set_heigth(int(self._surface_height * self._player.get_height() / self._objects_base_height))
+                self._player.set_pos(self._player.get_x(), int(self._surface_height * self._player.get_y() / self._objects_base_height))
+
+            for crate in self._crates:
+                crate.set_heigth(int(self._surface_height * crate.get_height() / self._objects_base_height))
+                crate.set_pos(crate.get_x(), int(self._surface_height * crate.get_y() / self._objects_base_height))
+
+            for enemy in self._enemies:
+                enemy.set_heigth(int(self._surface_height * enemy.get_height() / self._objects_base_height))
+                enemy.set_pos(enemy.get_x(), int(self._surface_height * enemy.get_y() / self._objects_base_height))
+
     # Gettery
     def get_level_file_name(self):
         return self._level_file_name
@@ -385,6 +418,11 @@ class LevelContainer(object):
                     group.add(enemy)
 
         return group
+
+    # Settery
+    def set_surface_size(self, new_width, new_height):
+        self._surface_height = new_height
+        self._surface_width = new_width
 
     # Add
     def add_player(self, player):

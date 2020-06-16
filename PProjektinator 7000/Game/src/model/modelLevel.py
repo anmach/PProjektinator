@@ -28,6 +28,10 @@ class ModelLevel(Model):
         self._lvl_container = LevelContainer(define.get_levels_folder_path() + "\\001_Tut1.txt", self.level_number)
         self._error = self._lvl_container.get_level_read_succes()
 
+        # Dopasowanie rozmiaru do okna (na razie tylko po y, to zniknie
+        self._lvl_container.set_surface_size(display.get_width(), display.get_height())
+        self._lvl_container.resize_objects_for_surface_size()
+
         if self._error != 0:
             self.objs = py.sprite.Group()
             self.__visible_objs = py.sprite.Group()
