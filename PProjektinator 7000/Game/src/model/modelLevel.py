@@ -59,7 +59,7 @@ class ModelLevel(Model):
                 -5 if self._command & Command.GO_LEFT & ~0x80 else \
                 0
 
-        for entity in self.__all_sprites:
+        for entity in self.__visible_objs:
             if entity.type == ObjectType.DYNAMIC or entity.type == ObjectType.PLAYER:
                 entity.spd_y += 1 if entity.does_gravity else\
                                 0
@@ -108,12 +108,14 @@ class ModelLevel(Model):
                             return           
 
 
-    def collisions(self):       # nested 'ifs' to hatch?  xD    #Dobre.
+    def collisions(self):       # nested 'ifs' to hatch?  xD    #Dobre. #nie, nie dobre
         for entity in self.__all_sprites:
             if entity.rect.x + entity.rect.width > self.__camera.x and entity.rect.x < self.__camera.x + self.__camera.width:
                 self.__visible_objs.add(entity)
             else:
                 self.__visible_objs.remove(entity)
+                if entity.type == ObjectType.DYNAMIC:
+                    entity.spd_y = 0
 
             for dynamic in self.__visible_objs:
                 if dynamic != entity and (dynamic.rect.x + dynamic.rect.width > self.__camera.x and dynamic.rect.x < self.__camera.x + self.__camera.width):
@@ -181,6 +183,7 @@ class ModelLevel(Model):
                     if dynamic.type == ObjectType.BULLET and entity != self.__player:
                         if dynamic.check_collision_ip(entity, dynamic.spd_x, dynamic.spd_y):
                             self.__all_sprites.remove(dynamic)
+                            self.__visible_objs.remove(dynamic)
                             del dynamic
 
         if (self.__player.rect.y >= self.__bottomless_pit):
@@ -191,8 +194,7 @@ class ModelLevel(Model):
 
     def update(self):
 
-        #print(self.__camera.width + self.__camera.x - self.__player.rect.x)
-        print(self.__player.rect.y)
+        print(self.tele_objs[0].spd_y)
         if self._command == Command.EXIT:                               # wyjście
             self._runMode = False
 
@@ -208,9 +210,8 @@ class ModelLevel(Model):
         # kolizje
             self.collisions()
         # update obiektów (pozycji)
-            for entity in self.__all_sprites:
-                if entity.rect.colliderect(self.__camera):
-                   entity.update()
+            for entity in self.__visible_objs:
+                entity.update()
             self.update_camera()
 #------------END update-----------------------------
 
