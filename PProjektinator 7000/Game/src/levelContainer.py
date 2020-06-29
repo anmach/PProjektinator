@@ -25,6 +25,7 @@ class LevelContainer(object):
         self._crates = []
 
         self._enemies = []
+        self._finish_lines = []
         self._player = None
 
         # poziom odczytany bez odkrytych błędów, ale może nie mieć playera 
@@ -159,6 +160,8 @@ class LevelContainer(object):
                 # Błąd - niepoprawne dane
                 return 0
             self._enemies.append(MovingObject(x,y, width, height, False, ObjectType.ENEMY, None, movement_max_x, movement_max_y, speed_x, speed_y))
+        elif id == ObjectType.FINISH_LINE:
+            self._finish_lines.append(GameObject(x, y, width, height, ObjectType.FINISH_LINE, define.get_end_game_sprites_folder_path()))
         else:
             # Błąd - nieznany typ
             return 0
@@ -192,6 +195,14 @@ class LevelContainer(object):
         for item in self._enemies:
             if item == object:
                 self._enemies.pop(index)
+                return
+            else:
+                index += 1
+
+        index = 0
+        for item in self._finish_lines:
+            if item == object:
+                self._finish_lines.pop(index)
                 return
             else:
                 index += 1
@@ -298,6 +309,7 @@ class LevelContainer(object):
         self._platforms.clear()
         self._moving_platforms.clear()
         self._enemies.clear();
+        self._finish_lines.clear()
 
     def resize_objects_for_surface_size(self):
         if self._objects_base_height != -1 and self._objects_base_width != -1 and self._surface_height != -1 and self._surface_width != 1:
@@ -320,6 +332,10 @@ class LevelContainer(object):
             for enemy in self._enemies:
                 enemy.set_heigth(int(self._surface_height * enemy.get_height() / self._objects_base_height))
                 enemy.set_pos(enemy.get_x(), int(self._surface_height * enemy.get_y() / self._objects_base_height))
+
+            for line in self._finish_lines:
+                line.set_heigth(int(self._surface_height * line.get_height() / self._objects_base_height))
+                line.set_pos(line.get_x(), int(self._surface_height * line.get_y() / self._objects_base_height))
 
     # Gettery
     def get_level_file_name(self):
@@ -346,6 +362,9 @@ class LevelContainer(object):
         for item in self._enemies:
             objects.append(item)
 
+        for item in self._finish_lines:
+            objects.append(item)
+
         if self._player != None:
             objects.append(self._player)
 
@@ -362,6 +381,9 @@ class LevelContainer(object):
 
     def get_enemies(self):
         return self._enemies
+
+    def get_finish_lines(self):
+        return self._finish_lines
 
     def get_player(self):
         return self._player
@@ -383,6 +405,9 @@ class LevelContainer(object):
 
         for enemy in self._enemies:
             group.add(enemy)
+
+        for line in self._finish_lines:
+            group.add(line)
 
         return group
 
@@ -413,6 +438,12 @@ class LevelContainer(object):
             if x_start < enemy.get_x() + enemy.get_width():
                 if x_end > enemy.get_x():
                     group.add(enemy)
+
+        for line in self._finish_lines:
+            if x_start < line.get_x() + line.get_width():
+                if x_end > line.get_x():
+                    group.add(line)
+
             elif x_start < enemy.get_path_max_x() + enemy.get_width():
                 if x_end > enemy.get_path_max_x():
                     group.add(enemy)
@@ -439,3 +470,6 @@ class LevelContainer(object):
 
     def add_enemy(self, enemy):
         self._enemies.append(enemy)
+
+    def add_finish_line(self, line):
+        self._finish_lines.append(line)
