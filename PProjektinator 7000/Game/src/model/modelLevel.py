@@ -50,9 +50,8 @@ class ModelLevel(Model):
             # debugowe elementy poziomu
             # self.__all_sprites.add(GameObject(1000, 200, 100, 100,
             # ObjectType.FINISH_LINE, None))
+            self.__all_sprites.add(MovingObject(1000, 400, 100, 100, False, ObjectType.ENEMY, None, 0, 30, 0, 2))
             self.__all_sprites.add(GameObject(700, 500, 1000, 100, ObjectType.STATIC, None))
-            # self.__all_sprites.add(MovingObject(1000, 400, 100, 100, False,
-            # ObjectType.ENEMY, None, 0, 30, 0, 2))
 
     def movement(self):
         spd_x = 5 if self._command & Command.GO_RIGHT & ~0x80 else \
@@ -116,6 +115,8 @@ class ModelLevel(Model):
                 self.__visible_objs.remove(entity)
                 if entity.type == ObjectType.DYNAMIC:
                     entity.spd_y = 0
+                if entity.type == ObjectType.BULLET:
+                    self.__all_sprites.remove(entity)
 
             for dynamic in self.__visible_objs:
                 if dynamic != entity and (dynamic.rect.x + dynamic.rect.width > self.__camera.x and dynamic.rect.x < self.__camera.x + self.__camera.width):
@@ -184,7 +185,11 @@ class ModelLevel(Model):
                         if dynamic.check_collision_ip(entity, dynamic.spd_x, dynamic.spd_y):
                             self.__all_sprites.remove(dynamic)
                             self.__visible_objs.remove(dynamic)
-                            del dynamic
+                            if entity.type == ObjectType.ENEMY:
+                                self.__all_sprites.remove(entity)
+                                self.__visible_objs.remove(entity)
+                        if dynamic not in self.__all_sprites:
+                            self.__visible_objs.remove(dynamic)                        
 
         if (self.__player.rect.y >= self.__bottomless_pit):
             self.__gamover = True
