@@ -71,6 +71,8 @@ class Command(IntEnum):
 
     PLACE_ENEMY = 0x1005,
 
+    PLACE_END_GAME = 0x1006,
+
     #polecenie do przejścia do menu opcji
     OPTIONS = 0x100,
 

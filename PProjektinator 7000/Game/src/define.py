@@ -19,6 +19,12 @@ def get_moving_platform_sprite_path():
 def get_enemy_sprite_path():
     return '.\\res\\sprites\\enemies\\sample.png'
 
+def get_end_game_sprite_path():
+    return '.\\res\\sprites\\endgame\\end.png'
+
+def get_end_game_sprites_folder_path():
+    return '.\\res\\sprites\\endgame\\'
+
 def get_raleway_font_path():
     return 'res/fonts/Raleway.ttf'
 
@@ -39,3 +45,6 @@ def get_standard_resolution():
 
 def get_platform_tile_standard_size():
     return (50, 50)
+
+def get_end_game_standard_size():
+    return (25, 25)

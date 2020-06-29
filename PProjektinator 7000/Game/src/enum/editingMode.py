@@ -22,6 +22,9 @@ class EditingMode(IntEnum):
     #wstawianie przeciwnika
     ENEMY_PLACEMENT = 5,
 
+    #wstawianie końca gry
+    END_GAME_PLACEMENT = 6,
+
     #przenoszenie obiektów
     OBJECT_RELOCATION = 30,
 

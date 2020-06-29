@@ -149,6 +149,12 @@ class ModelLevelEditor(Model):
             self.__something_coords = (-1, -1, -1, -1)
             self.__new_platform_vertex_number = 1
 
+        elif self._command == Command.PLACE_END_GAME:
+            self.__mode = EditingMode.END_GAME_PLACEMENT
+
+            self.__something_coords = (-1, -1, -1, -1)
+            self.__new_platform_vertex_number = 1
+
         if self._command != Command.CLICKED_MMB:
             self.__is_level_being_moved = False
         #interpretacja akcji użytkownika na polu edycyjnym zależy od trybu w
@@ -174,6 +180,9 @@ class ModelLevelEditor(Model):
 
         elif self.__mode == EditingMode.ENEMY_PLACEMENT:
             self.update_enemy_placement()
+
+        elif self.__mode == EditingMode.END_GAME_PLACEMENT:
+            self.update_end_game_placement()
 
     def update_enemy_placement(self):
         mouse_pos = py.mouse.get_pos()
@@ -325,8 +334,6 @@ class ModelLevelEditor(Model):
                 self.__new_platform_vertex_number = 1
 
     def update_player_placement(self):
-        #sprawdzenie kolizji - TODO??  ulepszenie tego?  żeby nie sprawdzać z
-        #każdym obiektem
         mouse_pos = py.mouse.get_pos()
         
         #nowa pozycja gracza - TODO - zmienić dla zmian rozdzielczości
@@ -462,6 +469,33 @@ class ModelLevelEditor(Model):
 
             elif self._command == Command.CLICKED_RMB:
                 self.__moving_platform_placement_mode = 1
+
+    def update_end_game_placement(self):
+        mouse_pos = py.mouse.get_pos()
+        
+        #nowa pozycja końca gry
+        x0 = mouse_pos[0] - int(0.5 * define.get_end_game_standard_size()[0])
+        x1 = x0 + define.get_end_game_standard_size()[0]
+
+        y0 = mouse_pos[1] - int(0.5 * define.get_end_game_standard_size()[1])
+        y1 = y0 + define.get_end_game_standard_size()[1]
+
+        self.__something_coords = (x0, y0, x1, y1)
+
+        self.__can_object_be_placed = True
+
+        if self._command == Command.CLICKED_LMB:
+            #stworzenie gracza
+            self.__level.try_add_new_object(ObjectType.FINISH_LINE, x0, y0, define.get_end_game_standard_size()[0], define.get_end_game_standard_size()[1], ObjectType.FINISH_LINE)
+
+            self.__something_coords = (-1, -1, -1, -1)
+
+            #po dodaniu zmień tryb
+            self.__mode = EditingMode.NONE
+
+        elif self._command == Command.CLICKED_RMB:
+            self.__something_coords = (-1, -1, -1, -1)
+            self.__mode = EditingMode.NONE
 
     def update_deletion(self):
         obj_to_del = None

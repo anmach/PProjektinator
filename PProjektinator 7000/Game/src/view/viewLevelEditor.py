@@ -9,6 +9,7 @@ from src.view.UI.button import Button
 from src.view.UI.imageButton import ImageButton
 from src.view.UI.imageButtonGroup import ImageButtonGroup
 
+from src.view.Game.gameObject import GameObject
 from src.view.Game.player import Player
 from src.view.Game.movingObject import MovingObject
 
@@ -102,6 +103,9 @@ class ViewLevelEditor(View):
         #dodanie obiektu przeciwnika
         self.add_image_button(ImageButton(define.get_enemy_sprite_path(), (0.90 * surface_size_x, 0.5 * surface_size_y), (image_button_size, image_button_size), False, Command.OBJECT_SELECTED, Command.PLACE_ENEMY))
 
+        #dodanie obiektu przeciwnika
+        self.add_image_button(ImageButton(define.get_end_game_sprite_path(), (0.90 * surface_size_x, 0.5 * surface_size_y), (image_button_size, image_button_size), False, Command.OBJECT_SELECTED, Command.PLACE_END_GAME))
+
         self.__imageButtonGroup = ImageButtonGroup((0.825 * surface_size_x, 0.5 * surface_size_y), Command.OBJECT_SELECTED, (image_button_size, image_button_size), self.__image_buttons, (4, 3), 1)
         self._controls.append(self.__imageButtonGroup)
 
@@ -165,6 +169,10 @@ class ViewLevelEditor(View):
                     py.draw.line(self._surface, (237, 28, 36), (new_object.get_x(), new_object.get_y()), (new_object.get_x() + new_object.get_width(), new_object.get_y() + new_object.get_height()), 3)
                     py.draw.line(self._surface, (237, 28, 36), (new_object.get_x() + new_object.get_width(), new_object.get_y()), (new_object.get_x(), new_object.get_y() + new_object.get_height()), 3)
         
+            elif self.__mode == EditingMode.END_GAME_PLACEMENT:
+                new_object = GameObject(self.__coords[0], self.__coords[1], define.get_end_game_standard_size()[0], define.get_end_game_standard_size()[1], ObjectType.FINISH_LINE, define.get_end_game_sprites_folder_path())                
+                self._surface.blit(new_object.surf, new_object.rect)
+
             #rysowanie poruszającej się platformy
             elif self.__mode == EditingMode.MOVING_PLATFORM_PLACEMENT or self.__mode == EditingMode.ENEMY_PLACEMENT:
                 #jeden wierzchołek
