@@ -10,6 +10,9 @@ def get_player_sprites_folder_path():
 def get_platform_middle_sprite_path():
     return '.\\res\\sprites\\platform tiles\\x3\\tile internal x3.png'
 
+def get_platform_sprites_folder_path():
+    return '.\\res\\sprites\\platform tiles\\x3\\'
+
 def get_crate_sprite_path():
     return '.\\res\\sprites\\crates\\crate.png'
 
