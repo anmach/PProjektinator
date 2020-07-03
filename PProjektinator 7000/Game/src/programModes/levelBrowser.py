@@ -15,5 +15,7 @@ class LevelBrowser(ProgramMode):
     def change_mode(self):
        if(self._model.get_command() == Command.PLAY):
             level = Level(self._view.get_surface(), self._model.get_shown_level_number())
-            level.run()
+            level_won = level.run()
+            if level_won[1]:
+                self._model.unlock_level(level_won[0])
             self._controller.set_command(Command.CONTINUE)

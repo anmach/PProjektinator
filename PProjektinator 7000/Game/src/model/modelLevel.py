@@ -48,10 +48,10 @@ class ModelLevel(Model):
             self.__all_sprites.add(self.__player) 
 
             # debugowe elementy poziomu
-            # self.__all_sprites.add(GameObject(1000, 200, 100, 100,
-            # ObjectType.FINISH_LINE, None))
-            self.__all_sprites.add(MovingObject(1000, 400, 100, 100, False, ObjectType.ENEMY, None, 0, 30, 0, 2))
-            self.__all_sprites.add(GameObject(700, 500, 1000, 100, ObjectType.STATIC, None))
+            self.__all_sprites.add(GameObject(1000, 200, 100, 100,
+            ObjectType.FINISH_LINE, None))
+            #self.__all_sprites.add(MovingObject(1000, 400, 100, 100, False, ObjectType.ENEMY, None, 0, 30, 0, 2))
+            #self.__all_sprites.add(GameObject(700, 500, 1000, 100, ObjectType.STATIC, None))
 
     def movement(self):
         spd_x = 5 if self._command & Command.GO_RIGHT & ~0x80 else \
@@ -199,7 +199,6 @@ class ModelLevel(Model):
 
     def update(self):
 
-        print(self.tele_objs[0].spd_y)
         if self._command == Command.EXIT:                               # wyjście
             self._runMode = False
 

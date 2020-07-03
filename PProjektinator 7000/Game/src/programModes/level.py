@@ -13,5 +13,9 @@ class Level(ProgramMode):
         
         self._controller.set_blink(self._view)
 
+    def run(self):
+        super().run()
+        return (self._model.level_number, self._model.is_won())
+
     def change_mode(self): # <<-- TODO?
         pass
