@@ -25,7 +25,7 @@ class ModelLevel(Model):
         self._shot_sound = py.mixer.Sound(define.get_shot_sound_path())
 
         # TU DODAŁAM
-        self._lvl_container = LevelContainer(define.get_levels_folder_path() + "\\001_Tut1.txt", self.level_number)
+        self._lvl_container = LevelContainer(define.get_levels_folder_path() + "\\1.txt", self.level_number)
         self._error = self._lvl_container.get_level_read_succes()
 
         # Dopasowanie rozmiaru do okna (na razie tylko po y, to zniknie
