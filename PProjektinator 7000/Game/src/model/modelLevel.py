@@ -25,7 +25,7 @@ class ModelLevel(Model):
         self._shot_sound = py.mixer.Sound(define.get_shot_sound_path())
 
         # TU DODAŁAM
-        self._lvl_container = LevelContainer(define.get_levels_folder_path() + "\\1.txt", self.level_number)
+        self._lvl_container = LevelContainer(define.get_levels_folder_path() + "\\" + str(level_number + 1) + ".txt", self.level_number)
         self._error = self._lvl_container.get_level_read_succes()
 
         # Dopasowanie rozmiaru do okna (na razie tylko po y, to zniknie
@@ -46,12 +46,6 @@ class ModelLevel(Model):
             # TU DODAŁAM
             self.__all_sprites = self._lvl_container.get_sprite_group()
             self.__all_sprites.add(self.__player) 
-
-            # debugowe elementy poziomu
-            self.__all_sprites.add(GameObject(1000, 200, 100, 100,
-            ObjectType.FINISH_LINE, None))
-            #self.__all_sprites.add(MovingObject(1000, 400, 100, 100, False, ObjectType.ENEMY, None, 0, 30, 0, 2))
-            #self.__all_sprites.add(GameObject(700, 500, 1000, 100, ObjectType.STATIC, None))
 
     def movement(self):
         spd_x = 5 if self._command & Command.GO_RIGHT & ~0x80 else \

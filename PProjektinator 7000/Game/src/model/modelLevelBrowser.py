@@ -37,7 +37,7 @@ class ModelLevelBrowser(Model):
             self._changeMode = True
 
     def unlock_level(self, won_lvl_number):
-        if (self.__unlocked_levels < (len(self.__levelList)) - 1) and (won_lvl_number == self.__unlocked_levels - 1):
+        if (self.__unlocked_levels < (len(self.__levelList))) and (won_lvl_number == self.__unlocked_levels - 1):
             self.__unlocked_levels += 1
 
     #v----GETTERY----v
