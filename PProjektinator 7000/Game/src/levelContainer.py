@@ -184,6 +184,8 @@ class LevelContainer(object):
             #self._platforms.append(GameObject(x, y, width, height, ObjectType.STATIC, None))
         elif id == ObjectType.DYNAMIC:
             self._crates.append(dynamicObject(x, y, width, height, True, ObjectType.DYNAMIC, None))
+        elif id == ObjectType.FINISH_LINE:
+            self._finish_lines.append(GameObject(x, y, width, height, ObjectType.FINISH_LINE, None))
         elif id == ObjectType.KINEMATIC:
             if speed_x < 0 or speed_y < 0:# or movement_max_x < 0 or movement_max_y < 0:
                 # Błąd - niepoprawne dane
@@ -335,7 +337,21 @@ class LevelContainer(object):
             file.write('\n')          
             file.write(str(enemy.get_spd_y())) # speed y
             file.write('\n')
-            
+           
+        for line in self._finish_lines:       
+            file.write('@')   
+            file.write('\n')           
+            file.write(str(int(ObjectType.FINISH_LINE))) # id
+            file.write('\n')          
+            file.write(str(platform.get_x())) # x
+            file.write('\n')        
+            file.write(str(platform.get_y())) # y
+            file.write('\n')          
+            file.write(str(platform.get_width())) # szerokość
+            file.write('\n')          
+            file.write(str(platform.get_height())) # wysokość
+            file.write('\n')  
+
         file.write('$')
         file.close()
 
