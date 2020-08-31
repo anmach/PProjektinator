@@ -1,4 +1,5 @@
 from src.controller.controller import Controller
+from src.controller.controllerBCI import ControllerBCI
 from src.model.modelMenu import ModelMenu
 from src.view.viewMenu import ViewMenu
 from src.enum.command import Command
@@ -31,8 +32,8 @@ class ControllerLevel(Controller):
         self.read_steering_from_file()
 
         if(self._blink_enable == 1):            
-            self.__controlBCI = controllerBCI()
-
+           # self.__controlBCI = controllerBCI()
+           pass
     #przetwarzanie danych wejściowych
     def process_input(self):
         self._command &= ~Command.ATTACK

@@ -21,7 +21,10 @@ class ViewLevel(View):
         self.__blink_enabled = 1
 
         self.__blinking_rects = []
-        self.__blinking_rects.append(BlinkingRect(0.5, (0.01 * self._surfaceSize[0], 0.01 * self._surfaceSize[0]), (0.02 * self._surfaceSize[0], 0.02 * self._surfaceSize[0])))
+        self.__blinking_rects.append(BlinkingRect(8, (0.01 * self._surfaceSize[0], 0.5 * self._surfaceSize[1]), (0.02 * self._surfaceSize[0], 0.02 * self._surfaceSize[0])))
+        self.__blinking_rects.append(BlinkingRect(10, (0.5 * self._surfaceSize[0], 0.01 * self._surfaceSize[1]), (0.02 * self._surfaceSize[0], 0.02 * self._surfaceSize[0])))
+        self.__blinking_rects.append(BlinkingRect(12, (0.97 * self._surfaceSize[0], 0.5 * self._surfaceSize[1]), (0.02 * self._surfaceSize[0], 0.02 * self._surfaceSize[0])))
+        self.__blinking_rects.append(BlinkingRect(15, (0.5 * self._surfaceSize[0], 0.96 * self._surfaceSize[1]), (0.02 * self._surfaceSize[0], 0.02 * self._surfaceSize[0])))
 
     def render(self):
         self._surface.fill((200, 220, 250))
