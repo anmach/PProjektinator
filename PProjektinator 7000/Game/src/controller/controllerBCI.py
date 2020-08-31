@@ -100,8 +100,9 @@ class ControllerBCI:
 
     def __init__(self, ip_address):
         self.__instructions = []
-        self.__brain = tf.keras.models.load_model(define.get_brain_model)
+        self.__brain = tf.keras.models.load_model(define.get_brain_model())
 
+        sample_rate = 1000
         self.shield = bci.OpenBCIWiFi(ip_address=ip_address, log=True, high_speed=True, sample_rate=sample_rate, latency=100)
 
     def start_reading(self):

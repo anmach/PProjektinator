@@ -32,8 +32,8 @@ class ControllerLevel(Controller):
         self.read_steering_from_file()
 
         if(self._blink_enable == 1):            
-           # self.__controlBCI = controllerBCI()
-           pass
+           self.__controlBCI = ControllerBCI('192.168.4.1')
+
     #przetwarzanie danych wejściowych
     def process_input(self):
         self._command &= ~Command.ATTACK
