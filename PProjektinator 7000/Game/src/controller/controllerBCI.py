@@ -1,4 +1,4 @@
-from openbci import wifi as bci
+from pyOpenBCI import wifi as bci
 import tensorflow as tf
 import src.define as define
 from scipy.fftpack import fftfreq
