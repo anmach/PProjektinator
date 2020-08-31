@@ -11,6 +11,7 @@ class ControllerLevel(Controller):
 
     def __init__(self):
         super().__init__()
+
         self._command = 0;
 
         #klawisze do sterowania
@@ -24,11 +25,13 @@ class ControllerLevel(Controller):
         self._key_pause = ord('p')
 
         self._blink_enable = 0
-
-        # strzelono - trzeba ponownie nacisnąć przycisk
+        self.telekinesis_on = 0
 
         #odczytanie sterowania z pliku opcji
         self.read_steering_from_file()
+
+        if(self._blink_enable == 1):            
+            self.__controlBCI = controllerBCI()
 
     #przetwarzanie danych wejściowych
     def process_input(self):
@@ -60,7 +63,9 @@ class ControllerLevel(Controller):
                     self._command |= Command.ATTACK
                 #rozpoczęcie telekinezy
                 elif event.key == self._key_telekinesis:
-                    print("The force is strong with this one.\n")
+                    self.telekinesis_on = 1
+                    if(self._blink_enable == 1): 
+                        self.__controlBCI.start_reading()
                     self._command = Command.TELEKINESIS
                 #poruszanie się lewo/prawo
                 elif event.key == self._key_go_left:
@@ -81,9 +86,15 @@ class ControllerLevel(Controller):
                     self._command &= ~Command.CROUCH
                 elif event.key == self._key_telekinesis:
                     self._command &= ~Command.TELEKINESIS
-                    print("The force is NOT strong with this one.\n")
+                    self.telekinesis_on = 0
+                    if(self._blink_enable == 1): 
+                        self.__controlBCI.stop_reading()
                 elif event.key == self._key_go_up:
                     self._command &= ~Command.GO_UP
+
+        if(self.telekinesis_on == 1 & self._blink_enable == 1):
+            self._command = self.controlBCI.get_instruction()
+
 
     #metoda pozwalająca przekazać model do widoku w celu jego wyrenderowania
     def communicateMV(self, model, view):
