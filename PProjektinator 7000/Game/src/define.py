@@ -51,3 +51,7 @@ def get_platform_tile_standard_size():
 
 def get_end_game_standard_size():
     return (25, 25)
+    
+def get_brain_model():
+    return '.\\res\\brain\\model'
+    
