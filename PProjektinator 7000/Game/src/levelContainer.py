@@ -151,7 +151,7 @@ class LevelContainer(object):
         elif id == ObjectType.DYNAMIC:
             self._crates.append(dynamicObject(x, y, width, height, True, ObjectType.DYNAMIC, None))
         elif id == ObjectType.FINISH_LINE:
-            self._finish_lines.append(GameObject(x, y, width, height, ObjectType.FINISH_LINE, None))
+            self._finish_lines.append(GameObject(x, y, width, height, ObjectType.FINISH_LINE, define.get_end_game_sprites_folder_path()))
         elif id == ObjectType.KINEMATIC:
             if speed_x < 0 or speed_y < 0:# or movement_max_x < 0 or movement_max_y < 0:
                 # Błąd - niepoprawne dane

@@ -103,7 +103,7 @@ class ViewLevelEditor(View):
         #dodanie obiektu przeciwnika
         self.add_image_button(ImageButton(define.get_enemy_sprite_path(), (0.90 * surface_size_x, 0.5 * surface_size_y), (image_button_size, image_button_size), False, Command.OBJECT_SELECTED, Command.PLACE_ENEMY))
 
-        #dodanie obiektu przeciwnika
+        #dodanie endgame
         self.add_image_button(ImageButton(define.get_end_game_sprite_path(), (0.90 * surface_size_x, 0.5 * surface_size_y), (image_button_size, image_button_size), False, Command.OBJECT_SELECTED, Command.PLACE_END_GAME))
 
         self.__imageButtonGroup = ImageButtonGroup((0.825 * surface_size_x, 0.5 * surface_size_y), Command.OBJECT_SELECTED, (image_button_size, image_button_size), self.__image_buttons, (4, 3), 1)
