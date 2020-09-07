@@ -307,13 +307,13 @@ class LevelContainer(object):
             file.write('\n')           
             file.write(str(int(ObjectType.FINISH_LINE))) # id
             file.write('\n')          
-            file.write(str(platform.get_x())) # x
+            file.write(str(line.get_x())) # x
             file.write('\n')        
-            file.write(str(platform.get_y())) # y
+            file.write(str(line.get_y())) # y
             file.write('\n')          
-            file.write(str(platform.get_width())) # szerokość
+            file.write(str(line.get_width())) # szerokość
             file.write('\n')          
-            file.write(str(platform.get_height())) # wysokość
+            file.write(str(line.get_height())) # wysokość
             file.write('\n')  
 
         file.write('$')

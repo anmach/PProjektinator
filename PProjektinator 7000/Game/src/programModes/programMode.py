@@ -57,6 +57,8 @@ class ProgramMode(ABC):
     #metoda, która zajmuje się wszelkimi rzeczami związanymi z renderowaniem obiektów na ekran
     #@abstractmethod
     def render(self):
+        if self._model.get_error() == 0:    
+            return
         self._controller.communicateMV(self._model, self._view)
         self._view.render()
 

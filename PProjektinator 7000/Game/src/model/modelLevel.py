@@ -231,4 +231,7 @@ class ModelLevel(Model):
 
     def get_camera(self):
         return self.__camera
+    
+    def get_error(self):           
+        return self._error
 

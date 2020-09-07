@@ -34,6 +34,9 @@ class Model(ABC):
     #v----SETTERY----v
     def set_command(self, command):
         self._command = command
+        
+    def get_error(self):       
+        return 1
 
     def set_change_mode(self, change):
         self._changeMode = change
