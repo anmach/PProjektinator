@@ -518,6 +518,8 @@ class ModelLevelEditor(Model):
         if self._command == Command.CLICKED_LMB and len(self.__level.get_all_level_objects()) > 0:
             self.__level.try_delete_object(obj_to_del)
 
+            self.__level.refresh_mini_platforms()
+
             #jeśli był to gracz to zapamiętaj, że już go nie
             if isinstance(obj_to_del, Player):
                 self.__is_player_placed = False
