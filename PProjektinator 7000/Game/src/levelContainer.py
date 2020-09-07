@@ -535,3 +535,6 @@ class LevelContainer(object):
 
     def add_finish_line(self, line):
         self._finish_lines.append(line)
+
+    def refresh_mini_platforms(self):
+        self._mini_platforms = create_mini_platforms()
