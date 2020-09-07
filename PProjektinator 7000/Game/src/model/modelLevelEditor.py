@@ -321,6 +321,8 @@ class ModelLevelEditor(Model):
 
                 self.__level.try_add_new_object(ObjectType.STATIC, x0, y0, x1 - x0, y1 - y0, ObjectType.STATIC)
 
+                self.__level.refresh_mini_platforms()
+
                 self.__something_coords = (-1, -1, -1, -1)
                 self.__new_platform_vertex_number = 1
 
