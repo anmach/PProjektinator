@@ -145,43 +145,7 @@ class LevelContainer(object):
             return 0
         # Dodawanie obiektu
         if id == ObjectType.STATIC:
-            #podział na mniejsze platformy
-
-            tile_size = define.get_platform_tile_standard_size()
-            columns_count = width // define.get_platform_tile_standard_size()[0]
-            rows_count = height // define.get_platform_tile_standard_size()[1]
-
-            for i in range(0, 3):
-                print(i)
-
-            newPlatforms = []
-            tile = 0
-            for i in range(0, columns_count):
-                for j in range(0, rows_count):
-                    if i == 0:
-                        if j == 0:
-                            tile = 2
-                        elif j == rows_count - 1:
-                            tile = 0
-                        else:
-                            tile = 5
-                    elif i == columns_count - 1:
-                        if j == 0:
-                            tile = 3
-                        elif j == rows_count - 1:
-                            tile = 1
-                        else:
-                            tile = 7
-                    else:
-                        if j == 0:
-                            tile = 8
-                        elif j == rows_count - 1:
-                            tile = 6
-                        else:
-                            tile = 4
-                    self._platforms.append(GameObject(x + i * tile_size[0], y + j * tile_size[1], tile_size[0], tile_size[1], ObjectType.STATIC, define.get_platform_sprites_folder_path()))
-                    self._platforms[-1].set_frame_by_id(tile)
-            #self._platforms.append(GameObject(x, y, width, height, ObjectType.STATIC, None))
+            self._platforms.append(GameObject(x, y, width, height, ObjectType.STATIC, None))            
         elif id == ObjectType.DYNAMIC:
             self._crates.append(dynamicObject(x, y, width, height, True, ObjectType.DYNAMIC, None))
         elif id == ObjectType.FINISH_LINE:
@@ -198,8 +162,6 @@ class LevelContainer(object):
                 # Błąd - niepoprawne dane
                 return 0
             self._enemies.append(MovingObject(x,y, width, height, False, ObjectType.ENEMY, None, movement_max_x, movement_max_y, speed_x, speed_y))
-        elif id == ObjectType.FINISH_LINE:
-            self._finish_lines.append(GameObject(x, y, width, height, ObjectType.FINISH_LINE, define.get_end_game_sprites_folder_path()))
         else:
             # Błąd - nieznany typ
             return 0
@@ -447,7 +409,7 @@ class LevelContainer(object):
             group.add(item)
 
         for platform in self._platforms:
-            group.add(platform)
+            group.add(self.get_mini_platforms())
 
         if self._player != None:
             group.add(self._player)
@@ -462,6 +424,51 @@ class LevelContainer(object):
             group.add(line)
 
         return group
+
+    def get_mini_platforms(self):
+        mini_platforms = []
+
+        #podział na mniejsze platformy
+
+        tile_size = define.get_platform_tile_standard_size()
+
+        for plat in self._platforms:
+            x = plat.get_x()
+            y = plat.get_y()
+            height = plat.get_height()
+            width = plat.get_width()
+            
+            columns_count = width // define.get_platform_tile_standard_size()[0]
+            rows_count = height // define.get_platform_tile_standard_size()[1]
+
+            tile = 0
+            for i in range(0, columns_count):
+                for j in range(0, rows_count):
+                    if i == 0:
+                        if j == 0:
+                            tile = 2
+                        elif j == rows_count - 1:
+                            tile = 0
+                        else:
+                            tile = 5
+                    elif i == columns_count - 1:
+                        if j == 0:
+                            tile = 3
+                        elif j == rows_count - 1:
+                            tile = 1
+                        else:
+                            tile = 7
+                    else:
+                        if j == 0:
+                            tile = 8
+                        elif j == rows_count - 1:
+                            tile = 6
+                        else:
+                            tile = 4
+                    mini_platforms.append(GameObject(x + i * tile_size[0], y + j * tile_size[1], tile_size[0], tile_size[1], ObjectType.STATIC, define.get_platform_sprites_folder_path()))
+                    mini_platforms[-1].set_frame_by_id(tile)
+
+        return mini_platforms
 
     # Marna nazwa
     # Zwraca grupę obiektów (bez gracza), które choć częściowo leżą w zadanym
