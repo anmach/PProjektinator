@@ -20,6 +20,7 @@ class LevelContainer(object):
         self._objects_base_width = -1
         self._objects_base_height = -1
 
+        self._mini_platforms = []
         self._platforms = []
         self._moving_platforms = []
         self._crates = []
@@ -131,6 +132,7 @@ class LevelContainer(object):
         file.close()
         
         self._level_read_without_errors = 1
+        self._mini_platforms = self.create_mini_platforms()
 
         if self._player:
             # Udało się odczytać plik poprawnie (chyba)
@@ -408,8 +410,8 @@ class LevelContainer(object):
         for item in self._moving_platforms:
             group.add(item)
 
-        for platform in self._platforms:
-            group.add(self.get_mini_platforms())
+        for platform in self._mini_platforms:
+            group.add(platform)
 
         if self._player != None:
             group.add(self._player)
@@ -425,7 +427,7 @@ class LevelContainer(object):
 
         return group
 
-    def get_mini_platforms(self):
+    def create_mini_platforms(self):
         mini_platforms = []
 
         #podział na mniejsze platformy
