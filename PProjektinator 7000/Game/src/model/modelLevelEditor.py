@@ -106,12 +106,12 @@ class ModelLevelEditor(Model):
                 self.__prev_position = py.mouse.get_pos()
             else:
                 new_position = py.mouse.get_pos()
-                self.__translation = (new_position[0] - self.__prev_position[0], new_position[1] - self.__prev_position[1])
+                self.__translation = (self.__translation[0] + new_position[0] - self.__prev_position[0], self.__translation[1] + new_position[1] - self.__prev_position[1])
                 self.__prev_position = new_position
                 
             #przesunięcie wszystkich obiektów
-            for game_object in self.__level.get_all_level_objects():
-                game_object.set_pos(game_object.get_x() + self.__translation[0], game_object.get_y() + self.__translation[1])
+            #for game_object in self.__level.get_all_level_objects():
+            #    game_object.set_pos(game_object.get_x() + self.__translation[0], game_object.get_y() + self.__translation[1])
 
         elif self._command == Command.DELETE_OBJECT:
             self.__mode = EditingMode.DELETION
@@ -186,6 +186,7 @@ class ModelLevelEditor(Model):
 
     def update_enemy_placement(self):
         mouse_pos = py.mouse.get_pos()
+        mouse_pos = (mouse_pos[0] - self.__translation[0], mouse_pos[1] - self.__translation[1])
 
         if self.__moving_platform_placement_mode == 1:
             new_vertex_pos = mouse_pos
@@ -234,7 +235,9 @@ class ModelLevelEditor(Model):
         #sprawdzenie czy nie nachodzi/koliduje z innymi obiektami
 
         mouse_pos = py.mouse.get_pos()
+        mouse_pos = (mouse_pos[0] - self.__translation[0], mouse_pos[1] - self.__translation[1])
         new_vertex_pos = mouse_pos
+        
         if self.__new_platform_vertex_number == 1:
             #snap
             for game_object in self.__level.get_all_level_objects():
@@ -337,6 +340,7 @@ class ModelLevelEditor(Model):
 
     def update_player_placement(self):
         mouse_pos = py.mouse.get_pos()
+        mouse_pos = (mouse_pos[0] - self.__translation[0], mouse_pos[1] - self.__translation[1])
         
         #nowa pozycja gracza - TODO - zmienić dla zmian rozdzielczości
         x0 = mouse_pos[0] - int(0.5 * define.get_player_standard_size()[0])
@@ -374,6 +378,8 @@ class ModelLevelEditor(Model):
 
     def update_crate_placement(self):
          mouse_pos = py.mouse.get_pos()
+         mouse_pos = (mouse_pos[0] - self.__translation[0], mouse_pos[1] - self.__translation[1])
+         
          new_vertex_pos = mouse_pos
          
          if self.__new_platform_vertex_number == 1:
@@ -413,6 +419,7 @@ class ModelLevelEditor(Model):
 
     def update_moving_platform_placement(self):
         mouse_pos = py.mouse.get_pos()
+        mouse_pos = (mouse_pos[0] - self.__translation[0], mouse_pos[1] - self.__translation[1])
 
         if self.__moving_platform_placement_mode == 1:
             new_vertex_pos = mouse_pos
@@ -474,6 +481,7 @@ class ModelLevelEditor(Model):
 
     def update_end_game_placement(self):
         mouse_pos = py.mouse.get_pos()
+        mouse_pos = (mouse_pos[0] - self.__translation[0], mouse_pos[1] - self.__translation[1])
         
         #nowa pozycja końca gry
         x0 = mouse_pos[0] - int(0.5 * define.get_end_game_standard_size()[0])
@@ -504,6 +512,8 @@ class ModelLevelEditor(Model):
         self.__something_coords = (-1, -1, -1, -1)
 
         mouse_pos = py.mouse.get_pos()
+
+        mouse_pos = (mouse_pos[0] - self.__translation[0], mouse_pos[1] - self.__translation[1])
 
         #wyszukiwanie obietku nad którym znajduje się kursor myszy (potenjalny
         #kandydat do usunięcia)

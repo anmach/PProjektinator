@@ -62,7 +62,7 @@ class ControllerLevelEditor(Controller):
             
     #metoda pozwalająca przekazać model do widoku w celu jego wyrenderowania
     def communicateMV(self, model, view):
-        view.set_model(model.get_level_to_edit_number(), model.get_mode(), model.get_level(), model.get_something_coords(), model.get_can_object_be_placed(), model.get_is_player_placed())
+        view.set_model(model.get_level_to_edit_number(), model.get_mode(), model.get_level(), model.get_something_coords(), model.get_can_object_be_placed(), model.get_is_player_placed(), model.get_translation())
 
     #metoda pozwalająca na przekazanie polecenia do modelu
     def give_command(self, model):

@@ -129,38 +129,40 @@ class ViewLevelEditor(View):
         
         for entity in self.__level.get_sprite_group():
             if isinstance(entity, MovingObject):
-                py.draw.rect(self._surface, (0,0,0), (entity.get_x() + entity.get_path_max_x(), entity.get_y() + entity.get_path_max_y(), entity.get_width(), entity.get_height()), 1)
-                py.draw.line(self._surface, (0,0,0), (entity.get_x() + entity.get_width() // 2, entity.get_y() + entity.get_height() // 2), (entity.get_x() + entity.get_width() // 2 + entity.get_path_max_x(), entity.get_y() + entity.get_height() // 2 + entity.get_path_max_y()), 1)
-            self._surface.blit(entity.surf, entity.rect)
+                py.draw.rect(self._surface, (0,0,0), (entity.get_x() + entity.get_path_max_x() + self.__translation[0], entity.get_y() + entity.get_path_max_y() + self.__translation[1], entity.get_width(), entity.get_height()), 1)
+                py.draw.line(self._surface, (0,0,0), (entity.get_x() + entity.get_width() // 2 + self.__translation[0], entity.get_y() + entity.get_height() // 2 + self.__translation[1]), (entity.get_x() + entity.get_width() // 2 + entity.get_path_max_x() + self.__translation[0], entity.get_y() + entity.get_height() // 2 + entity.get_path_max_y() + self.__translation[1]), 1)
+            #self._surface.blit(entity.surf, entity.rect)
+            self._surface.blit(entity.surf, (entity.get_x() + self.__translation[0], entity.get_y() + self.__translation[1]))
 
         if py.mouse.get_pos()[0] < self.__edit_surface_border * self._surface.get_size()[0]:
+            
             #rysowanie kształtu nowej platformy lub nowej skrzyni
             if self.__mode == EditingMode.PLATFORM_CREATION or self.__mode == EditingMode.CRATE_PLACEMENT:
                 #jeden wierzchołek
                 if self.__coords[2] == -1:
-                    py.draw.circle(self._surface, (174, 13, 24), (self.__coords[0], self.__coords[1]), 5)
+                    py.draw.circle(self._surface, (174, 13, 24), (self.__coords[0]+ self.__translation[0], self.__coords[1]+ self.__translation[1]), 5)
                 #cały prostokąt
                 else:
-                    x0 = min(self.__coords[0], self.__coords[2])
-                    x1 = max(self.__coords[0], self.__coords[2])
+                    x0 = min(self.__coords[0], self.__coords[2]) + self.__translation[0]
+                    x1 = max(self.__coords[0], self.__coords[2]) + self.__translation[0]
 
-                    y0 = min(self.__coords[1], self.__coords[3])
-                    y1 = max(self.__coords[1], self.__coords[3])
+                    y0 = min(self.__coords[1], self.__coords[3]) + self.__translation[1]
+                    y1 = max(self.__coords[1], self.__coords[3]) + self.__translation[1]
 
-                    py.draw.circle(self._surface, (174, 13, 24), (self.__coords[0], self.__coords[1]), 3)
-                    py.draw.circle(self._surface, (174, 13, 24), (self.__coords[2], self.__coords[3]), 3)
+                    py.draw.circle(self._surface, (174, 13, 24), (self.__coords[0]+ self.__translation[0], self.__coords[1]+ self.__translation[1]), 3)
+                    py.draw.circle(self._surface, (174, 13, 24), (self.__coords[2]+ self.__translation[0], self.__coords[3]+ self.__translation[1]), 3)
 
                     py.draw.rect(self._surface, (0, 0, 0), (x0, y0, x1 - x0, y1 - y0), 1)
             
             #rysowanie obramowania obiektu do usunięcia
             elif self.__mode == EditingMode.DELETION:
                 if(self.__coords[0] != -1):
-                    py.draw.rect(self._surface, (123, 22, 66), (self.__coords[0], self.__coords[1], self.__coords[2] - self.__coords[0], self.__coords[3] - self.__coords[1]), 3)
+                    py.draw.rect(self._surface, (123, 22, 66), (self.__coords[0] + self.__translation[0], self.__coords[1] + self.__translation[1], self.__coords[2] - self.__coords[0], self.__coords[3] - self.__coords[1]), 3)
 
             #rysowanie gracza na (potencjalnej) nowej pozycji
             elif self.__mode == EditingMode.PLAYER_PLACEMENT:
                 
-                new_object = Player(self.__coords[0], self.__coords[1], define.get_player_standard_size()[0], define.get_player_standard_size()[1], True, ObjectType.PLAYER, define.get_player_sprites_folder_path())
+                new_object = Player(self.__coords[0]+ self.__translation[0], self.__coords[1]+ self.__translation[1], define.get_player_standard_size()[0], define.get_player_standard_size()[1], True, ObjectType.PLAYER, define.get_player_sprites_folder_path())
                 new_object.set_frame_by_id(1)
 
                 self._surface.blit(new_object.surf, new_object.rect)
@@ -170,34 +172,34 @@ class ViewLevelEditor(View):
                     py.draw.line(self._surface, (237, 28, 36), (new_object.get_x() + new_object.get_width(), new_object.get_y()), (new_object.get_x(), new_object.get_y() + new_object.get_height()), 3)
         
             elif self.__mode == EditingMode.END_GAME_PLACEMENT:
-                new_object = GameObject(self.__coords[0], self.__coords[1], define.get_end_game_standard_size()[0], define.get_end_game_standard_size()[1], ObjectType.FINISH_LINE, define.get_end_game_sprites_folder_path())                
+                new_object = GameObject(self.__coords[0] + self.__translation[0], self.__coords[1] + self.__translation[1], define.get_end_game_standard_size()[0], define.get_end_game_standard_size()[1], ObjectType.FINISH_LINE, define.get_end_game_sprites_folder_path())                
                 self._surface.blit(new_object.surf, new_object.rect)
 
             #rysowanie poruszającej się platformy
             elif self.__mode == EditingMode.MOVING_PLATFORM_PLACEMENT or self.__mode == EditingMode.ENEMY_PLACEMENT:
                 #jeden wierzchołek
                 if self.__coords[2] == -1:
-                    py.draw.circle(self._surface, (174, 13, 24), (self.__coords[0], self.__coords[1]), 5)
+                    py.draw.circle(self._surface, (174, 13, 24), (self.__coords[0]+ self.__translation[0], self.__coords[1]+ self.__translation[1]), 5)
                 #drugi wierzchołek
                 elif self.__coords[4] == -1:
-                    x0 = min(self.__coords[0], self.__coords[2])
-                    x1 = max(self.__coords[0], self.__coords[2])
+                    x0 = min(self.__coords[0], self.__coords[2]) + self.__translation[0]
+                    x1 = max(self.__coords[0], self.__coords[2]) + self.__translation[0]
 
-                    y0 = min(self.__coords[1], self.__coords[3])
-                    y1 = max(self.__coords[1], self.__coords[3])
+                    y0 = min(self.__coords[1], self.__coords[3])+ self.__translation[1]
+                    y1 = max(self.__coords[1], self.__coords[3])+ self.__translation[1]
 
-                    py.draw.circle(self._surface, (174, 13, 24), (self.__coords[0], self.__coords[1]), 3)
-                    py.draw.circle(self._surface, (174, 13, 24), (self.__coords[2], self.__coords[3]), 3)
+                    py.draw.circle(self._surface, (174, 13, 24), (self.__coords[0]+ self.__translation[0], self.__coords[1]+ self.__translation[1]), 3)
+                    py.draw.circle(self._surface, (174, 13, 24), (self.__coords[2]+ self.__translation[0], self.__coords[3]+ self.__translation[1]), 3)
 
                     py.draw.rect(self._surface, (0, 0, 0), (x0, y0, x1 - x0, y1 - y0), 1)
                 #pozycja końcowa
                 else:
                     #poz.  pocz.
-                    x0 = min(self.__coords[0], self.__coords[2])
-                    x1 = max(self.__coords[0], self.__coords[2])
+                    x0 = min(self.__coords[0], self.__coords[2])+ self.__translation[0]
+                    x1 = max(self.__coords[0], self.__coords[2])+ self.__translation[0]
 
-                    y0 = min(self.__coords[1], self.__coords[3])
-                    y1 = max(self.__coords[1], self.__coords[3])
+                    y0 = min(self.__coords[1], self.__coords[3])+ self.__translation[1]
+                    y1 = max(self.__coords[1], self.__coords[3])+ self.__translation[1]
 
                     #poz.  końc.
                     x2 = x0 + self.__coords[4]
@@ -239,11 +241,12 @@ class ViewLevelEditor(View):
         return self.__image_buttons
 
     #v----SETTERY----v
-    def set_model(self, level_num, mode, level, coords, can_be_placed, is_player_placed):
+    def set_model(self, level_num, mode, level, coords, can_be_placed, is_player_placed, translation):
         self.__texts[0].set_text(str(level_num))
         self.__mode = mode
         self.__level = level
         self.__coords = coords
         self.__can_be_placed = can_be_placed
         self.__is_player_placed = is_player_placed
+        self.__translation = translation
 
