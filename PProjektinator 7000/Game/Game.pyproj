@@ -23,6 +23,9 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="src\controller\controllerBCI.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="src\enum\optionKey.py" />
     <Compile Include="src\levelContainer.py">
       <SubType>Code</SubType>
